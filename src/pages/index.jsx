@@ -40,11 +40,32 @@ const labs = [
     link: '/labs/copilot-coding-agent',
   },
   {
+    title: 'Copilot SDK',
+    description: 'Learn how to use the Copilot SDK to integrate Copilot in your app.',
+    duration: '~1 hour',
+    level: 'Beginner',
+    link: '/labs/copilot-sdk',
+  },
+  {
+    title: 'MCP - Atlassian Jira & Confluence',
+    description: 'Use MCP to integrate with Jira and Confluence, creating an agent that can interact with both tools.',
+    duration: '~30 min',
+    level: 'Intermediate',
+    link: '/labs/mcp-atlassian',
+  },
+  {
     title: 'Agent Orchestration',
     description: 'Orchestrate multiple agents to collaborate on complex tasks.',
     duration: '~30 min',
     level: 'Advanced',
     link: '/labs/agent-orchestration',
+  },
+  {
+    title: 'Build Your MCP Server',
+    description: 'Create your first MCP server and learn how to integrate it with various tools and agents.',
+    duration: '~1 hour',
+    level: 'Advanced',
+    link: '/labs/build-your-mcp-server',
   },
 ];
 
@@ -128,7 +149,7 @@ export default function Home() {
           <div className="container">
             <h2 className="landing-section__title">Hands-on Labs</h2>
             <p className="landing-section__subtitle">
-              Focused, self-contained exercises you can complete in 15–30 minutes.
+              Focused, self-contained exercises you can complete in less than 1 hour.
             </p>
             <div className="row">
               {labs.map((props, idx) => (

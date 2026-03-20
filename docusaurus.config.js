@@ -2,9 +2,9 @@
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'GitHub Copilot Academy',
-  tagline: 'Self-paced workshops and hands-on labs for GitHub Copilot',
-  favicon: 'img/favicon.svg',
+  title: 'GitHub Copilot',
+  tagline: 'Self-paced workshops and hands-on labs',
+  favicon: '/img/favicon.svg',
 
   url: 'https://copilot-academy.github.io',
   baseUrl: '/',
@@ -75,7 +75,7 @@ const config = {
     ({
       image: 'img/social-card.png',
       navbar: {
-        title: 'Workshops',
+        title: 'Copilot Academy',
         logo: {
           alt: 'GitHub Logo',
           src: 'img/logo.svg',

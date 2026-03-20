@@ -47,7 +47,7 @@ npm install
 npm start
 ```
 
-Site will be available at http://localhost:3000/copilot-workshops/
+Site will be available at http://localhost:3000/
 
 ## Deployment
 
