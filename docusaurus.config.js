@@ -6,8 +6,8 @@ const config = {
   tagline: 'Self-paced workshops and hands-on labs for GitHub Copilot',
   favicon: 'img/favicon.svg',
 
-  url: 'https://octodemo.github.io',
-  baseUrl: '/copilot-workshops/',
+  url: 'https://sturdy-adventure-3qvzjj4.pages.github.io',
+  baseUrl: '/',
 
   organizationName: 'octodemo',
   projectName: 'copilot-workshops',
