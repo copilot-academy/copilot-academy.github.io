@@ -26,25 +26,25 @@ const workshops = [
 
 const labs = [
   {
-    title: 'Build Your First Skill',
-    description: 'Create a Hello World agent skill from scratch.',
-    duration: '~20 min',
+    title: 'Copilot CLI: Zero to Hero',
+    description: 'Master the GitHub Copilot CLI from the ground up.',
+    duration: '~1 hour',
     level: 'Beginner',
-    link: '/labs/build-your-first-skill',
+    link: '/labs/copilot-cli-zero-to-hero',
   },
   {
-    title: 'Create a Custom Agent',
-    description: 'Build a custom agent with tools and instructions.',
+    title: 'Copilot Coding Agent',
+    description: 'Delegate work to Copilot Coding Agent.',
     duration: '~20 min',
     level: 'Beginner',
-    link: '/labs/create-a-custom-agent',
+    link: '/labs/copilot-coding-agent',
   },
   {
-    title: 'Agent with Tools',
-    description: 'Build an agent with tool restrictions and MCP integrations.',
+    title: 'Agent Orchestration',
+    description: 'Orchestrate multiple agents to collaborate on complex tasks.',
     duration: '~30 min',
-    level: 'Intermediate',
-    link: '/labs/agent-with-tools',
+    level: 'Advanced',
+    link: '/labs/agent-orchestration',
   },
 ];
 

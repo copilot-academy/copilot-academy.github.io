@@ -165,7 +165,7 @@ This walkthrough demonstrates connecting to a SQLite MCP server to your VS Code 
 
 ### Step 1 — Create a Sample Database
 
-This repo includes a legacy SQL Server schema in [legacy/database-schema.sql](../legacy/database-schema.sql) that defines `Employees` and `Departments` tables. Since that schema uses SQL Server syntax (`IDENTITY`, `GETDATE()`, etc.), we will create a simplified SQLite version for this walkthrough:
+This repo includes a legacy SQL Server schema that defines `Employees` and `Departments` tables. Since that schema uses SQL Server syntax (`IDENTITY`, `GETDATE()`, etc.), we will create a simplified SQLite version for this walkthrough:
 
 ```bash
 # From the repository root
