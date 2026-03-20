@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./workshops:/app/workshops
+      - ./labs:/app/labs
+      - ./sidebars:/app/sidebars
+      - ./src:/app/src
+      - ./static:/app/static
+      - ./docusaurus.config.js:/app/docusaurus.config.js
+    environment:
+      - NODE_ENV=development

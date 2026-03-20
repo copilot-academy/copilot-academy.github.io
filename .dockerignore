@@ -1,0 +1,11 @@
+node_modules
+build
+.docusaurus
+.git
+.github
+.gitignore
+.DS_Store
+README.md
+CONTRIBUTING.md
+Dockerfile
+docker-compose.yml

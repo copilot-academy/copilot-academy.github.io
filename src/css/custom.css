@@ -1,0 +1,425 @@
+/**
+ * GitHub-themed custom styles for Docusaurus
+ * Based on GitHub's Primer design system
+ * https://primer.style/design/foundations/colors
+ */
+
+/* ---------- Light mode (default) ---------- */
+:root {
+  /* Primary */
+  --ifm-color-primary: #0969da;
+  --ifm-color-primary-dark: #0550ae;
+  --ifm-color-primary-darker: #033d8b;
+  --ifm-color-primary-darkest: #02306b;
+  --ifm-color-primary-light: #218bff;
+  --ifm-color-primary-lighter: #54aeff;
+  --ifm-color-primary-lightest: #80ccff;
+
+  /* Backgrounds */
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #f6f8fa;
+
+  /* Text */
+  --ifm-font-color-base: #1f2328;
+  --ifm-font-color-secondary: #656d76;
+
+  /* Borders */
+  --ifm-color-emphasis-300: #d0d7de;
+
+  /* Code */
+  --ifm-code-font-size: 85%;
+  --ifm-code-background: #eff1f3;
+  --ifm-code-border-radius: 6px;
+  --ifm-code-padding-horizontal: 0.4rem;
+  --ifm-code-padding-vertical: 0.1rem;
+
+  /* Layout */
+  --ifm-global-radius: 6px;
+  --ifm-global-shadow-lw: 0 1px 0 rgba(27, 31, 36, 0.04);
+  --ifm-global-shadow-md: 0 3px 6px rgba(140, 149, 159, 0.15);
+  --ifm-global-shadow-tl: 0 12px 28px rgba(140, 149, 159, 0.3);
+
+  /* Navbar */
+  --ifm-navbar-background-color: #24292f;
+  --ifm-navbar-shadow: 0 1px 0 rgba(27, 31, 36, 0.15);
+
+  /* Footer */
+  --ifm-footer-background-color: #24292f;
+  --ifm-footer-color: #e6edf3;
+  --ifm-footer-link-color: #e6edf3;
+
+  /* Sidebar */
+  --doc-sidebar-width: 280px;
+
+  /* Wider content area (defaults: 1140px / 1320px at xl) */
+  --ifm-container-width: 1440px;
+  --ifm-container-width-xl: 1600px;
+}
+
+/* ---------- Dark mode ---------- */
+[data-theme='dark'] {
+  /* Primary */
+  --ifm-color-primary: #58a6ff;
+  --ifm-color-primary-dark: #388bfd;
+  --ifm-color-primary-darker: #1f6feb;
+  --ifm-color-primary-darkest: #0550ae;
+  --ifm-color-primary-light: #79c0ff;
+  --ifm-color-primary-lighter: #a5d6ff;
+  --ifm-color-primary-lightest: #cae8ff;
+
+  /* Backgrounds */
+  --ifm-background-color: #0d1117;
+  --ifm-background-surface-color: #161b22;
+
+  /* Text */
+  --ifm-font-color-base: #e6edf3;
+  --ifm-font-color-secondary: #8b949e;
+
+  /* Borders */
+  --ifm-color-emphasis-300: #30363d;
+
+  /* Code */
+  --ifm-code-background: #161b22;
+
+  /* Navbar */
+  --ifm-navbar-background-color: #161b22;
+
+  /* Footer */
+  --ifm-footer-background-color: #010409;
+}
+
+/* ---------- Typography ---------- */
+:root {
+  --ifm-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji';
+  --ifm-font-family-monospace: ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+    Consolas, 'Liberation Mono', monospace;
+  --ifm-heading-font-weight: 600;
+  --ifm-font-weight-bold: 600;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar__title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.navbar__link {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: #ffffff;
+}
+
+/* ---------- Sidebar ---------- */
+.menu__link {
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  background-color: rgba(9, 105, 218, 0.1);
+}
+
+[data-theme='dark'] .menu__link--active:not(.menu__link--sublist) {
+  background-color: rgba(88, 166, 255, 0.1);
+}
+
+/* ---------- Content ---------- */
+.markdown h1:first-child {
+  font-size: 2rem;
+}
+
+.markdown h2 {
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  padding-bottom: 0.3em;
+}
+
+/* Blockquote styling for status badges */
+.markdown blockquote {
+  border-left-color: var(--ifm-color-primary);
+  background-color: var(--ifm-background-surface-color);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+
+/* Table styling */
+.markdown table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.markdown table th {
+  background-color: var(--ifm-background-surface-color);
+  font-weight: 600;
+}
+
+.markdown table td,
+.markdown table th {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  padding: 0.5rem 0.75rem;
+}
+
+/* ---------- Footer ---------- */
+.footer__link-item {
+  font-size: 0.875rem;
+}
+
+.footer__copyright {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* ---------- Admonitions ---------- */
+.admonition {
+  border-radius: 6px;
+}
+
+/* ---------- Prompt blocks (word-wrapped) ---------- */
+.prompt-block pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.prompt-block pre::before {
+  content: '💬 Prompt';
+  display: block;
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+/* ---------- Video component ---------- */
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  margin: 1.5rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--ifm-background-surface-color);
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- Landing page ---------- */
+.hero-banner {
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+  padding: 4rem 0;
+  text-align: center;
+  color: #e6edf3;
+}
+
+.hero-banner__title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.hero-banner__subtitle {
+  font-size: 1.25rem;
+  color: #8b949e;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-banner__actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-banner__actions .button--primary {
+  background-color: #238636;
+  border-color: #238636;
+  color: #ffffff;
+}
+
+.hero-banner__actions .button--primary:hover {
+  background-color: #2ea043;
+  border-color: #2ea043;
+  color: #ffffff;
+}
+
+.hero-banner__actions .button--outline {
+  color: #e6edf3;
+  border-color: #30363d;
+}
+
+.hero-banner__actions .button--outline:hover {
+  background-color: #30363d;
+  color: #ffffff;
+}
+
+.landing-main {
+  padding: 0;
+}
+
+.landing-section {
+  padding: 3rem 0;
+}
+
+.landing-section--alt {
+  background-color: var(--ifm-background-surface-color);
+}
+
+.landing-section__title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.landing-section__subtitle {
+  color: var(--ifm-font-color-secondary);
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+}
+
+/* Card styles */
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  padding: 1.5rem;
+  height: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: var(--ifm-background-color);
+}
+
+.card:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: var(--ifm-global-shadow-md);
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.card__icon {
+  font-size: 1.5rem;
+}
+
+.card__header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.card__body {
+  margin-bottom: 1rem;
+}
+
+.card__body p {
+  margin: 0;
+  color: var(--ifm-font-color-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.card__footer {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge--primary {
+  background-color: rgba(9, 105, 218, 0.15);
+  color: var(--ifm-color-primary);
+}
+
+.badge--secondary {
+  background-color: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-secondary);
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.badge--info {
+  background-color: rgba(35, 134, 54, 0.12);
+  color: #238636;
+}
+
+[data-theme='dark'] .badge--info {
+  background-color: rgba(46, 160, 67, 0.15);
+  color: #3fb950;
+}
+
+/* Lab cards - slightly smaller */
+.card--lab {
+  padding: 1.25rem;
+}
+
+.card--lab .card__header h3 {
+  font-size: 1.05rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-banner {
+    padding: 2.5rem 1rem;
+  }
+
+  .hero-banner__title {
+    font-size: 2rem;
+  }
+
+  .hero-banner__subtitle {
+    font-size: 1rem;
+  }
+
+  .col--4,
+  .col--6 {
+    margin-bottom: 1rem;
+  }
+}
+
+/* ---------- Wider doc content column ---------- */
+@media (min-width: 997px) {
+  [class*='docItemCol'] {
+    max-width: 80% !important;
+  }
+}
