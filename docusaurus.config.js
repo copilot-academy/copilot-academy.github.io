@@ -10,7 +10,7 @@ const config = {
   baseUrl: '/',
 
   organizationName: 'copilot-academy',
-  projectName: 'copilot-academy',
+  projectName: 'copilot-academy.github.io',
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
@@ -43,7 +43,7 @@ const config = {
         routeBasePath: 'workshops/copilot-customization',
         sidebarPath: './sidebars/copilot-customization.js',
         editUrl:
-          'https://github.com/copilot-academy/copilot-academy/tree/main/',
+          'https://github.com/copilot-academy/copilot-academy.github.io/tree/main/',
       },
     ],
     [
@@ -54,7 +54,7 @@ const config = {
         routeBasePath: 'workshops/immersive-experience',
         sidebarPath: './sidebars/immersive-experience.js',
         editUrl:
-          'https://github.com/copilot-academy/copilot-academy/tree/main/',
+          'https://github.com/copilot-academy/copilot-academy.github.io/tree/main/',
       },
     ],
     [
@@ -65,7 +65,7 @@ const config = {
         routeBasePath: 'labs',
         sidebarPath: './sidebars/labs.js',
         editUrl:
-          'https://github.com/copilot-academy/copilot-academy/tree/main/',
+          'https://github.com/copilot-academy/copilot-academy.github.io/tree/main/',
       },
     ],
   ],
@@ -102,7 +102,7 @@ const config = {
             position: 'left',
           },
           {
-            href: 'https://github.com/copilot-academy/copilot-academy',
+            href: 'https://github.com/copilot-academy/copilot-academy.github.io',
             label: 'GitHub',
             position: 'right',
           },
@@ -146,7 +146,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/copilot-academy/copilot-academy',
+                href: 'https://github.com/copilot-academy/copilot-academy.github.io',
               },
             ],
           },

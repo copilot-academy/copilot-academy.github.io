@@ -1,6 +1,6 @@
 # GitHub Copilot Workshops
 
-[![Deploy to GitHub Pages](https://github.com/copilot-academy/copilot-academy/actions/workflows/deploy.yml/badge.svg)](https://github.com/copilot-academy/copilot-academy/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/copilot-academy/copilot-academy.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/copilot-academy/copilot-academy.github.io/actions/workflows/deploy.yml)
 
 A collection of self-paced workshops and hands-on labs for understanding and leveraging GitHub Copilot's customization capabilities — from basic instructions to advanced agentic workflows.
 
