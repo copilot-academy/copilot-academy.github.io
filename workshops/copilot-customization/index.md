@@ -31,4 +31,4 @@ Start with the [Introduction](/workshops/copilot-customization/copilot_customiza
 - [Visual Studio Code](https://code.visualstudio.com/) with [GitHub Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) extension installed
 - A GitHub account with Copilot access
 - Basic familiarity with VS Code and Git
-- Clone a copy of the [dotnet-react-starter-demo repository](https://github.com/octodemo/dotnet-react-starter-demo) for the skills and custom agents modules
+- Clone a copy of the [dotnet-react-starter-demo repository](https://github.com/copilot-academy/dotnet-react-starter-demo) for the skills and custom agents modules

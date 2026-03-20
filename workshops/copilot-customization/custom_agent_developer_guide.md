@@ -54,7 +54,7 @@ We built the `test-coverage` agent for the `dotnet-react-starter` template appli
 - **Visual Studio Code** v1.106 or later (custom agents were introduced in this release)
 - **GitHub Copilot** extension installed with an active subscription (Free, Pro, or Enterprise)
 - A **workspace** (Git repository) where you can create the `.github/agents/` folder
-- Get a copy of the [dotnet-react-starter-demo repo](https://github.com/octodemo/dotnet-react-starter-demo)
+- Get a copy of the [dotnet-react-starter-demo repo](https://github.com/copilot-academy/dotnet-react-starter-demo)
 
 ### Create the Agents Directory
 

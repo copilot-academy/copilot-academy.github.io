@@ -2,15 +2,15 @@
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'GitHub Copilot Workshops',
+  title: 'GitHub Copilot Academy',
   tagline: 'Self-paced workshops and hands-on labs for GitHub Copilot',
   favicon: 'img/favicon.svg',
 
-  url: 'https://sturdy-adventure-3qvzjj4.pages.github.io',
+  url: 'https://copilot-academy.github.io',
   baseUrl: '/',
 
-  organizationName: 'octodemo',
-  projectName: 'copilot-workshops',
+  organizationName: 'copilot-academy',
+  projectName: 'copilot-academy',
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
@@ -43,7 +43,7 @@ const config = {
         routeBasePath: 'workshops/copilot-customization',
         sidebarPath: './sidebars/copilot-customization.js',
         editUrl:
-          'https://github.com/octodemo/copilot-workshops/tree/main/',
+          'https://github.com/copilot-academy/copilot-academy/tree/main/',
       },
     ],
     [
@@ -54,7 +54,7 @@ const config = {
         routeBasePath: 'workshops/immersive-experience',
         sidebarPath: './sidebars/immersive-experience.js',
         editUrl:
-          'https://github.com/octodemo/copilot-workshops/tree/main/',
+          'https://github.com/copilot-academy/copilot-academy/tree/main/',
       },
     ],
     [
@@ -65,7 +65,7 @@ const config = {
         routeBasePath: 'labs',
         sidebarPath: './sidebars/labs.js',
         editUrl:
-          'https://github.com/octodemo/copilot-workshops/tree/main/',
+          'https://github.com/copilot-academy/copilot-academy/tree/main/',
       },
     ],
   ],
@@ -75,7 +75,7 @@ const config = {
     ({
       image: 'img/social-card.png',
       navbar: {
-        title: 'Copilot Workshops',
+        title: 'Workshops',
         logo: {
           alt: 'GitHub Logo',
           src: 'img/logo.svg',
@@ -102,7 +102,7 @@ const config = {
             position: 'left',
           },
           {
-            href: 'https://github.com/octodemo/copilot-workshops',
+            href: 'https://github.com/copilot-academy/copilot-academy',
             label: 'GitHub',
             position: 'right',
           },
@@ -146,12 +146,12 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/octodemo/copilot-workshops',
+                href: 'https://github.com/copilot-academy/copilot-academy',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} GitHub Copilot Workshops`,
+        copyright: `Copyright © ${new Date().getFullYear()} GitHub `,
       },
       prism: {
         theme: {

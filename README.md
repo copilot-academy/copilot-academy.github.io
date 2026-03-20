@@ -1,10 +1,10 @@
 # GitHub Copilot Workshops
 
-[![Deploy to GitHub Pages](https://github.com/octodemo/copilot-workshops/actions/workflows/deploy.yml/badge.svg)](https://github.com/octodemo/copilot-workshops/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/copilot-academy/copilot-academy/actions/workflows/deploy.yml/badge.svg)](https://github.com/copilot-academy/copilot-academy/actions/workflows/deploy.yml)
 
 A collection of self-paced workshops and hands-on labs for understanding and leveraging GitHub Copilot's customization capabilities — from basic instructions to advanced agentic workflows.
 
-**Live site:** https://octodemo.github.io/copilot-workshops/
+**Live site:** https://copilot-academy.github.io/
 
 ## Workshops
 
@@ -57,4 +57,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for full development and contribution gui
 
 ## Related Content
 
-* [dotnet-react-starter-demo](https://github.com/octodemo/dotnet-react-starter-demo) - A sample .NET + React app used in the Copilot Customization workshop
+* [dotnet-react-starter-demo](https://github.com/copilot-academy/dotnet-react-starter-demo) - A sample .NET + React app used in the Copilot Customization workshop

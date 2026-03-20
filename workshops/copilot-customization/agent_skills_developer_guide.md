@@ -20,7 +20,7 @@ Before building agent skills, make sure your environment is ready. Skills are an
 - GitHub Copilot extension installed and an active Copilot subscription (Free, Pro, or Enterprise)
 - Agent Skills preview enabled: set `chat.useAgentSkills` to `true` in VS Code settings
 - A workspace (Git repository) where you can create the skill directory structure
-- Get a copy of the [dotnet-react-starter-demo repo](https://github.com/octodemo/dotnet-react-starter-demo)
+- Get a copy of the [dotnet-react-starter-demo repo](https://github.com/copilot-academy/dotnet-react-starter-demo)
 
 ### Enable Agent Skills in VS Code
 

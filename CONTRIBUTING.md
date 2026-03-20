@@ -113,7 +113,7 @@ Deployment is automated — push to `main` and GitHub Actions handles the rest:
 1. The [test workflow](.github/workflows/test.yml) runs on every PR to validate the build
 2. The [deploy workflow](.github/workflows/deploy.yml) runs on push to `main` and publishes to GitHub Pages
 
-The site is live at: https://octodemo.github.io/copilot-workshops/
+The site is live at: https://copilot-academy.github.io/
 
 ## Project Structure
 
