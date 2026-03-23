@@ -11,9 +11,9 @@ Focused, self-contained exercises you can complete in 15–30 minutes. Each lab 
 
 | Lab | Duration | Description |
 |-----|----------|-------------|
-| [Copilot CLI: Zero to Hero](/labs/copilot-cli-zero-to-hero) | ~1 hour | Create a "Hello World" agent skill from scratch |
+| [Copilot CLI: Zero to Hero](/labs/copilot-cli-zero-to-hero) | ~1 hour | Learn GitHub Copilot CLI from first install to advanced agentic workflows |
 | [Copilot Coding Agent](/labs/copilot-coding-agent) | ~20 min | Delegate work to Copilot Coding Agent |
-| [Copilot SDK](/labs/copilot-sdk) | ~1 hour | Learn how to use the Copilot SDK to integrate Copilot in your app |
+| [Copilot SDK](/labs/copilot-sdk) | ~1 hour | Build a Smart Changelog Generator CLI using the Copilot SDK |
 
 ## Intermediate
 
