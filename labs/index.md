@@ -20,6 +20,7 @@ Focused, self-contained exercises you can complete in 15–30 minutes. Each lab 
 | Lab | Duration | Description |
 |-----|----------|-------------|
 | [MCP: Atlassian Jira and Confluence](/labs/mcp-atlassian) | ~30 min | Use MCP to integrate with Jira and Confluence |
+| [Agentic Workflows Repo Analyzer](/labs/agentic-workflows-repo-analyzer) | ~45 min | Create a GitHub Agentic Workflow for weekly repository health reports |
 
 ## Advanced
 

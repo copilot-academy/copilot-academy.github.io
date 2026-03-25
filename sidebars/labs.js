@@ -20,7 +20,7 @@ const sidebars = {
       label: 'Intermediate',
       items: [
         'mcp-atlassian',
-
+        'agentic-workflows-repo-analyzer',
       ],
     },
     {
