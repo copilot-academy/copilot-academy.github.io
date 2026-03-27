@@ -1,7 +1,7 @@
 ---
 title: "Lab: Copilot SDK"
 description: Build a Smart Changelog Generator CLI tool using the GitHub Copilot SDK to embed Copilot's agentic engine into your own application.
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 # Lab: Copilot SDK

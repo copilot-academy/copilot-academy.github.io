@@ -46,7 +46,8 @@ With AI, specifications can now be:
    # Run this in the root of your repo - Say yes to continue with the risk of overwriting files
    specify init . --ai copilot --script sh
 
-   # If you run into auth issues, try this: `env -u GITHUB_TOKEN specify init . --ai copilot --script sh`
+   # If you run into auth issues, try this:
+   # `env -u GITHUB_TOKEN specify init . --ai copilot --script sh`
    ```
    
    This creates:
@@ -60,7 +61,6 @@ The **constitution** is your project's immutable architectural DNA - the princip
 
 1. Clear your chat history, ensure you are on `Agent` mode with `Claude Sonnet 4.6`
 2. Run the constitution command with the following prompt:
-   <div className="prompt-block">
    ```text
    /speckit.constitution  Our OctoCAT Supply Chain application follows these principles:
    - Library-first architecture for maximum reusability
@@ -71,7 +71,6 @@ The **constitution** is your project's immutable architectural DNA - the princip
    - TypeScript for type safety
    - Minimal dependencies - evaluate before adding
    ```
-   </div>
 3. Review the generated `.specify/memory/constitution.md`
 4. When happy with it, click `Keep` to save changes
 5. The constitution will now guide all subsequent specifications and plans
@@ -81,7 +80,6 @@ The **constitution** is your project's immutable architectural DNA - the princip
 Let's add a **Purchase Order** feature using spec-driven development.
 
 1. Run the specify command and provide the feature description:
-   <div className="prompt-block">
    ```text
    /speckit.specify Create a Purchase Order management system. Buyers at branches can create purchase 
    orders to suppliers for products. Each PO contains multiple line items with 
@@ -89,7 +87,6 @@ Let's add a **Purchase Order** feature using spec-driven development.
    Fulfilled, Cancelled). Suppliers receive notifications when POs are submitted. 
    Include approval workflow for POs over $10,000.
    ```
-   </div>
 2. **Agent will:**
    - Scan existing specs to assign next feature number (e.g., `001-purchase-orders`)
    - Create a feature branch automatically
@@ -111,11 +108,9 @@ Let's add a **Purchase Order** feature using spec-driven development.
 Before planning implementation, use structured clarification to reduce downstream rework.
 
 1. Run the clarify command:
-   <div className="prompt-block">
    ```text
    /speckit.clarify
    ```
-   </div>
 2. Agent will analyze the spec and ask targeted questions like:
    - "How should suppliers receive notifications?"
    - "What happens when an approver tries to approve their own purchase orders?"
@@ -131,7 +126,6 @@ Before planning implementation, use structured clarification to reduce downstrea
 Now translate the business spec into a technical plan with your chosen architecture.
 
 1. Run the plan command with your technical requirements:
-   <div className="prompt-block">
    ```text
    /speckit.plan  Technology Stack:
    - TypeScript with Express.js for REST API
@@ -148,7 +142,6 @@ Now translate the business spec into a technical plan with your chosen architect
    - React Context for state management
    - Responsive UI matching existing design system
    ```
-   </div>
 
 3. **Agent will generate multiple artifacts**:
    - `specs/004-purchase-orders/plan.md` - High-level implementation plan
@@ -168,11 +161,9 @@ Now translate the business spec into a technical plan with your chosen architect
 Convert the implementation plan into actionable, executable tasks.
 
 1. Run the tasks command:
-   <div className="prompt-block">
    ```text
    /speckit.tasks
    ```
-   </div>
 2. Agent analyzes the plan and creates `specs/004-purchase-orders/tasks.md` with:
    - Database migration tasks (schema, indexes, foreign keys)
    - Repository layer tasks (CRUD operations per entity)
@@ -198,11 +189,9 @@ Convert the implementation plan into actionable, executable tasks.
 Now execute the implementation plan.
 
 1. Run the implement command:
-   <div className="prompt-block">
    ```text
    /speckit.implement
    ```
-   </div>
 2. **Agent will:**
    - Validate all prerequisites (constitution, spec, plan, tasks exist)
    - Execute tasks in dependency order
@@ -234,12 +223,10 @@ Now execute the implementation plan.
    - Verify approval workflow for high-value POs
    
 3. If issues arise, provide feedback to agent.  For example:
-   <div className="prompt-block">
    ```text
    The approval notification isn't triggering. 
    Fix the notification service and add integration tests.
    ```
-   </div>
 4. Agent will update the implementation and re-run tests
 
 ## Step 9: Specification Evolution
@@ -249,7 +236,6 @@ When requirements change (and they will), update specifications first.
 **Scenario:** PM says *"We need to support partial fulfillment - suppliers can fulfill line items incrementally."*
 
 1. Update the spec:
-   <div className="prompt-block">
    ```text
    /speckit.specify
    
@@ -259,25 +245,18 @@ When requirements change (and they will), update specifications first.
    - PO status is "Partially Fulfilled" until all items complete
    - Add GET /api/purchase-orders/:id/fulfillment-history endpoint
    ```
-   </div>
 2. Regenerate the plan:
-   <div className="prompt-block">
    ```text
    /speckit.plan
    ```
-   </div>
 3. Regenerate tasks:
-   <div className="prompt-block">
    ```text
    /speckit.tasks
    ```
-   </div>
 4. Implement changes:
-   <div className="prompt-block">
    ```text
    /speckit.implement
    ```
-   </div>
 
 The specification drives evolution. Code is regenerated from updated specs, not manually patched.
 

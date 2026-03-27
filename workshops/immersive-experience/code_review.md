@@ -44,13 +44,10 @@ Once the Actions run has completed, go back to the pull request.  You should see
 Don't like manual fixes? Click **"Implement Suggestions"** to hand feedback back to Coding Agent for automatic fixes.  This will open a new pull request that merges into your existing PR with all suggested fixes applied.
 
 Alternatively you can open a new comment:
-<div className="prompt-block">
 
 ```text
 @Copilot implement all your review suggestions
 ```
-
-</div>
 
 ## Step 5: Grouped Changes (Optional)
 

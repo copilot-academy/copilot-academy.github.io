@@ -263,6 +263,11 @@ Agents work best with **well‑scoped tasks**.
 
 The clearer the task, the more reliable the agent.  This isn't necessarily related to preparing your repository, but more a word of wisdom once you have completed the steps above.  
 
+## 12. Ongoing Measurement and Improvement
+
+As you begin building customizations in your repository it is useful to have some measurements of current state and improvement over time.  One of the labs we built is the [Repo Health Analyzer Agentic Workflow](../labs/agentic-workflows-repo-analyzer.md). Consider using this or customizing for your needs to continuously monitor your repository's health and readiness for agents. Regularly reviewing the metrics and recommendations can aid continual improvement.
+
+
 ## Wrapping Up
 
 Ultimately, preparing a repository for agents is an exercise in **context engineering**.  The goal is to make the repository self-describing so an automated system can understand how the project works, how changes should be made, and how those changes should be validated.  

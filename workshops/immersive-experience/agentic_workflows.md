@@ -131,14 +131,9 @@ Here we will use Copilot Coding Agent to create an agentic workflow from scratch
 
 1. In your repo in GitHub.com, go to the `Agents` tab
 2. Choose 'Claude Opus 4.6' as your model and enter this prompt:
-
-   <div className="prompt-block">
-
    ```text
    Create a workflow for GitHub Agentic Workflows using https://github.com/github/gh-aw/blob/main/create.md. The purpose of the workflow is to import multi-device resolution tester agentic workflow from github/gh-aw and adapt it to test the website in this repo.  Ensure that the build steps are followed in docs/build.md.  Please create a pull request with these changes and ensure it can be triggered from workflow_dispatch as well as scheduled weekly.  
    ```
-
-   </div>
 3. Click the send button to send the request to Copilot Coding Agent
 4. Let Copilot Coding Agent Cook - it will:
    - Fetch the creation guide

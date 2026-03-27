@@ -11,7 +11,6 @@ const sidebars = {
       label: 'Getting Started',
       items: [
         'copilot-cli-zero-to-hero',
-        'copilot-coding-agent',
         'copilot-sdk',
       ],
     },
@@ -27,7 +26,6 @@ const sidebars = {
       type: 'category',
       label: 'Advanced',
       items: [
-        'agent-orchestration',
         'build-your-mcp-server',
       ], 
     },

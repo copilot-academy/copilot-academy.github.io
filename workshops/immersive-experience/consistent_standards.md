@@ -48,11 +48,9 @@ TAO is a fictitious observability framework for this workshop.  You can read abo
 
 1. Clear chat history, switch to `Agent` mode.  Choose any model (Claude Sonnet 4.6 recommended)
 2. Prompt:
-   <div className="prompt-block">
    ```text
    Add observability to the Supplier route using our internal standards
    ```
-   </div>
 3. Notice Copilot:
    - Adds TAO logging
    - Includes metrics
@@ -67,11 +65,9 @@ Sometimes you need to pass context to a teammate, a new chat session, or an agen
 
 1. Clear chat, switch to `Plan` mode.  Again, consider switching to `Gemini 3.1 Pro` or `Claude Opus 4.6` for planning use cases.
 2. Prompt:
-   <div className="prompt-block">
    ```text
    Create a plan for a user profile page with edit capability and picture upload
    ```
-   </div>
 3. Run the handoff command:
    ```text
    /handoff
@@ -106,31 +102,19 @@ Here we will use GitHub's remote Model Context Protocol (MCP) server to retrieve
 4. Click on the 'Tools' icon next to the model selector.  You should see `github-remote` checked at the bottom.  You can uncheck things like `Azure MCP Server`, `Bicep`, and `playwright` if they are selected.  Click `OK` to save. 
 5. Enter the following prompt:
 
-    <div className="prompt-block">
-
     ```txt
     Get the contents of the Copilot Space `OD OctoCAT Supply Compliance Docs`. Once you have those, please analyze my current changes in the PR: Did we include all the necessary languages for the Terms of Service download?
     ```
 
-    </div>
-
 5. Additional prompts at your disposal:
-
-    <div className="prompt-block">
 
     ```txt
     Check if we have all the necessary legal disclaimers included in our Privacy Policy update.
     ```
 
-    </div>
-
-    <div className="prompt-block">
-
     ```txt
     We need to implement a Cookie Banner. Implement it according to the compliance requirements we have in our Copilot Space `OD OctoCAT Supply Compliance Docs`.
     ```
-
-    </div>
 
 Spaces provided additional compliance context for Copilot to reference when analyzing your code changes.  However, you could also access them directly as a chat bot at https://github.com/copilot/spaces if you just want to ask questions about the content.  
 

@@ -23,11 +23,9 @@ sidebar_position: 5
 3. Select the main branch for working (should be preselected)
 4. Choose **BDD Specialist** agent
 5. Prompt:
-   <div className="prompt-block">
    ```text
    Add comprehensive BDD tests for the Cart page feature
    ```
-   </div>
 6. Click the **Start Task** button
 7. Agent starts working - **you can close the tab and do other work**
 
@@ -38,18 +36,14 @@ sidebar_position: 5
 1. In your IDE, open `.github/prompts/demo-cart-page.prompt.md`
 2. The GitHub MCP server should already be started (from Use Case 3).  If not, start it now by hitting Cmd/Ctrl + Shift + P and selecting **MCP: List Servers**, selecting `github-remote`, and clicking `Start Server`.
 3. In the Copilot Chat panel, clear your history, ensure you are in agent mode and select a base model like `GPT-5 mini`.  Have Copilot open an issue for you.  Prompt:
-   <div className="prompt-block">
    ```text
    Create a GitHub issue with the title "Implement Recommendations Feature" using the contents in the demo-cart-page.prompt.md file as the body.
    ```
-   </div>
 4. Click Allow to let Copilot execute the create issue command.  It should return with a new issue URL.  
 5. Have Copilot assign the issue to the Coding Agent.  Prompt:
-   <div className="prompt-block">
    ```text
    Assign this issue to the Copilot coding agent.
    ```
-   </div>
    Note an alternative approach is do this directly in GitHub by manually creating the issue and then assigning it to `Copilot`.
 6. Open the issue in GitHub and you should see the 👀 indicator showing that Copilot saw the issue.  It should also have a link to a work in progress pull request shortly after.
 
@@ -61,17 +55,14 @@ sidebar_position: 5
    - Note you can view real-time progress and see commands executed
    - Also see the pull request contents
 4. **Steer mid-session by prompting Copilot:**
-   <div className="prompt-block">
    ```text
    While you're at it, add error handling for network failures
    ```
-   </div>
 
 ## Step 4: Use API Specialist for Backend Work
 
 1. Go back to your repository and open the agents panel like we did for the **BDD Specialist**.  This time select **API Specialist**
 2. Prompt with the following and click to **Start Task**:
-   <div className="prompt-block">
    ```text
    Create CRUD endpoints for user profiles: 
    GET /api/profiles/:id
@@ -79,7 +70,6 @@ sidebar_position: 5
    PUT /api/profiles/:id
    DELETE /api/profiles/:id
    ```
-   </div>
 3. Copilot Coding Agent will spin up another environment and implement the endpoint with proper error handling, validation, and Swagger docs
 
 ## What You Learned

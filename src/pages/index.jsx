@@ -33,13 +33,6 @@ const labs = [
     link: '/labs/copilot-cli-zero-to-hero',
   },
   {
-    title: 'Copilot Coding Agent',
-    description: 'Delegate work to Copilot Coding Agent.',
-    duration: '~20 min',
-    level: 'Beginner',
-    link: '/labs/copilot-coding-agent',
-  },
-  {
     title: 'Copilot SDK',
     description: 'Learn how to use the Copilot SDK to integrate Copilot in your app.',
     duration: '~1 hour',

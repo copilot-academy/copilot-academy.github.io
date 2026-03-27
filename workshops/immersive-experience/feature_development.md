@@ -22,11 +22,9 @@ The **planning agent** exists to help build a plan and clarify requirements.  It
 2. Drag `docs/design/cart.png` into chat (feel free to open it to review first)
 3. Set your model to 'Claude Opus 4.6' or 'Gemini 3.1 Pro'
 4. Prompt:
-   <div className="prompt-block">
    ```text
    I need to implement a shopping cart feature in this application matching this image including routing, navbar badge with item count, state management, and add/remove interactions.
    ```
-   </div>
 5. Copilot will ask clarifying questions like:
    - Should the cart persist across sessions?
    - What data should be stored?
@@ -38,11 +36,9 @@ The **planning agent** exists to help build a plan and clarify requirements.  It
 
 1. Switch to `Agent` mode, select `Claude Sonnet 4.6` model
 2. Prompt:
-   <div className="prompt-block">
    ```text
    Implement the plan you just produced.
    ```
-   </div>
 3. **Agent will:**
    - Create Cart component and page
    - Add routing
@@ -64,11 +60,9 @@ You can follow along as files are created/modified and also in the task list.  I
    - Verify badge updates (shows a count next to the cart icon)
    - Click the cart icon to view cart page
 3. If issues arise, have Copilot help troubleshoot.  Example prompt:
-   <div className="prompt-block">
    ```text
    The badge doesn't update when I add items. Fix this.
    ```
-   </div>
 4. When you are all done, click 'Keep' to save the changes.  
 
 ## What You Learned

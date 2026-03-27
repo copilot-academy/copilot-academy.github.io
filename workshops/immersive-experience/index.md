@@ -8,7 +8,7 @@ sidebar_position: 0
 
 Welcome to the **GitHub Copilot Immersive Experience** — a scenario-based workshop where you'll tackle real development problems that mirror your daily work. Each use case demonstrates multiple Copilot capabilities working together.
 
-This workshop uses the Octocat Supply demo application as a foundation, with custom workshop materials overlaid for hands-on exercises.
+This workshop uses the [Octocat Supply](https://github.com/copilot-academy/octocat_supply) demo application as a foundation. Make a copy of this repository to follow along with the exercises, or adapt the scenarios to your own codebase.
 
 ## Workshop Modules
 

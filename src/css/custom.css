@@ -182,6 +182,12 @@
   border-radius: 6px;
 }
 
+/* ---------- Code blocks: word-wrap by default ---------- */
+.theme-code-block pre code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* ---------- Prompt blocks (word-wrapped) ---------- */
 .prompt-block pre {
   white-space: pre-wrap;

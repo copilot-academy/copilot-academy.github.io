@@ -6,7 +6,7 @@ description: |
   with trend charts and actionable recommendations.
 
 on:
-  schedule: weekly
+  schedule: weekly on sunday
   workflow_dispatch:
 
 timeout-minutes: 30
@@ -34,7 +34,7 @@ tools:
     lockdown: false
     min-integrity: none
     toolsets: [default]
-    repos: all
+    allowed-repos: all
 
 safe-outputs:
   mentions: false

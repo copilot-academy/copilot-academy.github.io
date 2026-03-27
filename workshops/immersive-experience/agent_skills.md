@@ -49,11 +49,9 @@ Skills are defined in `.github/skills/` or `.claude/skills/` directories and con
 
 1. Open Copilot Chat and switch to **Agent** mode.  Select `Claude Opus 4.6`. 
 2. Enter the following prompt:
-   <div className="prompt-block">
    ```txt
    Add a new API endpoint for a new Entity called 'DeliveryVehicle'. Vehicles belong to branches.
    ```
-   </div>
 3. Watch as Copilot:
    - Analyzes the existing codebase structure
    - References the `api-endpoint` skill automatically

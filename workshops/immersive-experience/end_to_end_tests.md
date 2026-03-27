@@ -29,7 +29,6 @@ Note this requires that you've already implemented a shopping cart feature (from
 
 1. In the chat window, clear history, switch to `Agent` mode, and select the `Claude Sonnet 4.6` model
 2. Prompt:
-   <div className="prompt-block">
    ```text
    Create a Playwright e2e feature file testing:
    1. User adds two products to cart
@@ -41,17 +40,14 @@ Note this requires that you've already implemented a shopping cart feature (from
 
    Consult playwright config for the appropriate directories and setup.
    ```
-   </div>
 3. Review the files created (feature file in Gherkin format and E2E test implementation)
 
 ## Step 3: Run Tests (Local Only)
 
 1. Prompt:
-   <div className="prompt-block">
    ```text
    Run these tests in headless mode and show me results
    ```
-   </div>
 2. You'll be prompted to install some dependencies for Chromium...
 3. Agent executes tests using MCP and discusses results in chat
 

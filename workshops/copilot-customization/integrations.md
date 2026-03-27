@@ -159,7 +159,7 @@ Once started, verify it's running and connected in the Copilot Chat panel:
 
 ## 3. Walkthrough: Adding a Local Database MCP Server
 
-This walkthrough demonstrates connecting to a SQLite MCP server to your VS Code environment. We chose SQLite because it requires no external database setup and illustrates the configuration pattern that applies to any database MCP server.
+This walkthrough demonstrates connecting to a SQLite MCP server to your VS Code environment. We chose SQLite because it requires no external database setup and illustrates the configuration pattern that applies to any database MCP server.  If you don't already have it, get a copy of the [dotnet-react-starter-demo repo](https://github.com/copilot-academy/dotnet-react-starter-demo) for use with this walkthrough.
 
 > **Note:** This is an illustrative example. Your production workflow will use whatever database your project requires (PostgreSQL, SQL Server, MySQL, etc.) and will likely be remote from your local environment.  The same MCP pattern applies. The chosen MCP server does work for multiple database engines, but there may be alternatives that are purpose built for your specific database. 
 
@@ -264,7 +264,7 @@ GitHub Copilot will use the MCP tools to connect to your database, inspect the s
 
 ## 4. Walkthrough: Adding a Remote GitHub MCP Server
 
-This walkthrough connects the GitHub MCP server, giving Copilot the ability to search issues, read pull requests, and interact with your repository's GitHub data directly from chat. This will showcase connecting to a remote MCP server using OAUTH credentials.
+This walkthrough connects the GitHub MCP server, giving Copilot the ability to search issues, read pull requests, and interact with your repository's GitHub data directly from chat. This will showcase connecting to a remote MCP server using OAUTH credentials. Consider pushing the dotnet-react-starter-demo repo to your GitHub account for use with this walkthrough. Alternative, use any repository you have access to — the GitHub MCP server will use the context of the current repository by default.
 
 ### Step 1 — Configure the MCP Server
 
@@ -309,7 +309,7 @@ After configuration, check the MCP tools indicator in Copilot Chat to the right 
 
 The repo you are currently in is the context for the GitHub MCP server. You can always ask for something in another repo by specifying the repository as org_name/repo_name. Try prompts like:
 
-Sample prompts to try:
+Sample prompts to try (consider what exists in the repository you are using for context and adjust accordingly):
 
 - "List all open issues in the repository"
 - "Summarize the last 5 pull requests and their review status"
