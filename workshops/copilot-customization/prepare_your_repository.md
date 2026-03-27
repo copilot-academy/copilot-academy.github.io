@@ -265,7 +265,7 @@ The clearer the task, the more reliable the agent.  This isn't necessarily relat
 
 ## 12. Ongoing Measurement and Improvement
 
-As you begin building customizations in your repository it is useful to have some measurements of current state and improvement over time.  One of the labs we built is the [Repo Health Analyzer Agentic Workflow](../labs/agentic-workflows-repo-analyzer.md). Consider using this or customizing for your needs to continuously monitor your repository's health and readiness for agents. Regularly reviewing the metrics and recommendations can aid continual improvement.
+As you begin building customizations in your repository it is useful to have some measurements of current state and improvement over time.  One of the labs we built is the [Repo Health Analyzer Agentic Workflow](/labs/agentic-workflows-repo-analyzer). Consider using this or customizing for your needs to continuously monitor your repository's health and readiness for agents. Regularly reviewing the metrics and recommendations can aid continual improvement.
 
 
 ## Wrapping Up
