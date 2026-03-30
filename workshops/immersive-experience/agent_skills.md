@@ -74,7 +74,7 @@ Skills are defined in `.github/skills/` or `.claude/skills/` directories and con
 5. (Optional) Verify the implementation
    ```bash
    make build-api             # Build the API
-   npm test --workspace=api   # Run unit tests
+   make test                  # Run unit tests
    make run-api               # Start the API server    
    # Open the Swagger UI at `http://localhost:3000/api-docs` and show the new DeliveryVehicle endpoints
    ```

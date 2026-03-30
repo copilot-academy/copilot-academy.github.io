@@ -212,9 +212,9 @@ Now execute the implementation plan.
 
 1. Once implementation completes, test the feature:
    ```bash
-   npm run build
-   npm run test --workspace=api
-   npm run dev
+   make build
+   make test
+   make dev
    ```
 2. Test in the browser:
    - Navigate to the new Purchase Orders page

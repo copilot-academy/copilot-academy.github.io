@@ -20,17 +20,17 @@ sidebar_position: 1
    ```bash
    git clone <repo-url> demo_copilot_agent
    cd demo_copilot_agent
-   npm install
+   make install
    ```
 
 2. **Verify the build**
    ```bash
-   npm run build
+   make build
    ```
 
 3. **Initialize the database**
    ```bash
-   npm run db:init --workspace=api
+   make db-init
    ```
 
 4. **If using Codespaces:** Make ports 3000 and 5137 **Public**
