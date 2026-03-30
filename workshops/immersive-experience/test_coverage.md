@@ -48,7 +48,7 @@ Agent will:
 ## Step 4: Verify Results Yourself
 
 ```bash
-npm run test:coverage --workspace=api
+make test
 ```
 
 Review the coverage report - it should be significantly improved. 

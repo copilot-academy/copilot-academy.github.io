@@ -52,7 +52,7 @@ You can follow along as files are created/modified and also in the task list.  I
 
 1. Run the application:
    ```bash
-   npm run dev
+   make dev
    ```
 2. Test in browser - Click on 'Ports' tab to open port 5137:
    - Go to the 'Products' page or click 'Explore Products'
