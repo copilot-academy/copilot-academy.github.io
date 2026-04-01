@@ -81,7 +81,7 @@ Sometimes you need to pass context to a teammate, a new chat session, or an agen
 
 The steps are just defined in `.github/prompts/handoff.prompt.md`.  You can of course customize this.  For example, you might want it to automatically create a file in your workspace or create a GitHub issue.  You could always ask a follow up question to do that too. 
 
-## Step 5: Add external documentation as context with Copilot Spaces
+## Step 5: Add external documentation as context with Agent Skills
 
 Copilot instructions is great for driving behavior in your current repo/workspace. But what about shared context across multiple repos?  For example, your team may have a shared design system, style guide, or architecture principles. You can use an agent skill that is automatically invoked to provide context. Agent skills are a capability that combine a markdown prompt with the ability to reference other resources or run packaged scripts. In this lab we have an agent skill that contains the documentation directly. However, you could also build this to pull data from remote sources.
 
