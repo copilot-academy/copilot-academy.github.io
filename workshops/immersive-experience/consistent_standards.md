@@ -10,7 +10,7 @@ sidebar_position: 4
 >
 > **Time:** ~30 minutes
 >
-> **Copilot Features:** Custom Instructions, Handoffs, Copilot Spaces
+> **Copilot Features:** Custom Instructions, Handoffs, Agent Skills
 
 **Your Challenge:** Encode team standards so Copilot enforces them automatically.
 
@@ -68,7 +68,7 @@ Sometimes you need to pass context to a teammate, a new chat session, or an agen
    ```text
    Create a plan for a user profile page with edit capability and picture upload
    ```
-3. Run the handoff command:
+3. Switch to `Agent` mode and then run the handoff command:
    ```text
    /handoff
    ```
@@ -83,47 +83,45 @@ The steps are just defined in `.github/prompts/handoff.prompt.md`.  You can of c
 
 ## Step 5: Add external documentation as context with Copilot Spaces
 
-Copilot instructions is great for driving behavior in your current repo/workspace.  But what about shared context across multiple repos?  For example, your team may have a shared design system, style guide, or architecture principles.  You can use **Copilot Spaces** to provide this shared context.
+Copilot instructions is great for driving behavior in your current repo/workspace. But what about shared context across multiple repos?  For example, your team may have a shared design system, style guide, or architecture principles. You can use an agent skill that is automatically invoked to provide context. Agent skills are a capability that combine a markdown prompt with the ability to reference other resources or run packaged scripts. In this lab we have an agent skill that contains the documentation directly. However, you could also build this to pull data from remote sources.
 
-Here we will use GitHub's remote Model Context Protocol (MCP) server to retrieve documentation from a shared Copilot Space and use that to check compliance.
-
-1. Start the GitHub Remote Copilot Space 
-   - Open the Command Palette (Cmd/Ctrl + Shift + P)
-     - Alternatively you can navigate to `.vscode/mcp.json` and click the start button next to the `github-remote` server definition.
-   - Select "MCP: List Servers"
-   - Select the `github-remote` server
-   - Click "Start Server"
-   - This will say "The MCP Server Definition 'github-remote' wants to authenticate to GitHub." Click "Allow" to continue
-   - You will be redirected to an OAUTH flow.  Click 'Continue' on the account you are using.  
-   - If the organization for your repo requires SSO, you may need to authenticate that as well.  If not you can just click 'Continue' again.
-2. Check out the `feature-add-tos-download` branch.
+1. Check out the `feature-add-tos-download` branch.
    `git checkout feature-add-tos-download` (you may need to `git stash` first)
-3. Clear your chat history in Copilot Chat and switch to `Agent` mode, using the `Claude Sonnet 4.6` model.
-4. Click on the 'Tools' icon next to the model selector.  You should see `github-remote` checked at the bottom.  You can uncheck things like `Azure MCP Server`, `Bicep`, and `playwright` if they are selected.  Click `OK` to save. 
+2. Review the agent skill and example octocat compliance documentation available at [copilot-academy/od-octocat-supply-compliance-docs](https://github.com/copilot-academy/od-octocat-supply-compliance-docs).  This is a fictitious example meant to show how you can provide additional context to Copilot for compliance-related use cases.
+3. Install this skill in your local copy of your repository. You could git clone the repo and move the relevant files. However, we will use [skills.sh](https://skills.sh/) for this.  Run the following command from the root of your repository:
+
+    ```bash
+    npx skills add https://github.com/copilot-academy/od-octocat-supply-compliance-docs -a github-copilot -y
+    ```
+
+     This will pull down the relevant files in `.agents/skills/compliance`.
+4. Clear your chat history in Copilot Chat and switch to `Agent` mode, using the `Claude Sonnet 4.6` model. 
 5. Enter the following prompt:
 
     ```txt
-    Get the contents of the Copilot Space `OD OctoCAT Supply Compliance Docs`. Once you have those, please analyze my current changes in the PR: Did we include all the necessary languages for the Terms of Service download?
+    Please analyze my current changes in the PR: Did we include all the necessary languages for the Terms of Service download?
     ```
 
-5. Additional prompts at your disposal:
+    This will consult the skill and review its contents before analyzing your code changes and providing feedback.  You should see it reference the relevant compliance documentation in its response.
 
-    ```txt
+6. Additional prompts at your disposal:
+
+    ```text
     Check if we have all the necessary legal disclaimers included in our Privacy Policy update.
     ```
 
-    ```txt
+    ```text
     We need to implement a Cookie Banner. Implement it according to the compliance requirements we have in our Copilot Space `OD OctoCAT Supply Compliance Docs`.
     ```
 
-Spaces provided additional compliance context for Copilot to reference when analyzing your code changes.  However, you could also access them directly as a chat bot at https://github.com/copilot/spaces if you just want to ask questions about the content.  
+The compliance skill provided additional compliance context for Copilot to reference when analyzing your code changes.  
 
 ## What You Learned
 
 ✅ **Custom Instructions** - Team standards encoded once, applied everywhere  
 ✅ **Path-Specific Instructions** - Different rules for different file types  
 ✅ **Handoff Files** - Transfer context between sessions or developers  
-✅ **Copilot Spaces** - Providing curated, shared context for use with GitHub Copilot
+✅ **Agent Skills** - Providing curated, shared context for use with GitHub Copilot
 
 **Time Investment:** 30 minutes  
 **Value:** Consistent code quality, faster onboarding, less review friction
