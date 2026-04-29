@@ -20,6 +20,8 @@ Focused, self-contained exercises you can complete in 15–30 minutes. Each lab 
 |-----|----------|-------------|
 | [MCP: Atlassian Jira and Confluence](/labs/mcp-atlassian) | ~30 min | Use MCP to integrate with Jira and Confluence |
 | [Agentic Workflows Repo Analyzer](/labs/agentic-workflows-repo-analyzer) | ~45 min | Create a GitHub Agentic Workflow for weekly repository health reports |
+| [Customization in 90 Minutes](/labs/customization-in-90-minutes) | ~90 min | Build an SDLC multi-agent framework with skills, agents, orchestration, and model optimization |
+| [Context Engineering — Every Token Counts](/labs/context-engineering-lab) | ~2 hours | Measure, optimize, and engineer AI context windows — cutting token waste and reducing costs |
 
 ## Advanced
 
