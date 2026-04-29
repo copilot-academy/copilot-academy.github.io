@@ -20,6 +20,8 @@ const sidebars = {
       items: [
         'mcp-atlassian',
         'agentic-workflows-repo-analyzer',
+        'customization-in-90-minutes',
+        'context-engineering-lab',
       ],
     },
     {
