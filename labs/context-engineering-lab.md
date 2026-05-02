@@ -1188,6 +1188,289 @@ This structured format is ~30% shorter than the equivalent natural language para
 
 You can write prompts that are 40–60% smaller and produce better results. You know to use reference patterns, structured formats, and explicit constraints.
 
+
+## Exercise 10 — Knowledge Graphs & Pre-Compiled Context
+
+So far you've learned to selectively choose *which* files to load. This exercise goes one level deeper: instead of loading files at all, you'll pre-compile knowledge into compact, structured forms that Copilot can navigate in a fraction of the tokens.
+
+### 10.1 Why Knowledge Graphs Reduce Tokens
+
+When you ask Copilot about your codebase, it has two options:
+
+- **On-demand exploration**: Run `grep`, `find`, or `read_file` calls to discover facts each time — each tool call consumes tokens, and the results are verbose raw text
+- **Pre-compiled knowledge**: Read a compact, structured summary where the synthesis work was done once and not repeated on every query
+
+This is the core insight of **knowledge graphs** in AI workflows. You can replace verbose prose with structured facts.
+
+A raw text paragraph:
+
+```
+PaymentService is a microservice written in Go that handles payment processing. It depends on AuthService for token validation, connects to a PostgreSQL database for transaction records, and calls NotificationService to send payment confirmations.
+```
+
+**~55 tokens.**
+
+The same information as structured triples:
+
+```
+PaymentService → DEPENDS_ON   → AuthService (validates tokens)
+PaymentService → STORES_IN    → PostgreSQL (transaction records)
+PaymentService → CALLS        → NotificationService (payment confirmations)
+```
+
+**~25 tokens. Same information. ~2x more token-efficient.**
+
+For large collections of documents, the compression is far greater. Microsoft's GraphRAG research shows **26–97% fewer tokens per query** when pre-built graph summaries replace raw document search ([arXiv:2404.16130](https://arxiv.org/abs/2404.16130)).
+
+The pattern comes in a few forms:
+1. **Structured context files** — manually encode your codebase as a graph or use a tool like graphify to generate one from your codebase
+2. **LLM-wiki** — an LLM builds and maintains the graph from raw sources automatically
+
+### 10.2 Your copilot-instructions.md Is Already a Knowledge Graph
+
+The `copilot-instructions.md` you created in Exercise 3 is already a knowledge graph — it just may not be structured like one. A well-structured instructions file encodes:
+
+- **Nodes**: files, commands, modules, dependencies
+- **Edges**: depends-on, runs-before, implements, lives-at
+
+Compare these two styles:
+
+**Narrative style (~80 tokens, requires parsing):**
+
+```
+The project uses Express with Mongoose for MongoDB. Tests use Jest and supertest. Source code is in src/ and tests are in tests/. Run npm test to test and npm run dev for development.
+```
+
+**Graph-structured style (~45 tokens, Copilot navigates directly):**
+
+```markdown
+## Architecture
+- src/app.js        → Express entry point, route registration
+- src/models/       → Mongoose schemas (Item, User)
+- src/middleware.js → Auth, validation, error handling
+- tests/            → Jest + supertest (mirror src/ structure)
+
+## Commands
+- npm install → always run first
+- npm run dev → development (nodemon)
+- npm test    → must pass before PR
+```
+
+The second form lets Copilot answer "where does auth live?" With zero tool calls it reads the graph, finds the node, and answers directly.
+
+**Hands-on: Create an Architecture Map**
+
+Add a dedicated architecture map to the lab project in the `copilot` CLI:
+
+```
+Read the src/ directory structure in this project. Create a file called ARCHITECTURE_MAP.md that encodes the architecture as a structured knowledge graph with two sections:
+* "Where Things Live" (markdown table: Component | Path | Responsibility)
+* "Key Relationships" (bullet list of how components depend on each other)
+Keep it under 200 words. Code only.
+```
+
+Then reference it from your custom instructions:
+
+```bash
+echo '
+## Architecture Map
+See ARCHITECTURE_MAP.md for the full component graph. Read it before exploring src/.' \
+  >> .github/copilot-instructions.md
+```
+
+Now measure the token difference. `/clear` your session to start fresh and prompt:
+
+```
+Without searching any files, tell me: where does middleware logic live in this project?
+```
+
+Run `/usage`. Note how many tokens Copilot consumed and whether it used any tool calls.
+
+Next, start a second fresh session (`/clear`). Remove the `ARCHITECTURE_MAP.md` as well as the reference in `.github/copilot-instructions.md`. Ask the same question:
+
+```
+Where does middleware logic live in this project?
+```
+
+You will likely see it list files, search, and grep.  In addition `/usage` will show at least 1/3 more tokens used to achieve the same result. 
+
+:::tip 
+Well-structured context files have been shown to reduce session startup tokens from by as much as 88% by replacing on-demand exploration with pre-compiled knowledge.
+:::
+
+### 10.3 LLM-Wiki: Pre-Compiling Documentation
+
+Copilot-instructions can provide a basic knowledge graph. The pattern of linking other docs from the instructions file minimized the system prompt token consumption with every chat call, but still enables the model to discover knowledge whern needed.  **[LLM-wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)** is a pattern coined by Andrej Karpathy (co-founder of OpenAI). Instead of having Copilot read raw documentation on every question, an LLM incrementally builds a **persistent wiki** of interlinked markdown files. This includes one per concept, entity, or source. Copilot reads a compact index first, then drills into one or two relevant pages instead of searching the full raw source.
+
+The three-layer architecture:
+
+```
+raw/       ← immutable source captures (URLs, repos, transcripts) — never modified
+wiki/      ← LLM-compiled summaries: entity pages, concept pages, cross-references
+AGENTS.md  ← schema document: tells Copilot HOW to navigate the wiki
+```
+
+A 50,000-token raw documentation page becomes a ~500-token wiki summary. The generated `AGENTS.md` instructs Copilot to read `wiki/index.md` first (the navigation layer) instead of fetching raw URLs.
+
+**Hands-on: Install and use pin-llm-wiki**
+
+`pin-llm-wiki` implements this pattern as a GitHub Copilot CLI skill:
+
+```bash
+npx skills@latest add ndjordjevic/pin-llm-wiki
+```
+
+:::note
+Only install the Universal options. Just hit enter instead of selecting others. In addition, just install at the project level for now. 
+:::
+
+First ask copilot in a `/clear` session and ask Copilot directly with no wiki:
+
+```
+What types of context does GitHub Copilot use when answering questions in the IDE? Summarize the different context sources.
+```
+
+Run `/usage`. Record the token count.
+
+Now initialize a wiki in the current project. Start `copilot` CLI and then use the skill initialization:
+
+```
+/pin-llm-wiki init
+```
+
+Answer the questions: 
+* Purpose: GitHub Documentation
+* Detail Level: Standard
+* Source type: Web
+* Initialize a git repo: yes
+* When should lint run: Batch
+* After ingest, flip inbox: Yes
+* Proceed with Scaffold: Yes
+
+Ingest some docs content for the wiki (This will take several minutes):
+
+```
+/pin-llm-wiki ingest https://docs.github.com/api/article/body?pathname=/en/copilot/concepts
+/pin-llm-wiki ingest https://docs.github.com/en/copilot/concepts/context
+/pin-llm-wiki ingest https://docs.github.com/api/article/body?pathname=/en/copilot/concepts/context/repository-indexing
+/pin-llm-wiki ingest https://docs.github.com/api/article/body?pathname=/en/copilot/concepts/prompting
+/pin-llm-wiki ingest https://docs.github.com/api/article/body?pathname=/en/copilot/concepts/prompting/prompt-engineering 
+/pin-llm-wiki ingest https://docs.github.com/api/article/body?pathname=/en/copilot/concepts/chat
+```
+
+When it completes ingesting these docs it will also lint to ensure quality. 
+
+Now compare usage with the wiki.  In `copilot`, `/clear` your session history and prompt the same as before but with the wiki:
+
+```
+Using the wiki, what types of context does GitHub Copilot use when answering questions in the IDE? Summarize the different context sources.
+```
+
+Run `/usage` again. During writing this lab this approach saved about 50% on token usage (both input and output). 
+
+:::note
+The wiki answer reads a pre-compiled ~500-token summary page avoiding the need to fetch a more lengthy URL after initial ingest.  
+:::
+
+### 10.4 Graphify: Knowledge Graphs for Your Codebase
+
+The LLM-wiki pattern works well for external documentation. For your own codebase, **[Graphify](https://github.com/safishamsi/graphify)** applies the same principle automatically. In this section we will install Graphify, have it build a knowledge graph, and produce a `GRAPH_REPORT.md` that lets Copilot navigate your codebase structure without reading raw files on every turn. This allows to use fewer tokens per query compared to direct file exploration.
+
+**How it works:**
+
+Graphify runs in three passes:
+
+1. **AST pass** — Deterministically extracts classes, functions, imports, call graphs, and docstrings from 25 languages (Python, JS/TS, Go, Rust, Java, C/C++, and more) with no LLM needed.
+2. **Transcription pass** — Transcribes any video/audio files locally using Whisper with a domain-aware prompt.
+3. **LLM extraction pass** — Sub-agents run in parallel over docs, images, and transcripts to extract concepts and relationships.
+
+The result is merged into a graph, clustered by topology (no embeddings or vector DB needed), and exported as:
+
+```
+graphify-out/
+├── graph.html       # interactive visualization — open in any browser
+├── GRAPH_REPORT.md  # god nodes, community structure, suggested questions
+├── graph.json       # persistent graph — queryable weeks later
+└── cache/           # SHA256 cache — re-runs only process changed files
+```
+
+Every relationship is tagged `EXTRACTED` (found in source), `INFERRED` (with a confidence score), or `AMBIGUOUS`, so Copilot always knows what was found vs. guessed.
+
+**Capture a baseline**
+
+Before installing Graphify, establish a baseline *without* the graph. In `copilot`, start a fresh session with `/clear` and ask a structural question about your project:
+
+```
+What are the main modules in this codebase, what does each one do, and how do they depend on each other?
+```
+
+Run `/usage` and note the input and output token counts. Copilot will grep through source files and read many of them to build up that picture.
+
+**Install and try it:**
+
+Full installation instructions are in the [Graphify Repo](https://github.com/safishamsi/graphify).
+
+```bash
+uv tool install graphifyy 
+graphify install --platform copilot
+```
+
+Start `copilot` in your project and run:
+
+```
+/graphify .
+```
+
+This will take about 5 minutes. After graphify builds the graph, install the always-on hook so Copilot reads `GRAPH_REPORT.md` before searching raw files.
+
+The `graphify copilot install` command only installs the skill file today and **not** an always-on hook. Copilot CLI does support hooks natively so we will create one manually. In the future I'd expect Graphify will be updated to support this natively. 
+
+Setup the below hook to fire a `preToolUse` command before every file-search tool call, checks whether the graph exists, and if so injects a reminder into the tool response. The below hook is slightly different than what Graphify provides in their documentation, but it seems more effective in testing.
+
+```bash
+mkdir -p .github/hooks
+cat > .github/hooks/graphify.json << 'EOF'
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "[ -f graphify-out/graph.json ] && echo '{\"additionalContext\":\"graphify: Knowledge graph exists. Read graphify-out/GRAPH_REPORT.md before taking any action. Do not explore the codebase, search or read additional files until you have reviewed the knowledge graph.\"}' || true",
+        "powershell": "if (Test-Path graphify-out/graph.json) { Write-Output '{\"additionalContext\":\"graphify: Knowledge graph exists. Read graphify-out/GRAPH_REPORT.md before taking any action. Do not explore the codebase, search or read additional files until you have reviewed the knowledge graph.\"}' }"
+      }
+    ]
+  }
+}
+EOF
+```
+
+This fires before every tool call: if `graph.json` exists, Copilot receives the reminder as `additionalContext` and navigates via `GRAPH_REPORT.md` instead of grepping through raw files.
+
+**See the savings for yourself:**
+
+Start `copilot` and `/clear` if needed. Ask the same question you used for the baseline. Copilot will now automatically read the pre-compiled graph first:
+
+```
+What are the main modules in this codebase, what does each one do, and how do they depend on each other?
+```
+
+Run `/usage` and compare with your baseline. In testing this reduced input tokens around 50% as the single `GRAPH_REPORT.md` file replaces dozens of individual file reads. The savings should scale with codebase size. A large monorepo with hundreds of files could see significantly more savings than a small demo project. 
+
+Note `graphify hook install` can be used to setup git hooks that update the graph incrementally as you change files so you do not need to re-run the full graphify process on every change.
+
+:::tip When to use graphify vs. LLM-wiki vs. LSP
+Use **graphify** for broad codebase navigation. It extracts structure from code with no manual ingestion step and answers architectural questions ("what are the modules, how do they relate?") from a single pre-compiled file. Use **LLM-wiki** (or pin-llm-wiki) for external documentation you want to pre-compile into compact, linkable summaries. They complement each other: graphify covers your source, LLM-wiki covers your docs.
+
+For **per-symbol navigation** such as finding where a symbol is defined, listing all call sites, or getting type information, **LSP tools** are more token-efficient than grep. A single LSP call returns only the exact location rather than raw file content with surrounding noise. LSP is always up-to-date and accurate, while graphify is a point-in-time snapshot. The two are complementary: graphify for architecture, LSP for live symbol resolution. Check the [documentation](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/copilot-cli/lsp-servers) for how to set up LSP servers with Copilot CLI.
+:::
+
+> **Going deeper**: For large collections of documents, dedicated graph extraction pipelines like [LightRAG](https://github.com/HKUDS/LightRAG) and [Microsoft GraphRAG](https://github.com/microsoft/graphrag) (`pip install graphrag`) automate entity extraction and hierarchical summarization with peer-reviewed data showing 26–97% fewer tokens at query time. For agent memory similar to graphify, [Graphiti](https://github.com/getzep/graphiti) also provides a zero-server temporal knowledge graph.
+
+### ✅ Checkpoint
+
+You understand why knowledge graphs reduce tokens: structured triples and pre-compiled summaries replace verbose on-demand exploration. You've built an architecture map that lets Copilot navigate your codebase without tool calls, used LLM-wiki to pre-compile documentation into a token-efficient wiki, and used graphify to automatically build a knowledge graph of your codebase to reduce tokens per query.
+
 ## Wrap-Up: The Context Engineering Mindset
 
 ### Quick Reference: Techniques & Impact
@@ -1208,6 +1491,7 @@ You can write prompts that are 40–60% smaller and produce better results. You 
 | Explore-cheap-then-act-expensive | Significant cost reduction | Discovery → Implementation workflows |
 | Interactive over plan mode | Avoids context multiplication | Simple tasks that don't need multi-step planning |
 | Org-level instructions | Team-wide output reduction | Enterprise governance |
+| Knowledge graph Context (LLM-wiki, Graphify) | Fewer tokens per query | Document-heavy projects, Large or unfamiliar codebases |
 
 ### Key Principles
 
@@ -1240,6 +1524,8 @@ Several open-source tools automate the techniques taught in this lab:
 | [auto-memory](https://github.com/dezgit2025/auto-memory) | Exercise 5 — Queries Copilot CLI's session-store.db for cross-session recall | Pure Python, zero dependencies |
 | [awesome-copilot](https://github.com/nicobailon/awesome-copilot) | Exercise 7 — Curated list of Copilot skills, agents, and hooks (CLI alternatives to MCP) | Reference list |
 | [Codeburn](https://github.com/getagentseal/codeburn) | Exercises 2, 8 — Tracks token usage, cost, and one-shot rates across sessions. `optimize` command detects waste patterns. | `npm install -g codeburn` |
+| [pin-llm-wiki](https://github.com/ndjordjevic/pin-llm-wiki) | Exercise 11 — Builds a token-efficient wiki from URLs, repos, and YouTube; generates AGENTS.md so Copilot navigates the wiki instead of fetching raw sources | `npx skills@latest add ndjordjevic/pin-llm-wiki` |
+| [graphify](https://github.com/safishamsi/graphify) | Exercise 10 — Builds a knowledge graph from your codebase; 71.5x fewer tokens per query vs. raw file reading. Installs as a Copilot CLI skill. | `pip install graphifyy && graphify install --platform copilot` |
 
 :::tip
 These tools complement, not replace, the manual techniques you've learned. Understanding *why* each technique works lets you apply the principles even when tools aren't available.
@@ -1259,5 +1545,8 @@ These tools complement, not replace, the manual techniques you've learned. Under
 - [I Wasted 68 Minutes a Day on Context Switching Until This AI Tool Fixed It](https://devblogs.microsoft.com/semantic-kernel/i-wasted-68-minutes-a-day-on-context-switching-until-this-ai-tool-fixed-it/) — Auto-memory for cross-session context recall
 - [CodeAct: Executable Code Actions (Microsoft Agent Framework)](https://learn.microsoft.com/en-us/agent-framework/agents/code_act) — Formalizes the "think in code" pattern (Exercise 6.8) as an agent architecture
 - [CodeAct Paper (ICML 2024)](https://arxiv.org/abs/2402.01030) — Research behind executable code actions for LLM agents (up to 20% higher success rate)
+- [Karpathy's LLM-wiki spec](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) — Original concept: three-layer architecture (raw → wiki → schema) for pre-compiled knowledge wikis that reduce per-query token consumption
+- [Microsoft GraphRAG](https://github.com/microsoft/graphrag) — 26–97% fewer tokens at query time via hierarchical community summaries; peer-reviewed data at arXiv:2404.16130
+- [LightRAG](https://github.com/HKUDS/LightRAG) — Graph-enhanced RAG with dual-level retrieval; easy `pip install` entry point for comparing naive vs. graph-based retrieval modes
 
 > **🎓 You've completed the Context Engineering lab!** You now have the knowledge and tools to make every token count: Saving money, staying within usage limits, and getting better results from your AI coding partner.
