@@ -192,7 +192,7 @@ const config = {
             { types: ['regex', 'important', 'variable'], style: { color: '#7ee787' } },
           ],
         },
-        additionalLanguages: ['bash', 'json', 'yaml', 'markdown', 'typescript'],
+        additionalLanguages: ['bash', 'json', 'yaml', 'markdown', 'typescript', 'powershell'],
       },
       colorMode: {
         defaultMode: 'light',
