@@ -82,7 +82,6 @@ dotnet --list-sdks
 dotnet --version
 ```
 
-
 </TabItem>
 </Tabs>
 
@@ -119,7 +118,7 @@ where.exe nvm
 nvm version
 ```
 
-If `nvm` is still not found, run this shorter fallback to set common NVM paths:
+If `nvm` is still not found, run this shorter fallback to add the actual `nvm.exe` folder to your user `PATH`:
 
 ```powershell
 $nvmHome = "$env:LOCALAPPDATA\nvm"
@@ -130,15 +129,20 @@ if (-not (Test-Path "$nvmHome\nvm.exe")) {
 }
 
 [Environment]::SetEnvironmentVariable("NVM_HOME", $nvmHome, "User")
-[Environment]::SetEnvironmentVariable("NVM_SYMLINK", "C:\Program Files\nodejs", "User")
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+if ($userPath -notlike "*$nvmHome*") {
+  [Environment]::SetEnvironmentVariable("Path", "$userPath;$nvmHome", "User")
+}
 
-[Environment]::SetEnvironmentVariable(
-  "Path",
-  "$([Environment]::GetEnvironmentVariable('Path','User'));$nvmHome;C:\Program Files\nodejs",
-  "User"
-)
+# Make it work in the current window too
+if ($env:Path -notlike "*$nvmHome*") {
+  $env:Path = "$nvmHome;$env:Path"
+}
 
-Write-Host "Restart PowerShell, then run: where.exe nvm and nvm version"
+where.exe nvm
+nvm version
+
+Write-Host "If this succeeds, reopen PowerShell once so future terminals inherit the same PATH."
 ```
 
 Then install and use Node 24:
