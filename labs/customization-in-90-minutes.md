@@ -65,6 +65,24 @@ $env:DOTNET_ROOT = "C:\Program Files\dotnet"
 $env:Path = "$env:DOTNET_ROOT;$env:Path"
 ```
 
+Make them persistent (optional, then restart your terminal):
+
+```powershell
+[Environment]::SetEnvironmentVariable("DOTNET_ROOT", "C:\Program Files\dotnet", "User")
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+if ($userPath -notlike "*C:\Program Files\dotnet*") {
+  [Environment]::SetEnvironmentVariable("Path", "$userPath;C:\Program Files\dotnet", "User")
+}
+```
+
+Verify:
+
+```powershell
+dotnet --list-sdks
+dotnet --version
+```
+
+
 </TabItem>
 </Tabs>
 
