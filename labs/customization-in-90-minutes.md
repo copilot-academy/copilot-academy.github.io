@@ -26,7 +26,14 @@ Clone that repo and open in the terminal or in VS Code.
 
 You will also need Node 24 and .NET 8 installed locally to run the skill scripts and tests that will be generated in this lab.
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 * Install .NET 8
+
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 brew install dotnet@8
 
@@ -39,7 +46,50 @@ echo 'export DOTNET_ROOT="/opt/homebrew/opt/dotnet@8/libexec"' >> ~/.zshrc
 echo 'export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"' >> ~/.zshrc
 ```
 
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+# Install .NET 8 SDK
+winget install --id Microsoft.DotNet.SDK.8 --exact
+
+# Verify
+dotnet --list-sdks
+dotnet --version
+```
+
+If `dotnet` is not recognized after install, close and reopen PowerShell first. If needed, set `DOTNET_ROOT` for the current session:
+
+```powershell
+$env:DOTNET_ROOT = "C:\Program Files\dotnet"
+$env:Path = "$env:DOTNET_ROOT;$env:Path"
+```
+
+Make them persistent (optional, then restart your terminal):
+
+```powershell
+[Environment]::SetEnvironmentVariable("DOTNET_ROOT", "C:\Program Files\dotnet", "User")
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+if ($userPath -notlike "*C:\Program Files\dotnet*") {
+  [Environment]::SetEnvironmentVariable("Path", "$userPath;C:\Program Files\dotnet", "User")
+}
+```
+
+Verify:
+
+```powershell
+dotnet --list-sdks
+dotnet --version
+```
+
+</TabItem>
+</Tabs>
+
 * Install Node 24 via NVM
+
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 # Get the latest version of NVM at https://github.com/nvm-sh/nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
@@ -48,7 +98,85 @@ nvm install 24
 nvm use 24
 ```
 
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+For Node 24 on Windows, use [nvm-windows](https://github.com/coreybutler/nvm-windows) (a different project from `nvm-sh`):
+
+```powershell
+# Install NVM for Windows
+winget install --id CoreyButler.NVMforWindows --exact
+```
+
+**Restart PowerShell** (close and reopen the window) so installer environment changes are loaded.
+
+Verify `nvm` is on your `PATH`:
+
+```powershell
+# PowerShell uses where.exe (not `which`)
+where.exe nvm
+nvm version
+```
+
+If `nvm` is still not found, run this shorter fallback to add the actual `nvm.exe` folder to your user `PATH`:
+
+```powershell
+$nvmHome = "$env:LOCALAPPDATA\nvm"
+if (-not (Test-Path "$nvmHome\nvm.exe")) { $nvmHome = "$env:APPDATA\nvm" }
+
+if (-not (Test-Path "$nvmHome\nvm.exe")) {
+  throw "nvm.exe not found. Reinstall nvm-windows, then reopen PowerShell."
+}
+
+$nvmSymlink = "$env:ProgramFiles\nodejs"
+
+[Environment]::SetEnvironmentVariable("NVM_HOME", $nvmHome, "User")
+[Environment]::SetEnvironmentVariable("NVM_SYMLINK", $nvmSymlink, "User")
+
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+if ($userPath -notlike "*$nvmHome*") {
+  $userPath = "$userPath;$nvmHome"
+}
+if ($userPath -notlike "*$nvmSymlink*") {
+  $userPath = "$userPath;$nvmSymlink"
+}
+[Environment]::SetEnvironmentVariable("Path", $userPath, "User")
+
+# Make it work in the current window too
+if ($env:NVM_HOME -ne $nvmHome)    { $env:NVM_HOME    = $nvmHome }
+if ($env:NVM_SYMLINK -ne $nvmSymlink) { $env:NVM_SYMLINK = $nvmSymlink }
+if ($env:Path -notlike "*$nvmHome*")    { $env:Path = "$nvmHome;$env:Path" }
+if ($env:Path -notlike "*$nvmSymlink*") { $env:Path = "$nvmSymlink;$env:Path" }
+
+where.exe nvm
+nvm version
+
+Write-Host "If this succeeds, reopen PowerShell once so future terminals inherit the same PATH."
+```
+
+Then install and use Node 24:
+
+```powershell
+nvm install 24.0.0
+nvm use 24.0.0
+
+# Verify
+node -v
+npm -v
+```
+
+:::note
+If you previously installed Node directly (via the MSI installer), uninstall it first to avoid conflicts with nvm-windows.
+:::
+
+</TabItem>
+</Tabs>
+
 * In one terminal, build and run the backend
+
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 cd backend
 dotnet restore
@@ -56,8 +184,23 @@ dotnet build
 ASPNETCORE_ENVIRONMENT=Development dotnet run --project src/Api
 ```
 
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+cd backend
+dotnet restore
+dotnet build
+$env:ASPNETCORE_ENVIRONMENT = "Development"
+dotnet run --project src/Api
+```
+
+</TabItem>
+</Tabs>
+
 * In another terminal, run the frontend
-```bash 
+
+```bash
 cd frontend
 npm install
 npm run dev
@@ -309,14 +452,35 @@ When no existing skill fits your needs, you don't have to write one manually lin
 
 ### 3.1 Install the Skill Creator
 
-```bash
-# Option A: Via gh skill (recommended)
-gh skill install anthropics/skills skill-creator
+Option A (recommended) works the same on every platform:
 
-# Option B: Manual copy
+```bash
+gh skill install anthropics/skills skill-creator
+```
+
+Option B (manual copy) differs by shell:
+
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
+```bash
 git clone https://github.com/anthropics/skills.git /tmp/anthropic-skills
 cp -r /tmp/anthropic-skills/skills/skill-creator .github/skills/skill-creator
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+git clone https://github.com/anthropics/skills.git $env:TEMP\anthropic-skills
+New-Item -ItemType Directory -Force -Path .github\skills | Out-Null
+Copy-Item -Recurse -Force `
+  "$env:TEMP\anthropic-skills\skills\skill-creator" `
+  .github\skills\skill-creator
+```
+
+</TabItem>
+</Tabs>
 
 Verify it loaded.  In the CLI you can just use `/skills`.  Alternatively prompt to get an answer:
 
@@ -384,9 +548,22 @@ Feel free to run the tests again if prompted.
 
 After generation, examine what was created:
 
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 find .agents/skills/naming-checker -type f
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+Get-ChildItem -Recurse -File .agents\skills\naming-checker | Select-Object FullName
+```
+
+</TabItem>
+</Tabs>
 
 You should see a structure like:
 
@@ -424,9 +601,22 @@ Custom agents are **named personas** with their own tool access, model selection
 
 ### 4.1 Create the Agent
 
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 mkdir -p .github/agents
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+New-Item -ItemType Directory -Force -Path .github\agents | Out-Null
+```
+
+</TabItem>
+</Tabs>
 
 Create `.github/agents/reviewer.agent.md`:
 
@@ -739,9 +929,23 @@ The testing and code review agents are run as background tasks. You can use `/ta
 
 Once complete, you will need to restart the backend to load the updates: 
 
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 ASPNETCORE_ENVIRONMENT=Development dotnet run --project src/Api
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+$env:ASPNETCORE_ENVIRONMENT = "Development"
+dotnet run --project src/Api
+```
+
+</TabItem>
+</Tabs>
 
 You should now be able to migrate to preferences and update your theme and notification settings.
 
@@ -893,12 +1097,28 @@ Agent plugins are packaged customizations that you can discover and install.  A 
 * Create a new blank repo in GitHub called `plugin-marketplace`. This will host all of your customizations for sharing
 * Create the following directory structure in the root of the repo to hold the agents and skills you want to share:
 
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 mkdir -p .github/plugin
 mkdir -p plugins/dev-flow
 #mkdir agents
 #mkdir skills
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+New-Item -ItemType Directory -Force -Path .github\plugin | Out-Null
+New-Item -ItemType Directory -Force -Path plugins\dev-flow | Out-Null
+# New-Item -ItemType Directory -Force -Path plugins\dev-flow\agents | Out-Null
+# New-Item -ItemType Directory -Force -Path plugins\dev-flow\skills | Out-Null
+```
+
+</TabItem>
+</Tabs>
 
 :::tip Customization Locations
 The customizations that we create can live in folders like agents and skills to be installed independently. In this example we will package them all in the plugin as it will be a single deployed unit. 
@@ -1031,10 +1251,24 @@ Create `plugin.json` in that directory with the following content (updating your
 
 * Finally create the plugin marketplace metadata file. 
 
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 # Create this at the root of the repository
 mkdir -p .github/plugin
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+# Create this at the root of the repository
+New-Item -ItemType Directory -Force -Path .github\plugin | Out-Null
+```
+
+</TabItem>
+</Tabs>
 
 Create `.github/plugin/marketplace.json` with the following content:
 
@@ -1175,6 +1409,9 @@ dependencies:
 
 Now scaffold the `.apm/` source tree and copy the dev-flow content into it:
 
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 mkdir -p .apm/agents .apm/skills
 
@@ -1186,6 +1423,24 @@ cp -r plugins/dev-flow/skills/documentation-writer .apm/skills/
 cp -r plugins/dev-flow/skills/naming-checker .apm/skills/
 cp -r plugins/dev-flow/skills/task-breakdown .apm/skills/
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+New-Item -ItemType Directory -Force -Path .apm\agents, .apm\skills | Out-Null
+
+# Copy agents
+Copy-Item plugins\dev-flow\agents\*.agent.md .apm\agents\
+
+# Copy skills (each with their full directory structure)
+Copy-Item -Recurse -Force plugins\dev-flow\skills\documentation-writer .apm\skills\
+Copy-Item -Recurse -Force plugins\dev-flow\skills\naming-checker      .apm\skills\
+Copy-Item -Recurse -Force plugins\dev-flow\skills\task-breakdown      .apm\skills\
+```
+
+</TabItem>
+</Tabs>
 
 :::note Referencing Directly
 Instead of copying skill folders into `.apm/`, you could use symlinks and continue to host both APM and a plugin marketplace. However, more likely you would choose one or the other as your primary distribution method as the plugin marketplace is centralized while APM is decentralized.
@@ -1207,12 +1462,28 @@ scripts: {}
 
 The `plugin-marketplace` repo is a *source and distribution* repo. You develop and maintain your agents and skills in `.apm/`, then commit both the source and the deployed content to the repo. This way, other teams can install from the APM manifest and also see the actual agent files in the repo for reference.
 
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS" default>
+
 ```bash
 echo "apm_modules/" >> .gitignore    # like node_modules — never commit
 git add .apm/ apm.yml .gitignore
 git commit -m "Add APM manifest and .apm source content"
 git push origin main
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+Add-Content -Path .gitignore -Value "apm_modules/"   # like node_modules — never commit
+git add .apm/ apm.yml .gitignore
+git commit -m "Add APM manifest and .apm source content"
+git push origin main
+```
+
+</TabItem>
+</Tabs>
 
 The source structure you're publishing looks like this:
 
