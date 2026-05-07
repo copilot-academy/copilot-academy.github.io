@@ -121,9 +121,13 @@ $env:Path -split ';' | Select-String 'nvm'
 If `nvm` is still not found, add it to your user `PATH` manually and restart PowerShell again:
 
 ```powershell
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+$nvmHome = [Environment]::GetEnvironmentVariable("NVM_HOME", "User")
+$nvmSymlink = [Environment]::GetEnvironmentVariable("NVM_SYMLINK", "User")
+
 [Environment]::SetEnvironmentVariable(
   "Path",
-  "$([Environment]::GetEnvironmentVariable('Path','User'));$env:NVM_HOME;$env:NVM_SYMLINK",
+  "$userPath;$nvmHome;$nvmSymlink",
   "User"
 )
 ```
