@@ -131,8 +131,8 @@ If `nvm` is still not found, add it to your user `PATH` manually and restart Pow
 Then install and use Node 24:
 
 ```powershell
-nvm install 24.0.0
-nvm use 24.0.0
+nvm install 24
+nvm use 24
 
 # Verify
 node -v
