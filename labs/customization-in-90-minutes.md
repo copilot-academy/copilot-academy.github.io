@@ -52,30 +52,17 @@ echo 'export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"' >> ~/.zshrc
 ```powershell
 # Install .NET 8 SDK
 winget install --id Microsoft.DotNet.SDK.8 --exact
+
+# Verify
+dotnet --list-sdks
+dotnet --version
 ```
 
-Temporary environment variables for the current PowerShell session (usually not needed if installed normally, but equivalent to the macOS `export` lines):
+If `dotnet` is not recognized after install, close and reopen PowerShell first. If needed, set `DOTNET_ROOT` for the current session:
 
 ```powershell
 $env:DOTNET_ROOT = "C:\Program Files\dotnet"
 $env:Path = "$env:DOTNET_ROOT;$env:Path"
-```
-
-Make them persistent (optional, then restart your terminal):
-
-```powershell
-[Environment]::SetEnvironmentVariable("DOTNET_ROOT", "C:\Program Files\dotnet", "User")
-$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
-if ($userPath -notlike "*C:\Program Files\dotnet*") {
-  [Environment]::SetEnvironmentVariable("Path", "$userPath;C:\Program Files\dotnet", "User")
-}
-```
-
-Verify:
-
-```powershell
-dotnet --list-sdks
-dotnet --version
 ```
 
 </TabItem>
@@ -104,39 +91,43 @@ For Node 24 on Windows, use [nvm-windows](https://github.com/coreybutler/nvm-win
 winget install --id CoreyButler.NVMforWindows --exact
 ```
 
-**Restart PowerShell** (close and reopen the window, or open a new terminal) so the updated `PATH` and `NVM_HOME` / `NVM_SYMLINK` environment variables set by the installer are picked up.
+**Restart PowerShell** (close and reopen the window) so installer environment changes are loaded.
 
 Verify `nvm` is on your `PATH`:
 
 ```powershell
-# Should print a version, e.g. 1.1.12
+# PowerShell uses where.exe (not `which`)
+where.exe nvm
 nvm version
-
-# If "not recognized", confirm the install paths are on PATH
-$env:NVM_HOME
-$env:NVM_SYMLINK
-$env:Path -split ';' | Select-String 'nvm'
 ```
 
-If `nvm` is still not found, add it to your user `PATH` manually and restart PowerShell again:
+If `nvm` is still not found, run this shorter fallback to set common NVM paths:
 
 ```powershell
-$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
-$nvmHome = [Environment]::GetEnvironmentVariable("NVM_HOME", "User")
-$nvmSymlink = [Environment]::GetEnvironmentVariable("NVM_SYMLINK", "User")
+$nvmHome = "$env:LOCALAPPDATA\nvm"
+if (-not (Test-Path "$nvmHome\nvm.exe")) { $nvmHome = "$env:APPDATA\nvm" }
+
+if (-not (Test-Path "$nvmHome\nvm.exe")) {
+  throw "nvm.exe not found. Reinstall nvm-windows, then reopen PowerShell."
+}
+
+[Environment]::SetEnvironmentVariable("NVM_HOME", $nvmHome, "User")
+[Environment]::SetEnvironmentVariable("NVM_SYMLINK", "C:\Program Files\nodejs", "User")
 
 [Environment]::SetEnvironmentVariable(
   "Path",
-  "$userPath;$nvmHome;$nvmSymlink",
+  "$([Environment]::GetEnvironmentVariable('Path','User'));$nvmHome;C:\Program Files\nodejs",
   "User"
 )
+
+Write-Host "Restart PowerShell, then run: where.exe nvm and nvm version"
 ```
 
 Then install and use Node 24:
 
 ```powershell
-nvm install 24
-nvm use 24
+nvm install 24.0.0
+nvm use 24.0.0
 
 # Verify
 node -v
