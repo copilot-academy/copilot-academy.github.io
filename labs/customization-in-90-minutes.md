@@ -128,16 +128,25 @@ if (-not (Test-Path "$nvmHome\nvm.exe")) {
   throw "nvm.exe not found. Reinstall nvm-windows, then reopen PowerShell."
 }
 
+$nvmSymlink = "$env:ProgramFiles\nodejs"
+
 [Environment]::SetEnvironmentVariable("NVM_HOME", $nvmHome, "User")
+[Environment]::SetEnvironmentVariable("NVM_SYMLINK", $nvmSymlink, "User")
+
 $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
 if ($userPath -notlike "*$nvmHome*") {
-  [Environment]::SetEnvironmentVariable("Path", "$userPath;$nvmHome", "User")
+  $userPath = "$userPath;$nvmHome"
 }
+if ($userPath -notlike "*$nvmSymlink*") {
+  $userPath = "$userPath;$nvmSymlink"
+}
+[Environment]::SetEnvironmentVariable("Path", $userPath, "User")
 
 # Make it work in the current window too
-if ($env:Path -notlike "*$nvmHome*") {
-  $env:Path = "$nvmHome;$env:Path"
-}
+if ($env:NVM_HOME -ne $nvmHome)    { $env:NVM_HOME    = $nvmHome }
+if ($env:NVM_SYMLINK -ne $nvmSymlink) { $env:NVM_SYMLINK = $nvmSymlink }
+if ($env:Path -notlike "*$nvmHome*")    { $env:Path = "$nvmHome;$env:Path" }
+if ($env:Path -notlike "*$nvmSymlink*") { $env:Path = "$nvmSymlink;$env:Path" }
 
 where.exe nvm
 nvm version
