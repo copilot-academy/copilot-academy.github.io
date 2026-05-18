@@ -66,6 +66,22 @@ Your system prompt (~2,000 tokens) + custom instructions (~500 tokens) + tool de
 
 Under usage-based billing, these aren't abstract numbers. They're your actual costs. Every technique in this lab directly reduces your bill.
 
+## Where to See Token Usage Today
+
+| Surface | What it shows | How to access |
+| --- | --- | --- |
+| **VS Code donut (bottom-right)** | Visual context-window fill | Appears after first chat turn |
+| **Chat Debug View** | Per-LLM-call `prompt_tokens`, `completion_tokens`, `cached_tokens`, `total_tokens` | Cmd/Ctrl+Shift+P → "Developer: Show Chat Debug View" |
+| **Agent Debug Logs** | Turns, tool calls, total tokens, total events | Three-dot menu in Copilot Chat after an agent task |
+| **Copilot CLI `/context`** | Window breakdown: system / messages / buffer / free | In any `copilot` session |
+| **Copilot CLI `/usage`** | Session totals by model and request count | In any `copilot` session |
+| **CLI exit summary** | `↑ input • ↓ output • cached • reasoning` totals | Shown on `/exit` |
+| **GitHub billing dashboard** | Aggregate requests / AI credits, org-wide | github.com → Settings → Billing |
+| **Usage Metrics API** | Per-user, per-feature usage including CLI activity ([Apr 2/10, 2026](https://github.blog/changelog/2026-04-10-copilot-cli-activity-now-included-in-usage-metrics-totals-and-feature-breakdowns)) | REST API |
+
+
+---
+
 ## Exercise 1 — See What's in the Window
 
 ### 1.1 Launch and Set Your Model
