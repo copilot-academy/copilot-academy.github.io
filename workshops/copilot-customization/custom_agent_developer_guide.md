@@ -38,15 +38,6 @@ We built the `test-coverage` agent for the `dotnet-react-starter` template appli
 .github/agents/test-coverage.agent.md
 ```
 
-### Key References
-
-| Resource | URL |
-|----------|-----|
-| VS Code Custom Agents Docs | https://code.visualstudio.com/docs/copilot/customization/custom-agents |
-| GitHub Custom Agents Docs | https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/use-copilot-agents/coding-agent/create-custom-agents |
-| Agent Configuration Reference | https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/custom-agents-configuration |
-| Awesome Copilot — Community Agents | https://github.com/github/awesome-copilot/tree/main/agents |
-
 ## 2. Prerequisites and Setup
 
 ### Requirements
@@ -79,9 +70,9 @@ your-project/
 
 You can also create agents in your VS Code user profile so they're available across all workspaces:
 
-1. In the Agents dropdown in the Copilot Chat panel, select **Configure Custom Agents**
-2. Run **+ Create New Custom Agent**
-3. Choose **User Data** as the location
+1. Click the ⚙️ Gear in the Copilot Chat panel, select **Agents**
+2. Click the **Generate Agent** dropdown
+3. Choose **New Agent (User)**
 
 User-level agents are great for personal productivity tools (e.g., a "code reviewer" agent you use everywhere). Repository-level agents are better for team-shared, project-specific workflows.
 
@@ -94,7 +85,9 @@ After creating an `.agent.md` file, verify it's detected:
 3. Your custom agent should appear in the list
 4. Select **Configure Custom Agents** to see all loaded agents and their sources
 
-> **Tip:** To debug custom agents, click the **`...`** overflow menu in the Chat view → **Show Chat Debug View** (or run `Developer: Show Chat Debug View` from the Command Palette). This shows the full system prompt, context sent to the model, and tool invocations — making it easy to verify your agent's instructions are being applied correctly.
+:::tip
+To debug custom agents, click the **`...`** overflow menu in the Chat view → **Show Chat Debug View** (or run `Developer: Show Chat Debug View` from the Command Palette). This shows the full system prompt, context sent to the model, and tool invocations — making it easy to verify your agent's instructions are being applied correctly.
+:::
 
 ## 3. Anatomy of an Agent File
 
@@ -197,16 +190,16 @@ handoffs:
     prompt: "Generate comprehensive tests for the code above"
     send: false                     # false = pre-fill prompt, user clicks send
                                     # true = auto-submit immediately
-    model: Claude Sonnet 4 (copilot)  # Optional: override model for this step
+    model: Claude Sonnet 5 (copilot)  # Optional: override model for this step
 ```
 
 #### Example Workflow Chains
 
 ```
 ┌─────────────┐    handoff     ┌──────────────────┐    handoff     ┌───────────────┐
-│   Planner   │ ──────────────→ │  Implementation  │ ──────────────→ │ Test Coverage │
-│ (read-only) │  "Implement    │  (full tools)     │  "Add tests   │ (test tools)  │
-│             │   the plan"    │                    │  for new code"│               │
+│   Planner   │ ─────────────→ │  Implementation  │ ─────────────→ │ Test Coverage │
+│ (read-only) │  "Implement    │  (full tools)    │  "Add tests    │ (test tools)  │
+│             │   the plan"    │                  │  for new code" │               │
 └─────────────┘                └──────────────────┘                └───────────────┘
 ```
 
@@ -228,8 +221,9 @@ Use `agents: ['*']` to allow invocation of any available agent, or `agents: []` 
 
 The built-in `Plan` agent is an example you can review to understand all of the settings in frontmatter including tools, agents, handoffs, and overall instructions.  To view it's contents, follow these steps: 
 
-1. In the Agents dropdown in the Copilot Chat panel, select **Configure Custom Agents**
-2. Click on **Plan** to open the agent file
+1. Click the ⚙️ Gear in the Copilot Chat panel, select **Agents**
+2. Under Built-in Agents, click on **Plan** to open the agent file
+3. Review the contents 
 
 ## 5. Walkthrough: Building the `test-coverage` Agent
 
@@ -406,11 +400,9 @@ git push origin main
 
 ### Testing Locally in VS Code
 
-1. Open the repository in VS Code
-2. Open Copilot Chat (`⌘⇧I`)
-3. Click the **Agents dropdown** at the top of the chat panel
-4. Select **test-coverage**
-5. Type a prompt and observe the behavior
+In the Copilot Chat window, click the **agent** dropdown and select the **test-coverage** agent.
+
+Try a prompt below and observe the behavior
 
 #### Recommended Test Prompts
 
@@ -425,12 +417,12 @@ Start with simple, focused prompts to validate each aspect of the agent:
 
 #### What to Check
 
-- ✅ Agent correctly identifies existing tests in `tests/Api.Tests/`
-- ✅ Generated tests follow the `{MethodName}_{Scenario}_{ExpectedResult}` naming convention
-- ✅ Tests include `// Arrange`, `// Act`, `// Assert` comments
-- ✅ Tests are organized with `#region` blocks
-- ✅ Tests pass when run with `dotnet test`
-- ✅ Agent does NOT modify production source code
+- Agent correctly identifies existing tests in `tests/Api.Tests/`
+- Generated tests follow the `{MethodName}_{Scenario}_{ExpectedResult}` naming convention
+- Tests include `// Arrange`, `// Act`, `// Assert` comments
+- Tests are organized with `#region` blocks
+- Tests pass when run with `dotnet test`
+- Agent does NOT modify production source code
 
 ### Testing with GitHub Copilot Coding Agent
 
@@ -469,8 +461,6 @@ This opens a panel showing:
 - **Tool invocations** — which tools were called and their results
 
 Use this view to verify that your agent's instructions are being included in the prompt, that the correct tools are available, and to understand why the agent is behaving a certain way.
-
-> **Note:** Some VS Code versions also offer a **Chat Customization Diagnostics** view (right-click in the chat conversation area → **Diagnostics**) that shows all loaded customization files and their load status. If this option is available in your version, it's useful for quickly checking whether your `.agent.md` file was detected and parsed without errors.
 
 ## 7. Real-World Examples from the Community
 
