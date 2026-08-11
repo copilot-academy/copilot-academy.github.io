@@ -29,22 +29,39 @@ With AI, specifications can now be:
 ## Step 1: Install Spec Kit
 
 1. Install the Specify CLI:
+
+   **Linux (Ubuntu/Debian) prerequisites**
+
    ```bash
-   # Prerequisites
    sudo apt update && sudo apt install -y python3-pip pipx
    pipx install uv && pipx ensurepath
+   ```
 
-   # Setup Specify CLI
+   **Windows (PowerShell) prerequisites**
+
+   ```powershell
+   winget install Python.Python.3
+   python -m pip install --user pipx
+   python -m pipx ensurepath
+   pipx install uv
+   ```
+
+   **Setup Specify CLI**
+
+   ```bash
    uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
 
    specify check
-   # This should say "Specify CLI is ready to use!"
+   # This should say: "Specify CLI is ready to use!"
    ```
+
+   > On Windows, you may need to close and reopen PowerShell after running `python -m pipx ensurepath`.
+
    
 2. Initialize your project:
    ```bash
    # Run this in the root of your repo - Say yes to continue with the risk of overwriting files
-   specify init . --ai copilot --script sh
+   specify init . --integration copilot --script sh
 
    # If you run into auth issues, try this:
    # `env -u GITHUB_TOKEN specify init . --ai copilot --script sh`
