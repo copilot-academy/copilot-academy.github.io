@@ -68,6 +68,13 @@ const labs = [
     link: '/labs/context-engineering-lab',
   },
   {
+    title: 'APM in 60 Minutes',
+    description: 'Package, publish, and consume AI agent primitives with APM — build a plugin repo and a marketplace repo.',
+    duration: '~60 min',
+    level: 'Intermediate',
+    link: '/labs/apm-in-60-minutes',
+  },
+  {
     title: 'Build Your MCP Server',
     description: 'Create your first MCP server and learn how to integrate it with various tools and agents.',
     duration: '~1 hour',
