@@ -1324,12 +1324,17 @@ Return to the consumer repo, refresh its marketplace cache, and update the insta
 ```bash
 cd ../apm-consumer-demo
 apm marketplace update academy-marketplace
-apm install 'release-notes@academy-marketplace#v0.2.0' --target copilot-app
+apm install 'release-notes@academy-marketplace#v0.2.0' \
+  --target copilot,copilot-app
 ```
 
-The marketplace now exposes `^0.2.0`, and `apm marketplace update` refreshes the consumer's cached copy of that index. The original marketplace install wrote a resolved tag such as `release-notes-plugin#v0.1.0` into the consumer's `apm.yml`. Because that is an exact pin, a plain `apm update` will not cross it. Installing the marketplace package with `#v0.2.0` updates that existing dependency entry, rewrites the lockfile, and deploys the scheduled workflow for the Copilot app target.
+The marketplace now exposes `^0.2.0`, and `apm marketplace update` refreshes the consumer's cached copy of that index. The original marketplace install wrote a resolved tag such as `release-notes-plugin#v0.1.0` into the consumer's `apm.yml`. Because that is an exact pin, a plain `apm update` will not cross it. Installing the marketplace package with `#v0.2.0` updates that existing dependency entry and rewrites the lockfile. Selecting both targets keeps the skill, prompt, and instruction available to Copilot CLI while also deploying the scheduled workflow to the Copilot App.
 
-A successful install reports **`1 prompts integrated -> copilot-app/workflows/`**. If it instead says the package targets `[copilot]` do not overlap `[copilot-app]`, the producer tag still contains the old `targets:` restriction. Replace the manifest as shown in B.2, publish a new version, and install that version.
+A successful install summary includes **`1 prompts integrated`** and **`copilot-app/workflows/`**. The weekly workflow does not appear as a new file in the consumer repo: APM writes it to the Copilot App's workflow database and records a `copilot-app-db://workflows/...weekly-release-notes` URI in `apm.lock.yaml`.
+
+You will also see a warning that `draft-release-notes.prompt.md` has no workflow frontmatter. That is expected. The draft prompt remains under `.github/prompts/` for interactive Copilot use, while `weekly-release-notes.prompt.md` belongs only to the Copilot App workflow surface.
+
+If the install instead says the package targets `[copilot]` do not overlap `[copilot-app]`, the producer tag still contains the old `targets:` restriction. Replace the manifest as shown in B.2, publish a new version, and install that version.
 
 Confirm the consumer no longer has an available package update:
 
@@ -1342,6 +1347,8 @@ apm outdated
 Open the Copilot app and go to the **Workflows** tab. Your workflow is listed there — and it is **disabled**.
 
 That is deliberate. APM will never schedule background work on your machine without an explicit opt-in. Toggle it on and confirm the next run time matches the `schedule_day` and `schedule_hour` you set.
+
+If APM reports that it registered a new Copilot App project, restart the app once before opening the Workflows tab so the new project appears in the sidebar.
 
 :::tip Iterating on a workflow
 Scheduled runs are slow to debug by definition — you do not want a week-long feedback loop on wording. Get the body right as an ordinary prompt first, then add the scheduling frontmatter once you like the output.
