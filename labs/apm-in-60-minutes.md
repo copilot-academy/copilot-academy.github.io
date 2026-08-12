@@ -1170,13 +1170,28 @@ Experimental targets are opt-in per machine. Until you enable it, `--target copi
 
 ### B.2 Write the workflow
 
-A workflow is a prompt with scheduling fields in its frontmatter. Back in your **plugin repo**, create `.apm/prompts/weekly-release-notes.prompt.md`:
+A workflow is a prompt with scheduling fields in its frontmatter. The experimental flag from B.1 enables the target on your machine. Experimental targets are selected with `--target` and cannot be listed in `apm.yml`.
+
+The commands below return to your **plugin repo**, update its manifest for the `0.2.0` release, and create `.apm/prompts/weekly-release-notes.prompt.md`. Removing the previous `targets: [copilot]` restriction lets the consumer select either `copilot` or the experimental `copilot-app` target explicitly. Do **not** add `copilot-app` to the manifest; the current APM manifest validator rejects experimental targets there.
 
 <Tabs groupId="os">
 <TabItem value="macos" label="macOS / Linux" default>
 
 ```bash
 cd ../release-notes-plugin
+
+cat > apm.yml <<'EOF'
+name: release-notes
+version: 0.2.0
+description: Turn a commit range into clean, user-facing release notes.
+author: <owner>
+license: MIT
+
+includes: auto
+
+dependencies: {}
+EOF
+
 mkdir -p .apm/prompts
 
 cat > .apm/prompts/weekly-release-notes.prompt.md <<'EOF'
@@ -1204,6 +1219,19 @@ EOF
 
 ```powershell
 Set-Location ../release-notes-plugin
+
+@'
+name: release-notes
+version: 0.2.0
+description: Turn a commit range into clean, user-facing release notes.
+author: <owner>
+license: MIT
+
+includes: auto
+
+dependencies: {}
+'@ | Set-Content -Path apm.yml -Encoding utf8
+
 New-Item -ItemType Directory -Force -Path .apm/prompts | Out-Null
 
 @'
@@ -1239,7 +1267,7 @@ Notice there is **no `${input:...}` placeholder** anywhere in the body. A schedu
 
 ### B.3 Ship it
 
-In `release-notes-plugin/apm.yml`, change the package version from `0.1.0` to `0.2.0`. Then pack, commit, tag, and push the plugin:
+Pack, commit, tag, and push the plugin:
 
 ```bash
 apm pack
@@ -1270,6 +1298,8 @@ apm install 'release-notes@academy-marketplace#v0.2.0' --target copilot-app
 ```
 
 The marketplace now exposes `^0.2.0`, and `apm marketplace update` refreshes the consumer's cached copy of that index. The original marketplace install wrote a resolved tag such as `release-notes-plugin#v0.1.0` into the consumer's `apm.yml`. Because that is an exact pin, a plain `apm update` will not cross it. Installing the marketplace package with `#v0.2.0` updates that existing dependency entry, rewrites the lockfile, and deploys the scheduled workflow for the Copilot app target.
+
+A successful install reports **`1 prompts integrated -> copilot-app/workflows/`**. If it instead says the package targets `[copilot]` do not overlap `[copilot-app]`, the producer tag still contains the old `targets:` restriction. Replace the manifest as shown in B.2, publish a new version, and install that version.
 
 Confirm the consumer no longer has an available package update:
 
