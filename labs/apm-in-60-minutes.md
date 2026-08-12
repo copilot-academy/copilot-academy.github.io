@@ -1172,7 +1172,13 @@ Experimental targets are opt-in per machine. Until you enable it, `--target copi
 
 A workflow is a prompt with scheduling fields in its frontmatter. Back in your **plugin repo**, create `.apm/prompts/weekly-release-notes.prompt.md`:
 
-```markdown
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS / Linux" default>
+
+```bash
+mkdir -p .apm/prompts
+
+cat > .apm/prompts/weekly-release-notes.prompt.md <<'EOF'
 ---
 description: Draft release notes for everything merged in the past week.
 interval: weekly
@@ -1189,7 +1195,37 @@ lockfiles.
 
 If nothing user-facing shipped this week, say so in a single line rather
 than padding the notes.
+EOF
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+New-Item -ItemType Directory -Force -Path .apm/prompts | Out-Null
+
+@'
+---
+description: Draft release notes for everything merged in the past week.
+interval: weekly
+schedule_day: 5
+schedule_hour: 9
+---
+
+Summarize everything merged into the default branch in the last 7 days
+as user-facing release notes.
+
+Use the academy-release-notes skill for tone and structure. Group entries under
+Added, Changed, and Fixed. Skip commits that only touch CI config or
+lockfiles.
+
+If nothing user-facing shipped this week, say so in a single line rather
+than padding the notes.
+'@ | Set-Content -Path .apm/prompts/weekly-release-notes.prompt.md -Encoding utf8
+```
+
+</TabItem>
+</Tabs>
 
 | Field | Meaning |
 |-------|---------|
