@@ -149,15 +149,15 @@ apm install
    └─ 5. Lockfile     Record the commit + content hash of every deployed file
 ```
 
-The **Integrate** step is the interesting one. APM does not install into a generic folder — it writes into the directory each AI tool actually reads. One source file fans out to many destinations:
+The **Integrate** step is the interesting one. APM does not install into a generic folder — it writes into the directory the AI tool actually reads. One source file gets rewritten into its deployed location:
 
-| You author | Copilot gets | Claude gets |
-|------------|--------------|-------------|
-| `.apm/skills/foo/SKILL.md` | `.agents/skills/foo/SKILL.md` | `.claude/skills/foo/SKILL.md` |
-| `.apm/prompts/bar.prompt.md` | `.github/prompts/bar.prompt.md` | `.claude/commands/bar.md` |
-| `.apm/instructions/baz.instructions.md` | `.github/instructions/baz.instructions.md` | `.claude/rules/baz.md` |
+| You author | Copilot gets |
+|------------|--------------|
+| `.apm/skills/foo/SKILL.md` | `.agents/skills/foo/SKILL.md` |
+| `.apm/prompts/bar.prompt.md` | `.github/prompts/bar.prompt.md` |
+| `.apm/instructions/baz.instructions.md` | `.github/instructions/baz.instructions.md` |
 
-Write once, deploy everywhere. That is the core promise.
+Author once in a single source layout, let APM place the files. That is the core promise.
 
 ---
 
@@ -181,29 +181,40 @@ git init
 apm init
 ```
 
-This writes exactly one file: `apm.yml`. Open it.
+This is interactive. It asks for a project name, version, description, and author, then shows an "About to create" summary and a final `Is this OK?` confirmation.
+
+**Press Enter through every prompt to accept the defaults.** The defaults are all sensible for this exercise, and accepting them keeps everyone on the same page for the rest of the lab.
+
+:::note The default version is `1.0.0`, not `0.1.0`
+`apm init` starts you at `1.0.0` — it assumes a project, not a pre-release library. The `apm plugin init` scaffold in Part 3 behaves differently, so don't be surprised when the numbers don't match.
+
+Prefer to skip the questions entirely? `apm init --yes` takes every default without prompting.
+:::
+
+It writes exactly one file: `apm.yml`. Open it.
 
 ```yaml
 name: apm-consumer-demo
-version: 0.1.0
+version: 1.0.0
 description: APM project for apm-consumer-demo
-
+author: Developer
 # Which agent platforms to deploy to (uncomment to pin):
 # targets:
 #   - copilot
-
-includes: auto
+#   - claude
 
 dependencies:
   apm: []
   mcp: []
+includes: auto
+scripts: {}
 ```
 
 Three fields matter on day one:
 
 - **`dependencies.apm`** — the packages you install. Empty for now.
 - **`dependencies.mcp`** — MCP servers, wired into every detected harness.
-- **`targets`** — commented out, so APM auto-detects harnesses from directories like `.github/` and `.claude/`.
+- **`targets`** — commented out, so APM auto-detects harnesses from directories like `.github/`.
 
 ### 2.3 Install a package
 
@@ -236,15 +247,32 @@ Notice the second entry. `review-and-refactor` is a **transitive dependency** �
 git status
 ```
 
-You should see four new paths:
+```
+Changes not staged for commit:
+	modified:   apm.yml
 
+Untracked files:
+	.agents/
+	.github/
+	.gitignore
+	apm.lock.yaml
 ```
-apm.yml              # updated: package added under dependencies.apm
-apm.lock.yaml        # NEW: pins resolved commits + content hashes
-apm_modules/         # NEW: package cache (already gitignored)
-.github/             # NEW: prompts, agents, instructions
-.agents/skills/      # NEW: harness-neutral skills
-```
+
+Here is what each one is:
+
+| Path | What happened |
+|------|---------------|
+| `apm.yml` | **Modified** — the package was added under `dependencies.apm` |
+| `apm.lock.yaml` | **New** — pins resolved commits and content hashes |
+| `.github/` | **New** — prompts, agents, instructions |
+| `.agents/skills/` | **New** — harness-neutral skills |
+| `.gitignore` | **New** — APM created it to ignore `apm_modules/` |
+
+:::note Where is `apm_modules/`?
+It exists on disk, but `git status` doesn't list it. During the install APM printed `[i] Added apm_modules/ to .gitignore` — it wrote a `.gitignore` (creating the file if you didn't have one) so the package cache stays out of your history.
+
+If you already had a `.gitignore`, APM appends to it rather than overwriting.
+:::
 
 Open `apm.lock.yaml`. Every entry carries a resolved commit SHA and a content hash. This is what makes installs reproducible — a teammate who clones your repo and runs `apm install` gets byte-identical files, or the install fails loudly.
 
@@ -268,7 +296,30 @@ apm list
 apm view microsoft/apm-sample-package
 ```
 
-`apm list` shows the scripts available to run. `apm view` shows package metadata and the primitives it ships.
+`apm list` lists **scripts**, not packages. You didn't define any, so it prints:
+
+```
+[!] No scripts found.
+```
+
+That's expected. Scripts are optional shortcuts you declare under `scripts:` in `apm.yml`; installing a package never adds any.
+
+To see what you actually installed, use `apm view`:
+
+```
+Name: apm-sample-package
+Version: 1.0.0
+Source: local
+Ref: v1.0.0
+Commit: fb2851683be0
+
+Context Files:
+  * 1 instructions
+  * 1 agents
+
+Agent Workflows:
+  * 2 executable workflows
+```
 
 :::tip Try it in your harness
 Open this folder in Copilot CLI (`copilot`) or the Copilot app and look at your prompts picker. The sample package's prompts are already there — no registration step, no restart.
@@ -289,7 +340,7 @@ They are not interchangeable. Pick the wrong one and your package will feel brok
 | Primitive | Invoked by | Use it when |
 |-----------|-----------|-------------|
 | **Skill** | The model, automatically | The agent should reach for a guide mid-conversation based on what the user asked |
-| **Prompt** | The user, explicitly | The user runs a named workflow on demand (`/draft-release-notes`) |
+| **Prompt** | The user, explicitly | The user runs a named workflow on demand, picked from a list or referenced by path |
 | **Instruction** | The file glob | A rule should fire whenever the agent touches matching files |
 
 In short: **prompts are called, skills are reached for, instructions just apply.**
@@ -331,12 +382,7 @@ includes: auto
 dependencies: {}
 ```
 
-:::danger Update `plugin.json` too — `apm.yml` does not win
-Your directory is `release-notes-plugin`, so `apm plugin init` seeded `plugin.json` with `"name": "release-notes-plugin"`. You just set `apm.yml` to `release-notes`.
-
-**`apm pack` copies a root `plugin.json` verbatim — it does not regenerate it from `apm.yml`.** Leave them out of sync and your bundle ships under the wrong name, which breaks `apm install release-notes@academy-marketplace` in Part 5.
-
-Open `plugin.json` and make the name match:
+Now align `plugin.json` with what you just wrote. Your directory is `release-notes-plugin`, so the scaffold seeded `plugin.json` with `"name": "release-notes-plugin"`, while `apm.yml` now says `release-notes`. Open `plugin.json` and make the name and description match:
 
 ```json
 {
@@ -345,18 +391,43 @@ Open `plugin.json` and make the name match:
 }
 ```
 
-Rule of thumb: **a root `plugin.json` is the source of truth for bundle identity.** `apm.yml` drives resolution and versioning; `plugin.json` drives the packaged name.
-:::
+Keeping the two in sync matters because a root `plugin.json` is the source of truth for **bundle identity** — `apm.yml` drives resolution and versioning, but the packaged name comes from `plugin.json`. Leave them out of sync and your bundle ships under the wrong name, which breaks `apm install release-notes@academy-marketplace` in Part 5.
 
-Two things to note:
+Two more things to note in `apm.yml`:
 
-- **`targets: [copilot]`** pins deployment to GitHub Copilot. Part 5 covers switching this.
+- **`targets: [copilot]`** pins deployment to GitHub Copilot.
 - **`dependencies: {}`** — an explicit empty mapping. This tells `apm pack` to produce a bundle. If you *omit* `dependencies:` entirely, no bundle is built. That distinction matters in Part 4.
 
-:::warning Use `.apm/<type>/` for every primitive
+### 3.4 Set up the source layout
+
+Everything you author lives under a directory called `.apm/`, split by primitive type:
+
+```
+release-notes-plugin/
+├── apm.yml
+├── plugin.json
+└── .apm/
+    ├── skills/
+    │   └── release-notes/
+    │       └── SKILL.md
+    ├── prompts/
+    │   └── draft-release-notes.prompt.md
+    └── instructions/
+        └── release-notes.instructions.md
+```
+
+`.apm/` is your **source**. It is not what consumers receive. Later in this part you'll run `apm pack`, which walks `.apm/`, collects every primitive it finds, rewrites paths into the layout each harness expects, and writes the result to `build/`. That `build/` output is the bundle consumers actually install.
+
+Create the tree now:
+
+```bash
+mkdir -p .apm/skills/release-notes .apm/prompts .apm/instructions
+```
+
+:::warning Author under `.apm/<type>/` or your files get dropped
 This is the single most common way to ship a broken APM package.
 
-Put an instruction or prompt at your repo root and `apm pack` **silently drops it from the bundle** — no error, no warning, exit code 0. You get a package that publishes cleanly and delivers nothing.
+Put an instruction or prompt at your repo root instead of under `.apm/` and `apm pack` **silently drops it from the bundle** — no error, no warning, exit code 0. You get a package that publishes cleanly and delivers nothing.
 
 | Primitive | `apm pack` collects from | Root fallback |
 |-----------|--------------------------|----------------|
@@ -366,16 +437,10 @@ Put an instruction or prompt at your repo root and `apm pack` **silently drops i
 | hook | `.apm/hooks/*.json` | `hooks/*.json` |
 | skill | `.apm/skills/<name>/SKILL.md` | `skills/<name>/SKILL.md` |
 
-Only hooks and skills have a root fallback. Always author under `.apm/<type>/` and you never have to think about this table again — and always run the dry-run in step 3.7, which is exactly how you catch a dropped file.
+Only hooks and skills have a root fallback. Author under `.apm/<type>/` and you never have to think about this table again — and always run the dry-run in step 3.8, which is exactly how you catch a dropped file.
 :::
 
-Create the directory tree:
-
-```bash
-mkdir -p .apm/skills/release-notes .apm/prompts .apm/instructions
-```
-
-### 3.4 Author the skill
+### 3.5 Author the skill
 
 A skill is a model-invoked guide. The `description` is load-bearing — it is how the runtime decides whether to reach for this skill at all.
 
@@ -432,7 +497,7 @@ Good — describes the user's world:
 Runtimes match on the **first sentence**. Lead with the user's intent ("Use when the user asks to..."), then the trigger conditions. A vague description like "Helps with release notes" collides with every other skill on the machine. Keep it under 1024 characters — that is a hard ceiling in the agent-skills spec.
 :::
 
-### 3.5 Author the prompt
+### 3.6 Author the prompt
 
 A prompt is invoked explicitly by name. Create `.apm/prompts/draft-release-notes.prompt.md`:
 
@@ -468,10 +533,10 @@ writing an empty section.
 
 Two details worth calling out:
 
-- **`${input:name}`** placeholders are rewritten per target. On Claude they become `$name`; on Copilot they stay as-is.
-- Only five frontmatter keys survive the cross-tool transform: `description`, `input`, `allowed-tools`, `model`, and `argument-hint`. Anything else is dropped on non-Copilot targets.
+- **`${input:name}`** placeholders stay as-is on Copilot. They are the prompt's parameters — the agent asks you to fill them in when the prompt runs.
+- Only five frontmatter keys are portable: `description`, `input`, `allowed-tools`, `model`, and `argument-hint`. Stick to those.
 
-### 3.6 Author the instruction
+### 3.7 Author the instruction
 
 An instruction is a rule attached to a file glob. It fires automatically whenever the agent touches a matching file.
 
@@ -501,7 +566,7 @@ applyTo: "CHANGELOG.md,**/release-notes/**,**/RELEASES.md"
 Without `applyTo`, the rule is treated as unconditional and gets folded into compiled context files like `AGENTS.md` instead of becoming a scoped per-file rule. With it, each harness wraps the body in its own scoping syntax. Commas separate multiple globs — but commas *inside* brace alternation like `**/*.{css,scss}` are part of the glob, not separators.
 :::
 
-### 3.7 Preview before you pack
+### 3.8 Preview before you pack
 
 Always dry-run first. This is how you catch a misplaced file **before** consumers do.
 
@@ -517,9 +582,9 @@ commands/draft-release-notes.md
 instructions/release-notes.instructions.md
 ```
 
-If your instruction or prompt is missing from this list, it is in the wrong directory and `apm pack` has dropped it. Go back to the table in step 3.3.
+If your instruction or prompt is missing from this list, it is in the wrong directory and `apm pack` has dropped it. Go back to the table in step 3.4.
 
-### 3.8 Pack it
+### 3.9 Pack it
 
 ```bash
 apm pack
@@ -544,7 +609,7 @@ Two side effects worth knowing:
 The legacy APM bundle layout has no `plugin.json`, and `apm install` **rejects it** with a targeted error. Always use the default (`--format plugin`). Similarly, `--target` on `apm pack` is deprecated — bundles are target-agnostic, and the consumer's project decides which harness layouts receive files at install time.
 :::
 
-### 3.9 Publish and tag
+### 3.10 Publish and tag
 
 The tag is what makes your package versionable. Without it, the marketplace has nothing to resolve.
 
@@ -574,6 +639,12 @@ You should see `refs/tags/v0.1.0`. Your producer repo is done.
 **Time: ~15 minutes**
 
 A **marketplace** is a curated index: one repo publishes it, many repos install from it. This is the **aggregator** shape — no plugin source lives here, only pointers to plugins that live elsewhere.
+
+:::caution Working in a Codespace? This part needs extra setup
+From here on the lab spans **two repos** — the marketplace resolves your plugin repo over the network. A Codespace is credentialed for the single repo it was created from, so cloning and pushing a second repo will fail on authentication.
+
+Run Parts 4 and 5 **locally**, or first authenticate the Codespace for multi-repo access (for example `gh auth login` with a token that covers both repos, or a Codespace configured with multi-repository permissions).
+:::
 
 ### 4.1 Create and clone the repo
 
@@ -642,7 +713,7 @@ apm marketplace check
 
 This resolves every package's ref or version range against the remote and prints an **Entry Health Check** table — Status, Package, Reachable, Version Found, Ref OK, Detail. A missing tag or an unresolvable range exits non-zero, which is exactly why this is the command to run in CI before you push a release commit.
 
-If this fails, the two usual causes are the `example-package` entry from step 4.3, or skipping `git push --tags` in step 3.9.
+If this fails, the two usual causes are the `example-package` entry from step 4.3, or skipping `git push --tags` in step 3.10.
 
 ### 4.5 Build the marketplace artifact
 
@@ -748,9 +819,9 @@ You should see all three primitives:
 ```
 
 :::danger If a file is missing, you hit the `.apm/` gotcha
-An instruction or prompt authored outside `.apm/<type>/` was **dropped by `apm pack`** — it never made it into the bundle, so there was nothing to install. Go back to the discovery table in step 3.3, move the file, then re-run `apm pack`, re-tag, and re-install.
+An instruction or prompt authored outside `.apm/<type>/` was **dropped by `apm pack`** — it never made it into the bundle, so there was nothing to install. Go back to the discovery table in step 3.4, move the file, then re-run `apm pack`, re-tag, and re-install.
 
-This is why step 3.7's `--dry-run --verbose` check matters — it is much cheaper to catch this before publishing.
+This is why step 3.8's `--dry-run --verbose` check matters — it is much cheaper to catch this before publishing.
 :::
 
 :::tip Watch for the unpinned-dependency warning
@@ -771,60 +842,154 @@ grep -A3 release-notes apm.lock.yaml
 
 You should see a resolved commit and a content hash for each deployed file.
 
-### 5.4 Verify in Copilot CLI
+### 5.4 Give the project something to summarize
+
+`apm-consumer-demo` has been a scratch folder up to now — you ran `git init` back in step 2.1 but never committed. A release-notes workflow with no tags and no commits will correctly tell you there is nothing to summarize, which looks like a broken plugin.
+
+Give it a real history first:
+
+```bash
+git add -A
+git commit -m "chore: install release-notes plugin"
+git tag v0.1.0
+
+git commit --allow-empty -m "feat: add changelog scaffold"
+git commit --allow-empty -m "fix: correct tag parsing in the release script"
+```
+
+Confirm there is now a range to work with:
+
+```bash
+git log v0.1.0..HEAD --oneline
+```
+
+You should see the two commits made after the tag.
+
+### 5.5 Verify in Copilot CLI
 
 ```bash
 copilot
 ```
 
-Your prompt is registered as a slash command. Try:
+**Skills are exposed as slash commands. Prompt files are not.** Your skill is registered under its `name:` from `SKILL.md`, so:
 
 ```
-/draft-release-notes
+/release-notes
 ```
 
-Copilot will ask for the `since` and `version` inputs you declared in the prompt's frontmatter.
-
-Then verify the skill is discoverable by describing the task instead of naming the tool:
+Then verify auto-activation — describe the task without naming anything:
 
 ```
 Summarize what shipped in this repo since the last tag.
 ```
 
-The **release-notes** skill should activate on its own — that is the difference between a skill and a prompt. You never typed its name.
+The **release-notes** skill should activate on its own. That is the difference between a skill and a prompt: you never typed its name, the model reached for it based on the `description:` you wrote in step 3.5.
 
-### 5.5 Verify in the GitHub Copilot app
+:::warning `.prompt.md` files are not slash commands in Copilot CLI
+Typing `/draft-release-notes` will **not** work. Copilot CLI will tell you it is not a command — the CLI does not support prompt files as slash commands.
+
+Nothing is broken. The file deployed to the correct place (`.github/prompts/draft-release-notes.prompt.md`); it is simply not surfaced as a CLI slash command. To run it from the CLI, reference it by path:
+
+```
+@.github/prompts/draft-release-notes.prompt.md
+```
+
+**Practical rule:** if you want a workflow that a user can invoke by name from the CLI, ship it as a **skill**. Prompts are best where a prompt picker exists.
+:::
+
+### 5.6 Verify in the GitHub Copilot app
 
 Open the same folder in the GitHub Copilot app.
 
-Because both surfaces read the identical on-disk files — `.github/prompts/`, `.github/instructions/`, and `.agents/skills/` — everything you just verified in the CLI works here with no extra installation step:
+Both surfaces read the identical on-disk files — `.github/prompts/`, `.github/instructions/`, and `.agents/skills/` — so there is no extra installation step. What differs is how each surface exposes them:
 
-- `/draft-release-notes` appears in the prompts picker
-- The release-notes skill activates on a matching request
-- The instruction fires automatically the moment the agent edits `CHANGELOG.md`
+| Primitive | Copilot CLI | Copilot app |
+|-----------|-------------|-------------|
+| Skill | `/release-notes`, plus auto-activation | Auto-activation |
+| Prompt | `@` by file path only | Appears in the prompts picker |
+| Instruction | Fires on glob match | Fires on glob match |
 
 Test the instruction specifically: ask the agent to add a changelog entry, and confirm it uses the `## <version> — <YYYY-MM-DD>` heading format and present-tense verbs you specified. The agent was never told about those rules in your message — the glob matched, so the rule loaded.
 
-:::note Targeting other harnesses
-Your `apm.yml` pins `targets: [copilot]`. APM supports many more:
+---
 
-`claude` · `cursor` · `codex` · `gemini` · `windsurf` · `kiro` · `opencode` · `grok-build` · `antigravity` · `agent-skills`
+## Bonus — Scheduled Workflows in the Copilot App
 
-Change the `targets:` list and re-run `apm install` to fan the same source files out to a different tool. For example, adding `claude` deploys your skill to `.claude/skills/`, converts the prompt to a `/command` in `.claude/commands/`, rewrites `${input:name}` placeholders as `$name`, and emits `CLAUDE.md` instead of `AGENTS.md`.
+**Time: ~10 minutes — optional, beyond the 60-minute budget**
 
-Reach is **not** uniform — Codex, for instance, has no prompts primitive at all and receives nothing from a `.prompt.md`. If cross-harness coverage matters, ship the workflow as a **skill**, since skills route to every canonical skill target. See the [targets matrix](https://microsoft.github.io/apm/reference/targets-matrix/) for the full map.
-:::
+Everything so far runs when *you* ask for it. The Copilot app adds an experimental target of its own, `copilot-app`, which turns a prompt into a **scheduled workflow** — the same primitive, running on a timer with nobody in the loop.
 
-:::tip Bonus — scheduled workflows in the Copilot app
-The Copilot app has an experimental target of its own, `copilot-app`, which turns a prompt into a **scheduled workflow** on the app's Workflows tab. Add workflow frontmatter (`interval`, `schedule_hour`, `schedule_day`) to a `.prompt.md`, then:
+Release notes are a natural fit: draft them every Friday morning instead of remembering to ask.
+
+### B.1 Enable the experimental target
 
 ```bash
 apm experimental enable copilot-app
+```
+
+Experimental targets are opt-in per machine. Until you enable it, `--target copilot-app` is rejected.
+
+### B.2 Write the workflow
+
+A workflow is a prompt with scheduling fields in its frontmatter. Back in your **plugin repo**, create `.apm/prompts/weekly-release-notes.prompt.md`:
+
+```markdown
+---
+description: Draft release notes for everything merged in the past week.
+interval: weekly
+schedule_day: 5
+schedule_hour: 9
+---
+
+Summarize everything merged into the default branch in the last 7 days
+as user-facing release notes.
+
+Use the release-notes skill for tone and structure. Group entries under
+Added, Changed, and Fixed. Skip commits that only touch CI config or
+lockfiles.
+
+If nothing user-facing shipped this week, say so in a single line rather
+than padding the notes.
+```
+
+| Field | Meaning |
+|-------|---------|
+| `interval` | `hourly`, `daily`, or `weekly` |
+| `schedule_day` | Day of week, `0` = Sunday through `6` = Saturday. Only read when `interval: weekly` |
+| `schedule_hour` | Hour of day, `0`–`23`, in the app's local timezone |
+
+Notice there is **no `${input:...}` placeholder** anywhere in the body. A scheduled run has no user available to answer questions, so a workflow has to be entirely self-contained. That is the main authoring difference from the interactive prompt you wrote in step 3.6 — everything the run needs must already be in the file.
+
+### B.3 Ship it
+
+Same publish loop as Part 3 — pack, commit, tag, push:
+
+```bash
+apm pack
+git add -A
+git commit -m "feat: add weekly release notes workflow"
+git tag v0.2.0
+git push && git push --tags
+```
+
+Then in `apm-consumer-demo`, pull it down against the new target:
+
+```bash
 apm install --target copilot-app
 ```
 
-Workflows always install **disabled** — you opt in from the app UI. See the [Copilot app integration docs](https://microsoft.github.io/apm/integrations/copilot-app/).
+### B.4 Turn it on
+
+Open the Copilot app and go to the **Workflows** tab. Your workflow is listed there — and it is **disabled**.
+
+That is deliberate. APM will never schedule background work on your machine without an explicit opt-in. Toggle it on and confirm the next run time matches the `schedule_day` and `schedule_hour` you set.
+
+:::tip Iterating on a workflow
+Scheduled runs are slow to debug by definition — you do not want a week-long feedback loop on wording. Get the body right as an ordinary prompt first, then add the scheduling frontmatter once you like the output.
 :::
+
+Full details in the [Copilot app integration docs](https://microsoft.github.io/apm/integrations/copilot-app/).
+
 
 ---
 
@@ -970,8 +1135,7 @@ If you finished early, try these in order of difficulty:
 
 1. **Ship v0.2.0.** Add a second prompt (`/summarize-prs`) to the producer repo, tag `v0.2.0`, push tags, then re-run `apm pack` in the marketplace repo. Watch `marketplace.json` resolve to the new tag with no edit to the version range.
 2. **Break it on purpose.** Move your instruction from `.apm/instructions/` to a root-level `instructions/` directory. Run `apm pack --dry-run --verbose` and note it still packs. Then re-install as a consumer and watch it silently fail to appear.
-3. **Add a second harness.** Add `claude` to `targets:` and re-run `apm install`. Diff `.claude/commands/draft-release-notes.md` against `.github/prompts/draft-release-notes.prompt.md` to see the `${input:name}` → `$name` transform.
-4. **Convert to a monorepo.** Move `release-notes-plugin` into `packages/release-notes/` inside the marketplace repo, switch the package `source:` to a local path, and add `versioning: strategy: lockstep`.
+3. **Convert to a monorepo.** Move `release-notes-plugin` into `packages/release-notes/` inside the marketplace repo, switch the package `source:` to a local path, and add `versioning: strategy: lockstep`.
 
 ### Further reading
 
