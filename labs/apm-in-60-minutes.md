@@ -117,6 +117,16 @@ apm --version
 Homebrew, Scoop, pip, air-gapped mirrors, and signed archives are all supported. See the [installation guide](https://microsoft.github.io/apm/getting-started/installation/) if the script above does not fit your environment.
 :::
 
+:::warning Running in a container, Codespace, or slim Linux image?
+The install script **exits 0 even when the resulting binary is broken**, so always run `apm --version` before moving on. If it fails with a `sqlite3` import error, the base image is missing a shared library the bundled binary needs:
+
+```bash
+sudo apt-get update && sudo apt-get install -y libsqlite3-0
+```
+
+Then re-run `apm --version`. If you would rather avoid the standalone binary entirely, `pip install --user apm-cli` works and has no such dependency.
+:::
+
 ### 1.2 The mental model
 
 Three files do all the work. Learn these now and the rest of the lab is mechanical.
@@ -301,8 +311,8 @@ apm plugin init --target copilot --yes
 
 This writes two files into the current directory:
 
-- **`plugin.json`** — the bundle's identity card
-- **`apm.yml`** — the manifest, with a `devDependencies` block
+- **`plugin.json`** — the bundle's identity card, seeded from the **directory name**
+- **`apm.yml`** — the manifest, with `dependencies`, `devDependencies`, `scripts`, and `includes` blocks
 
 Open `apm.yml` and set the package name and description:
 
@@ -321,6 +331,23 @@ includes: auto
 dependencies: {}
 ```
 
+:::danger Update `plugin.json` too — `apm.yml` does not win
+Your directory is `release-notes-plugin`, so `apm plugin init` seeded `plugin.json` with `"name": "release-notes-plugin"`. You just set `apm.yml` to `release-notes`.
+
+**`apm pack` copies a root `plugin.json` verbatim — it does not regenerate it from `apm.yml`.** Leave them out of sync and your bundle ships under the wrong name, which breaks `apm install release-notes@academy-marketplace` in Part 5.
+
+Open `plugin.json` and make the name match:
+
+```json
+{
+  "name": "release-notes",
+  "description": "Turn a commit range into clean, user-facing release notes."
+}
+```
+
+Rule of thumb: **a root `plugin.json` is the source of truth for bundle identity.** `apm.yml` drives resolution and versioning; `plugin.json` drives the packaged name.
+:::
+
 Two things to note:
 
 - **`targets: [copilot]`** pins deployment to GitHub Copilot. Part 5 covers switching this.
@@ -329,17 +356,17 @@ Two things to note:
 :::warning Use `.apm/<type>/` for every primitive
 This is the single most common way to ship a broken APM package.
 
-`apm pack` (export) is permissive. `apm install` (discovery) is strict. A file in the wrong place will pack successfully, publish successfully, and then **silently never install**.
+Put an instruction or prompt at your repo root and `apm pack` **silently drops it from the bundle** — no error, no warning, exit code 0. You get a package that publishes cleanly and delivers nothing.
 
-| Primitive | `apm install` scans | Root fallback |
-|-----------|---------------------|----------------|
+| Primitive | `apm pack` collects from | Root fallback |
+|-----------|--------------------------|----------------|
 | instruction | `.apm/instructions/*.instructions.md` | **None** |
 | command (prompt) | `.apm/prompts/*.prompt.md` | **None** |
+| agent | `.apm/agents/**/*.agent.md` | **None** |
 | hook | `.apm/hooks/*.json` | `hooks/*.json` |
-| agent | `.apm/agents/**/*.agent.md` | `*.agent.md` at root |
 | skill | `.apm/skills/<name>/SKILL.md` | `skills/<name>/SKILL.md` |
 
-Instructions and prompts have **no** root fallback. Always author under `.apm/<type>/` and you never have to think about this table again.
+Only hooks and skills have a root fallback. Always author under `.apm/<type>/` and you never have to think about this table again — and always run the dry-run in step 3.7, which is exactly how you catch a dropped file.
 :::
 
 Create the directory tree:
@@ -482,15 +509,15 @@ Always dry-run first. This is how you catch a misplaced file **before** consumer
 apm pack --dry-run --verbose
 ```
 
-Read the file list carefully. You should see all three of your primitives:
+Read the file list carefully. Note that the dry run reports **destination** paths inside the bundle, not your `.apm/` source paths — `apm pack` rewrites the layout as it goes, and `.prompt.md` files become `commands/*.md`:
 
 ```
-.apm/skills/release-notes/SKILL.md
-.apm/prompts/draft-release-notes.prompt.md
-.apm/instructions/release-notes.instructions.md
+skills/release-notes/SKILL.md
+commands/draft-release-notes.md
+instructions/release-notes.instructions.md
 ```
 
-If your instruction or prompt is missing from this list, it is in the wrong directory. Go back to the table in step 3.3.
+If your instruction or prompt is missing from this list, it is in the wrong directory and `apm pack` has dropped it. Go back to the table in step 3.3.
 
 ### 3.8 Pack it
 
@@ -498,18 +525,20 @@ If your instruction or prompt is missing from this list, it is in the wrong dire
 apm pack
 ```
 
-APM writes a plugin-format directory under `./build/`:
+APM writes a plugin-format directory under `./build/`, named `<name>-<version>`:
 
 ```
-build/release-notes/
-├── plugin.json          # synthesized from apm.yml
+build/release-notes-0.1.0/
+├── plugin.json          # copied from your root plugin.json
 ├── skills/
 ├── commands/
-├── instructions/
-└── apm.lock.yaml        # embedded: pins every file by SHA-256
+└── instructions/
 ```
 
-That embedded lockfile contains a `pack.bundle_files` map of every file to its SHA-256 digest. When a consumer runs `apm install <bundle>`, APM rehashes every file and rejects the bundle if any hash mismatches, any listed file is missing, any unlisted file is present, or any path is a symlink. Tampering is caught before a single byte lands in the consumer's project.
+Two side effects worth knowing:
+
+- `apm pack` also writes **`.github/plugin/plugin.json`** into your working tree. That one *is* regenerated from `apm.yml`. Commit it or ignore it, but don't be surprised by it.
+- The `build/` directory is a build artifact. Add it to `.gitignore` — you publish the **tagged source repo**, not the bundle.
 
 :::warning Never use `--format apm`
 The legacy APM bundle layout has no `plugin.json`, and `apm install` **rejects it** with a targeted error. Always use the default (`--format plugin`). Similarly, `--target` on `apm pack` is deprecated — bundles are target-agnostic, and the consumer's project decides which harness layouts receive files at install time.
@@ -562,7 +591,7 @@ cd academy-marketplace
 apm marketplace init --owner <owner> --name academy-marketplace
 ```
 
-This appends a `marketplace:` block to `apm.yml`, creating the file if it does not exist.
+This appends a `marketplace:` block to `apm.yml`, creating the file if it does not exist. The scaffold includes a dummy `example-package` entry — you will remove it in the next step.
 
 ### 4.3 Add your plugin to the index
 
@@ -572,14 +601,21 @@ apm marketplace package add <owner>/release-notes-plugin \
   --version "^0.1.0"
 ```
 
-Open `apm.yml` to see the result:
+Now open `apm.yml` and **delete the scaffolded `example-package` entry**, leaving only your own:
 
 ```yaml
 marketplace:
   name: academy-marketplace
-  owner: <owner>
+  owner:
+    name: <owner>
+    url: https://github.com/<owner>
   description: Curated APM packages for the Copilot Academy lab
-  url: https://github.com/<owner>
+
+  build:
+    tagPattern: "v{version}"
+
+  outputs:
+    claude: {}
 
   packages:
     - name: release-notes
@@ -588,10 +624,14 @@ marketplace:
       version: "^0.1.0"
 ```
 
+:::danger Delete `example-package` or nothing will build
+`apm marketplace init` seeds a placeholder entry pointing at a repo that does not exist. Leave it in and `apm marketplace check` reports **"2 entries have issues"** — and both `check` and `apm pack` **exit 1**. Your own package is fine; the dummy one poisons the whole build.
+:::
+
 :::note Watch the key names
 In `apm.yml` the key is **`packages:`**. In the compiled `marketplace.json` it becomes **`plugins:`**. This rename is intentional — the JSON output is byte-compatible with Anthropic's marketplace format, so Claude Code, Copilot CLI, and APM all read the same artifact.
 
-Also note there is **no `versions[]` array**. Each compiled package carries exactly one resolved ref — the highest tag matching your range at build time. To publish a new version, re-tag the producer repo and re-run `apm pack` here.
+`owner:` is a **nested mapping** (`name:` + `url:`), not a flat string. Also note there is **no `versions[]` array**. Each compiled package carries exactly one resolved ref — the highest tag matching your range at build time. To publish a new version, re-tag the producer repo and re-run `apm pack` here.
 :::
 
 ### 4.4 Validate before building
@@ -600,9 +640,9 @@ Also note there is **no `versions[]` array**. Each compiled package carries exac
 apm marketplace check
 ```
 
-This resolves every package's ref or version range against the remote. A missing tag or an unresolvable range exits non-zero — which is exactly why this is the command to run in CI, before you push a release commit.
+This resolves every package's ref or version range against the remote and prints an **Entry Health Check** table — Status, Package, Reachable, Version Found, Ref OK, Detail. A missing tag or an unresolvable range exits non-zero, which is exactly why this is the command to run in CI before you push a release commit.
 
-If this fails, the usual cause is that you skipped `git push --tags` in step 3.9.
+If this fails, the two usual causes are the `example-package` entry from step 4.3, or skipping `git push --tags` in step 3.9.
 
 ### 4.5 Build the marketplace artifact
 
@@ -616,7 +656,29 @@ APM resolves every remote entry with `git ls-remote` and writes:
 .claude-plugin/marketplace.json
 ```
 
-Open it. You will see your package with a **resolved** ref — the range `^0.1.0` has been pinned to the concrete tag `v0.1.0`.
+Open it. You will see your package with a **resolved** ref — the range `^0.1.0` has been pinned to a concrete tag *and* the commit SHA behind it:
+
+```json
+{
+  "name": "academy-marketplace",
+  "owner": { "name": "<owner>", "url": "https://github.com/<owner>" },
+  "plugins": [
+    {
+      "name": "release-notes",
+      "version": "0.1.0",
+      "source": {
+        "source": "github",
+        "repo": "<owner>/release-notes-plugin",
+        "ref": "v0.1.0",
+        "sha": "657ec1140270b5b3ebd2539c4faff772b12ce904",
+        "tag_pattern": "v{version}"
+      }
+    }
+  ]
+}
+```
+
+That `sha` is the provenance guarantee: even if someone force-moves the `v0.1.0` tag later, consumers resolving through your marketplace still get the exact commit you published.
 
 Notice that **no bundle was produced**. That is because `apm.yml` here has no `dependencies:` mapping at all. Compare with Part 3, where `dependencies: {}` explicitly selected bundle output:
 
@@ -686,9 +748,19 @@ You should see all three primitives:
 ```
 
 :::danger If a file is missing, you hit the `.apm/` gotcha
-An instruction or prompt that packed fine but did not install means it was authored outside `.apm/<type>/`. Go back to the discovery table in step 3.3, move the file, then re-run `apm pack`, re-tag, and re-install.
+An instruction or prompt authored outside `.apm/<type>/` was **dropped by `apm pack`** — it never made it into the bundle, so there was nothing to install. Go back to the discovery table in step 3.3, move the file, then re-run `apm pack`, re-tag, and re-install.
 
 This is why step 3.7's `--dry-run --verbose` check matters — it is much cheaper to catch this before publishing.
+:::
+
+:::tip Watch for the unpinned-dependency warning
+If your install prints something like:
+
+```
+[!] 1 dependency unpinned: <owner>/release-notes-plugin -- add #tag or #sha to prevent drift
+```
+
+that is APM telling you the resolved source has no immutable ref. Marketplace entries resolved from a version range get pinned automatically; direct git installs do not. Add `#v0.1.0` to the source to silence it — and to guarantee reproducibility.
 :::
 
 Check the lockfile too:
