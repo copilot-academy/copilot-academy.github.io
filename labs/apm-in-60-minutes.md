@@ -470,7 +470,7 @@ Only hooks and skills have a root fallback. Store every primitive under `.apm/<t
 
 ### 3.5 Author the skill
 
-A skill is a model-invoked guide. The `description` is load-bearing — it is how the runtime decides whether to reach for this skill at all.
+A skill is a model-invoked guide. The runtime uses its `description` to decide when to load it, so describe the user request and trigger conditions clearly.
 
 Create `.apm/skills/release-notes/SKILL.md` with the command for your terminal:
 
@@ -726,8 +726,10 @@ applyTo: "CHANGELOG.md,**/release-notes/**,**/RELEASES.md"
 </TabItem>
 </Tabs>
 
-:::note `applyTo` is the load-bearing field
-Without `applyTo`, the rule is treated as unconditional and gets folded into compiled context files like `AGENTS.md` instead of becoming a scoped per-file rule. With it, each harness wraps the body in its own scoping syntax. Commas separate multiple globs — but commas *inside* brace alternation like `**/*.{css,scss}` are part of the glob, not separators.
+:::note `applyTo` scopes the instruction
+`applyTo` tells Copilot which files should receive this instruction. If you leave it out, APM treats the instruction as global and includes it in generated context files such as `AGENTS.md`.
+
+Separate multiple globs with commas. A comma inside a brace pattern, such as `**/*.{css,scss}`, belongs to that pattern and does not separate the globs.
 :::
 
 ### 3.8 Preview before you pack
