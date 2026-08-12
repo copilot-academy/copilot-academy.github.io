@@ -278,7 +278,7 @@ Open `apm.lock.yaml`. Every entry carries a resolved commit SHA and a content ha
 
 ### 2.5 Commit vs. gitignore
 
-This trips people up, so be deliberate about it:
+Use this rule when deciding what belongs in version control:
 
 | Path | Commit? | Why |
 |------|---------|-----|
