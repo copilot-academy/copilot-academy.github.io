@@ -840,7 +840,9 @@ apm marketplace package add <owner>/release-notes-plugin \
   --version "^0.1.0"
 ```
 
-Now open `apm.yml` and **delete the scaffolded `example-package` entry**, leaving only your own:
+The command appends `release-notes` to `marketplace.packages` in `apm.yml`. Do not add the package by hand.
+
+Open `apm.yml` and **delete only the scaffolded `example-package` entry**. The resulting marketplace block should contain the package that the command added:
 
 ```yaml
 marketplace:
@@ -853,9 +855,6 @@ marketplace:
   build:
     tagPattern: "v{version}"
 
-  outputs:
-    claude: {}
-
   packages:
     - name: release-notes
       description: Turn a commit range into clean, user-facing release notes.
@@ -864,11 +863,13 @@ marketplace:
 ```
 
 :::danger Delete `example-package` or nothing will build
-`apm marketplace init` seeds a placeholder entry pointing at a repo that does not exist. Leave it in and `apm marketplace check` reports **"2 entries have issues"** — and both `check` and `apm pack` **exit 1**. Your own package is fine; the dummy one poisons the whole build.
+`apm marketplace init` seeds a placeholder entry pointing at a repo that does not exist. Leave it in and `apm marketplace check` reports **"2 entries have issues"** — and both `check` and `apm pack` **exit 1**. Remove the placeholder so validation checks only your package.
 :::
 
 :::note Watch the key names
-In `apm.yml` the key is **`packages:`**. In the compiled `marketplace.json` it becomes **`plugins:`**. This rename is intentional — the JSON output is byte-compatible with Anthropic's marketplace format, so Claude Code, Copilot CLI, and APM all read the same artifact.
+In `apm.yml` the key is **`packages:`**. In the generated `marketplace.json` it becomes **`plugins:`**. Copilot CLI and APM both read this generated index.
+
+APM writes the index to `.claude-plugin/marketplace.json` by default because that is the shared marketplace file format it currently uses. The directory name does not add another target to this lab; the plugin itself remains restricted to `targets: [copilot]`.
 
 `owner:` is a **nested mapping** (`name:` + `url:`), not a flat string. Also note there is **no `versions[]` array**. Each compiled package carries exactly one resolved ref — the highest tag matching your range at build time. To publish a new version, re-tag the producer repo and re-run `apm pack` here.
 :::
