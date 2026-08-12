@@ -1176,6 +1176,7 @@ A workflow is a prompt with scheduling fields in its frontmatter. Back in your *
 <TabItem value="macos" label="macOS / Linux" default>
 
 ```bash
+cd ../release-notes-plugin
 mkdir -p .apm/prompts
 
 cat > .apm/prompts/weekly-release-notes.prompt.md <<'EOF'
@@ -1202,6 +1203,7 @@ EOF
 <TabItem value="windows" label="Windows (PowerShell)">
 
 ```powershell
+Set-Location ../release-notes-plugin
 New-Item -ItemType Directory -Force -Path .apm/prompts | Out-Null
 
 @'
