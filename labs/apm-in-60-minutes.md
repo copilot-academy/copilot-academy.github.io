@@ -434,9 +434,25 @@ release-notes-plugin/
 
 Create the tree now:
 
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS / Linux" default>
+
 ```bash
 mkdir -p .apm/skills/release-notes .apm/prompts .apm/instructions
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+New-Item -ItemType Directory -Force -Path `
+  .apm/skills/release-notes, `
+  .apm/prompts, `
+  .apm/instructions | Out-Null
+```
+
+</TabItem>
+</Tabs>
 
 :::warning Keep primitives under `.apm/<type>/`
 APM collects primitives only from supported source paths. Put an instruction or prompt at your repo root instead of under `.apm/` and `apm pack` **silently omits it from the bundle** — no error, no warning, exit code 0.
@@ -456,9 +472,13 @@ Only hooks and skills have a root fallback. Store every primitive under `.apm/<t
 
 A skill is a model-invoked guide. The `description` is load-bearing — it is how the runtime decides whether to reach for this skill at all.
 
-Create `.apm/skills/release-notes/SKILL.md`:
+Create `.apm/skills/release-notes/SKILL.md` with the command for your terminal:
 
-```markdown
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS / Linux" default>
+
+```bash
+cat > .apm/skills/release-notes/SKILL.md <<'EOF'
 ---
 name: release-notes
 description: Use when the user asks to write, draft, or summarize release notes, changelogs, or "what shipped" summaries from commits, PRs, or a tag range. Converts raw git history into user-facing prose grouped by impact.
@@ -503,7 +523,63 @@ Bad — describes the code:
 Good — describes the user's world:
 
 > Sign-in now completes without a round trip on repeat visits.
+EOF
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+@'
+---
+name: release-notes
+description: Use when the user asks to write, draft, or summarize release notes, changelogs, or "what shipped" summaries from commits, PRs, or a tag range. Converts raw git history into user-facing prose grouped by impact.
+---
+
+# Release Notes
+
+Turn raw commit history into notes a **user** cares about — not a
+restatement of the git log.
+
+## Process
+
+1. Determine the commit range. Default to `<last-tag>..HEAD`. If no tag
+   exists, use the last 30 commits.
+2. Read the commits. Prefer PR titles and bodies over raw commit subjects
+   when both are available.
+3. Discard anything with no user-visible effect: dependency bumps, CI
+   tweaks, formatting, internal refactors, revert pairs that cancel out.
+4. Group whatever remains under these headings, omitting empty ones:
+   - **Added** — new capabilities
+   - **Changed** — behavior that differs from the previous release
+   - **Fixed** — bugs a user could have hit
+   - **Deprecated** — still works, but scheduled for removal
+   - **Breaking** — requires action from the user before upgrading
+5. Write one line per entry. Lead with the verb. Say what the user can
+   now do, not which function changed.
+
+## Rules
+
+- Never invent an entry that has no commit behind it.
+- If a change is breaking, say so explicitly and state the migration step.
+- Link issue or PR numbers when the source material has them.
+- If the range contains nothing user-visible, say exactly that. Do not
+  pad the notes to look productive.
+
+## Example
+
+Bad — describes the code:
+
+> Refactored `AuthProvider` to use the new token cache.
+
+Good — describes the user's world:
+
+> Sign-in now completes without a round trip on repeat visits.
+'@ | Set-Content -Path .apm/skills/release-notes/SKILL.md -Encoding utf8
+```
+
+</TabItem>
+</Tabs>
 
 :::tip What makes a description good
 Runtimes match on the **first sentence**. Lead with the user's intent ("Use when the user asks to..."), then the trigger conditions. A vague description like "Helps with release notes" collides with every other skill on the machine. Keep it under 1024 characters — that is a hard ceiling in the agent-skills spec.
@@ -511,9 +587,13 @@ Runtimes match on the **first sentence**. Lead with the user's intent ("Use when
 
 ### 3.6 Author the prompt
 
-A prompt is invoked explicitly by name. Create `.apm/prompts/draft-release-notes.prompt.md`:
+A prompt is invoked explicitly by name. Create `.apm/prompts/draft-release-notes.prompt.md` with the command for your terminal:
 
-```markdown
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS / Linux" default>
+
+```bash
+cat > .apm/prompts/draft-release-notes.prompt.md <<'EOF'
 ---
 description: Draft release notes for a commit range and write them to CHANGELOG.md.
 input:
@@ -541,7 +621,46 @@ Follow these steps:
 
 If the range contains no user-visible changes, tell me that instead of
 writing an empty section.
+EOF
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+@'
+---
+description: Draft release notes for a commit range and write them to CHANGELOG.md.
+input:
+  - since: "Tag or commit to start from (defaults to the latest tag)"
+  - version: "Version number these notes describe (e.g. 1.4.0)"
+argument-hint: "[since] [version]"
+---
+
+# Draft release notes for ${input:version}
+
+Draft the release notes for version `${input:version}`, covering every
+change since `${input:since}`.
+
+Follow these steps:
+
+1. Run `git log ${input:since}..HEAD --oneline --no-merges` to collect
+   the raw history. If `${input:since}` is empty, resolve the latest tag
+   with `git describe --tags --abbrev=0` and use that instead.
+2. Apply the **release-notes** skill to turn that history into grouped,
+   user-facing entries.
+3. Prepend the result to `CHANGELOG.md` under a
+   `## ${input:version} — <today's date>` heading. Create the file if it
+   does not exist. Never overwrite existing entries.
+4. Print the notes you wrote so I can review them before committing.
+
+If the range contains no user-visible changes, tell me that instead of
+writing an empty section.
+'@ | Set-Content -Path .apm/prompts/draft-release-notes.prompt.md -Encoding utf8
+```
+
+</TabItem>
+</Tabs>
 
 Two details worth calling out:
 
@@ -552,9 +671,13 @@ Two details worth calling out:
 
 An instruction is a rule attached to a file glob. It fires automatically whenever the agent touches a matching file.
 
-Create `.apm/instructions/release-notes.instructions.md`:
+Create `.apm/instructions/release-notes.instructions.md` with the command for your terminal:
 
-```markdown
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS / Linux" default>
+
+```bash
+cat > .apm/instructions/release-notes.instructions.md <<'EOF'
 ---
 description: Formatting and tone rules for changelog and release-note files.
 applyTo: "CHANGELOG.md,**/release-notes/**,**/RELEASES.md"
@@ -572,7 +695,36 @@ applyTo: "CHANGELOG.md,**/release-notes/**,**/RELEASES.md"
   paths, no function names, no internal module names.
 - Reference issues as `(#123)` at the end of the line.
 - Never edit an entry under a version that has already been released.
+EOF
 ```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+@'
+---
+description: Formatting and tone rules for changelog and release-note files.
+applyTo: "CHANGELOG.md,**/release-notes/**,**/RELEASES.md"
+---
+
+# Changelog conventions
+
+- Newest version at the top. Never append to the bottom.
+- Heading format: `## <version> — <YYYY-MM-DD>`.
+- Allowed group headings, in this order: Added, Changed, Fixed,
+  Deprecated, Breaking. Omit any group with no entries.
+- One entry per line, starting with a verb in present tense
+  ("Adds", "Fixes", not "Added" or "This change fixes").
+- Write for a user of the product, not a contributor to it. No file
+  paths, no function names, no internal module names.
+- Reference issues as `(#123)` at the end of the line.
+- Never edit an entry under a version that has already been released.
+'@ | Set-Content -Path .apm/instructions/release-notes.instructions.md -Encoding utf8
+```
+
+</TabItem>
+</Tabs>
 
 :::note `applyTo` is the load-bearing field
 Without `applyTo`, the rule is treated as unconditional and gets folded into compiled context files like `AGENTS.md` instead of becoming a scoped per-file rule. With it, each harness wraps the body in its own scoping syntax. Commas separate multiple globs — but commas *inside* brace alternation like `**/*.{css,scss}` are part of the glob, not separators.
