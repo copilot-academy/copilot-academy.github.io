@@ -1266,10 +1266,12 @@ Return to the consumer repo, refresh its marketplace cache, and update the insta
 ```bash
 cd ../apm-consumer-demo
 apm marketplace update academy-marketplace
-apm update --target copilot-app
+apm install 'release-notes@academy-marketplace#v0.2.0' --target copilot-app
 ```
 
-The marketplace now exposes `^0.2.0`, and `apm marketplace update` refreshes the consumer's cached copy of that index. `apm update` then moves the lockfile to the newly published release and deploys its scheduled workflow for the Copilot app target. Confirm the consumer no longer has an available package update:
+The marketplace now exposes `^0.2.0`, and `apm marketplace update` refreshes the consumer's cached copy of that index. The original marketplace install wrote a resolved tag such as `release-notes-plugin#v0.1.0` into the consumer's `apm.yml`. Because that is an exact pin, a plain `apm update` will not cross it. Installing the marketplace package with `#v0.2.0` updates that existing dependency entry, rewrites the lockfile, and deploys the scheduled workflow for the Copilot app target.
+
+Confirm the consumer no longer has an available package update:
 
 ```bash
 apm outdated
