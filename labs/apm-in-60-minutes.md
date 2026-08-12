@@ -1239,7 +1239,7 @@ Notice there is **no `${input:...}` placeholder** anywhere in the body. A schedu
 
 ### B.3 Ship it
 
-Same publish loop as Part 3 — pack, commit, tag, push:
+In `release-notes-plugin/apm.yml`, change the package version from `0.1.0` to `0.2.0`. Then pack, commit, tag, and push the plugin:
 
 ```bash
 apm pack
@@ -1249,10 +1249,30 @@ git tag v0.2.0
 git push && git push --tags
 ```
 
-Then in `apm-consumer-demo`, pull it down against the new target:
+The marketplace artifact still points to the previously resolved release. Rebuild and publish it so `release-notes` resolves to `v0.2.0`:
 
 ```bash
-apm install --target copilot-app
+cd ../academy-marketplace
+apm marketplace package set release-notes --version "^0.2.0"
+apm marketplace check
+apm pack
+git add apm.yml ':(glob)**/marketplace.json'
+git commit -m "Update release-notes to v0.2.0"
+git push
+```
+
+Return to the consumer repo, refresh its marketplace cache, and update the installed plugin for the new target:
+
+```bash
+cd ../apm-consumer-demo
+apm marketplace update academy-marketplace
+apm update --target copilot-app
+```
+
+The marketplace now exposes `^0.2.0`, and `apm marketplace update` refreshes the consumer's cached copy of that index. `apm update` then moves the lockfile to the newly published release and deploys its scheduled workflow for the Copilot app target. Confirm the consumer no longer has an available package update:
+
+```bash
+apm outdated
 ```
 
 ### B.4 Turn it on
