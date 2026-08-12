@@ -22,6 +22,7 @@ const sidebars = {
         'agentic-workflows-repo-analyzer',
         'customization-in-90-minutes',
         'context-engineering-lab',
+        'apm-in-60-minutes',
       ],
     },
     {

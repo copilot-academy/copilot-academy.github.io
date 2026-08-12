@@ -22,6 +22,7 @@ Focused, self-contained exercises you can complete in 15–30 minutes. Each lab 
 | [Agentic Workflows Repo Analyzer](/labs/agentic-workflows-repo-analyzer) | ~45 min | Create a GitHub Agentic Workflow for weekly repository health reports |
 | [Customization in 90 Minutes](/labs/customization-in-90-minutes) | ~90 min | Build an SDLC multi-agent framework with skills, agents, orchestration, and model optimization |
 | [Context Engineering — Every Token Counts](/labs/context-engineering-lab) | ~2 hours | Measure, optimize, and engineer AI context windows — cutting token waste and reducing costs |
+| [APM in 60 Minutes](/labs/apm-in-60-minutes) | ~60 min | Package, publish, and consume AI agent primitives with APM — build a plugin repo and a marketplace repo |
 
 ## Advanced
 
