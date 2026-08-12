@@ -1010,18 +1010,97 @@ Give it a real history first:
 git add -A
 git commit -m "chore: install release-notes plugin"
 git tag v0.1.0
-
-git commit --allow-empty -m "feat: add changelog scaffold"
-git commit --allow-empty -m "fix: correct tag parsing in the release script"
 ```
+
+Now make two user-visible code changes:
+
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS / Linux" default>
+
+```bash
+cat > release-summary.js <<'EOF'
+function formatRelease(version, changes) {
+  const entries = changes.map((change) => `- ${change}`).join("\n");
+  return `## ${version}\n\n${entries}`;
+}
+
+module.exports = { formatRelease };
+EOF
+
+git add release-summary.js
+git commit -m "feat: add release summary formatter"
+
+cat > release-summary.js <<'EOF'
+function formatRelease(version, changes = []) {
+  const visibleChanges = changes.filter(Boolean);
+
+  if (visibleChanges.length === 0) {
+    return `## ${version}\n\nNo user-visible changes.`;
+  }
+
+  const entries = visibleChanges
+    .map((change) => `- ${change}`)
+    .join("\n");
+
+  return `## ${version}\n\n${entries}`;
+}
+
+module.exports = { formatRelease };
+EOF
+
+git add release-summary.js
+git commit -m "fix: handle empty release summaries"
+```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+@'
+function formatRelease(version, changes) {
+  const entries = changes.map((change) => `- ${change}`).join("\n");
+  return `## ${version}\n\n${entries}`;
+}
+
+module.exports = { formatRelease };
+'@ | Set-Content -Path release-summary.js -Encoding utf8
+
+git add release-summary.js
+git commit -m "feat: add release summary formatter"
+
+@'
+function formatRelease(version, changes = []) {
+  const visibleChanges = changes.filter(Boolean);
+
+  if (visibleChanges.length === 0) {
+    return `## ${version}\n\nNo user-visible changes.`;
+  }
+
+  const entries = visibleChanges
+    .map((change) => `- ${change}`)
+    .join("\n");
+
+  return `## ${version}\n\n${entries}`;
+}
+
+module.exports = { formatRelease };
+'@ | Set-Content -Path release-summary.js -Encoding utf8
+
+git add release-summary.js
+git commit -m "fix: handle empty release summaries"
+```
+
+</TabItem>
+</Tabs>
 
 Confirm there is now a range to work with:
 
 ```bash
 git log v0.1.0..HEAD --oneline
+git diff v0.1.0..HEAD --stat
 ```
 
-You should see the two commits made after the tag.
+You should see the two commits made after the tag and a real code diff for `release-summary.js`.
 
 ### 5.5 Verify in Copilot CLI
 
@@ -1042,6 +1121,8 @@ Summarize what shipped in this repo since the last tag.
 ```
 
 The **academy-release-notes** skill should activate on its own. That is the difference between a skill and a prompt: you never typed its name, the model reached for it based on the `description:` you wrote in step 3.5.
+
+The result should mention the new release-summary formatter and the fix for empty summaries. If it still reports no user-visible changes, run `git log v0.1.0..HEAD` and confirm both code commits are present.
 
 :::warning `.prompt.md` files are not slash commands in Copilot CLI
 Typing `/draft-release-notes` will **not** work. Copilot CLI will tell you it is not a command — the CLI does not support prompt files as slash commands.
