@@ -1257,6 +1257,36 @@ than padding the notes.
 </TabItem>
 </Tabs>
 
+Before publishing, verify the package version and confirm that no target restriction remains:
+
+<Tabs groupId="os">
+<TabItem value="macos" label="macOS / Linux" default>
+
+```bash
+grep '^version:' apm.yml
+
+if grep -q '^targets:' apm.yml; then
+  echo "Remove the targets block before publishing the workflow."
+  exit 1
+fi
+```
+
+</TabItem>
+<TabItem value="windows" label="Windows (PowerShell)">
+
+```powershell
+Select-String -Path apm.yml -Pattern '^version:'
+
+if (Select-String -Path apm.yml -Pattern '^targets:' -Quiet) {
+  throw "Remove the targets block before publishing the workflow."
+}
+```
+
+</TabItem>
+</Tabs>
+
+You should see `version: 0.2.0` and no error.
+
 | Field | Meaning |
 |-------|---------|
 | `interval` | `hourly`, `daily`, or `weekly` |
