@@ -186,7 +186,7 @@ This is interactive. It asks for a project name, version, description, and autho
 **Press Enter through every prompt to accept the defaults.** The defaults are all sensible for this exercise, and accepting them keeps everyone on the same page for the rest of the lab.
 
 :::note The default version is `1.0.0`, not `0.1.0`
-`apm init` starts you at `1.0.0` — it assumes a project, not a pre-release library. The `apm plugin init` scaffold in Part 3 behaves differently, so don't be surprised when the numbers don't match.
+`apm init` starts you at `1.0.0` because it assumes a project, not a pre-release library. The `apm plugin init` scaffold in Part 3 starts at `0.1.0`, so the two generated versions differ by design.
 
 Prefer to skip the questions entirely? `apm init --yes` takes every default without prompting.
 :::
@@ -293,18 +293,25 @@ Committing the deployed directories is the counter-intuitive one. The reason: a 
 
 ```bash
 apm list
-apm view microsoft/apm-sample-package
 ```
 
-`apm list` lists **scripts**, not packages. You didn't define any, so it prints:
+`apm list` lists **scripts**, not installed packages. Because this project does not define any scripts, the command prints:
 
 ```
 [!] No scripts found.
 ```
 
-That's expected. Scripts are optional shortcuts you declare under `scripts:` in `apm.yml`; installing a package never adds any.
+:::note Why are there no scripts?
+Scripts are optional shortcuts declared under `scripts:` in `apm.yml`. Installing a package does not add scripts to the consumer project, so this output is expected.
+:::
 
-To see what you actually installed, use `apm view`:
+To inspect the installed package, run:
+
+```bash
+apm view microsoft/apm-sample-package
+```
+
+The package metadata should look like this:
 
 ```
 Name: apm-sample-package
@@ -331,11 +338,11 @@ Open this folder in Copilot CLI (`copilot`) or the Copilot app and look at your 
 
 **Time: ~15 minutes**
 
-Now you author a package. You will build a **Release Notes plugin** with all three of the most common primitives.
+Now you author a package. You will build a **Release Notes plugin** with three primitive types: a skill, a prompt, and an instruction.
 
 ### 3.1 Understand the three primitives you're about to write
 
-They are not interchangeable. Pick the wrong one and your package will feel broken.
+Each primitive has a different invocation model. Use the table below to choose the one that matches the behavior you want.
 
 | Primitive | Invoked by | Use it when |
 |-----------|-----------|-------------|
@@ -343,7 +350,7 @@ They are not interchangeable. Pick the wrong one and your package will feel brok
 | **Prompt** | The user, explicitly | The user runs a named workflow on demand, picked from a list or referenced by path |
 | **Instruction** | The file glob | A rule should fire whenever the agent touches matching files |
 
-In short: **prompts are called, skills are reached for, instructions just apply.**
+In short: **prompts are called, skills are reached for, and instructions apply automatically.**
 
 ### 3.2 Create and clone the repo
 
@@ -424,10 +431,8 @@ Create the tree now:
 mkdir -p .apm/skills/release-notes .apm/prompts .apm/instructions
 ```
 
-:::warning Author under `.apm/<type>/` or your files get dropped
-This is the single most common way to ship a broken APM package.
-
-Put an instruction or prompt at your repo root instead of under `.apm/` and `apm pack` **silently drops it from the bundle** — no error, no warning, exit code 0. You get a package that publishes cleanly and delivers nothing.
+:::warning Keep primitives under `.apm/<type>/`
+APM collects primitives only from supported source paths. Put an instruction or prompt at your repo root instead of under `.apm/` and `apm pack` **silently omits it from the bundle** — no error, no warning, exit code 0.
 
 | Primitive | `apm pack` collects from | Root fallback |
 |-----------|--------------------------|----------------|
@@ -437,7 +442,7 @@ Put an instruction or prompt at your repo root instead of under `.apm/` and `apm
 | hook | `.apm/hooks/*.json` | `hooks/*.json` |
 | skill | `.apm/skills/<name>/SKILL.md` | `skills/<name>/SKILL.md` |
 
-Only hooks and skills have a root fallback. Author under `.apm/<type>/` and you never have to think about this table again — and always run the dry-run in step 3.8, which is exactly how you catch a dropped file.
+Only hooks and skills have a root fallback. Store every primitive under `.apm/<type>/`, then use the dry run in step 3.8 to confirm the bundle contains every expected file.
 :::
 
 ### 3.5 Author the skill
@@ -568,13 +573,13 @@ Without `applyTo`, the rule is treated as unconditional and gets folded into com
 
 ### 3.8 Preview before you pack
 
-Always dry-run first. This is how you catch a misplaced file **before** consumers do.
+Run a dry run before packing to catch misplaced files **before** consumers install the package.
 
 ```bash
 apm pack --dry-run --verbose
 ```
 
-Read the file list carefully. Note that the dry run reports **destination** paths inside the bundle, not your `.apm/` source paths — `apm pack` rewrites the layout as it goes, and `.prompt.md` files become `commands/*.md`:
+The dry run reports **destination** paths inside the bundle, not your `.apm/` source paths. `apm pack` rewrites the layout as it goes, and `.prompt.md` files become `commands/*.md`:
 
 ```
 skills/release-notes/SKILL.md
@@ -602,7 +607,7 @@ build/release-notes-0.1.0/
 
 Two side effects worth knowing:
 
-- `apm pack` also writes **`.github/plugin/plugin.json`** into your working tree. That one *is* regenerated from `apm.yml`. Commit it or ignore it, but don't be surprised by it.
+- `apm pack` also writes **`.github/plugin/plugin.json`** into your working tree. That file *is* regenerated from `apm.yml`; decide whether your project will commit or ignore it.
 - The `build/` directory is a build artifact. Add it to `.gitignore` — you publish the **tagged source repo**, not the bundle.
 
 :::warning Never use `--format apm`
@@ -760,7 +765,7 @@ Notice that **no bundle was produced**. That is because `apm.yml` here has no `d
 | Populated | Bundle **and** `marketplace.json` |
 
 :::warning A `.gitignore` with `*.json` will silently break your marketplace
-If your repo ignores `*.json`, the generated `marketplace.json` never gets committed and consumers see nothing. `apm marketplace init` warns about this. If you hit it, add an unignore: `!.claude-plugin/marketplace.json`.
+If your repo ignores `*.json`, the generated `marketplace.json` never gets committed and consumers see nothing. `apm marketplace init` warns about this. Add `!.claude-plugin/marketplace.json` to unignore the generated file.
 :::
 
 ### 4.6 Publish
@@ -783,7 +788,7 @@ If a package's repo tags releases as `release-notes_v0.1.0` instead of `v0.1.0`,
 
 **Time: ~10 minutes**
 
-Now close the loop. This is the moment of truth: if a step in Part 3 or 4 was wrong, it surfaces here.
+Now install through the marketplace to validate the producer and marketplace configuration from Parts 3 and 4.
 
 ### 5.1 Register the marketplace
 
@@ -818,7 +823,7 @@ You should see all three primitives:
 .agents/skills/release-notes/SKILL.md
 ```
 
-:::danger If a file is missing, you hit the `.apm/` gotcha
+:::danger If a file is missing, check the `.apm/` source layout
 An instruction or prompt authored outside `.apm/<type>/` was **dropped by `apm pack`** — it never made it into the bundle, so there was nothing to install. Go back to the discovery table in step 3.4, move the file, then re-run `apm pack`, re-tag, and re-install.
 
 This is why step 3.8's `--dry-run --verbose` check matters — it is much cheaper to catch this before publishing.
@@ -888,7 +893,7 @@ The **release-notes** skill should activate on its own. That is the difference b
 :::warning `.prompt.md` files are not slash commands in Copilot CLI
 Typing `/draft-release-notes` will **not** work. Copilot CLI will tell you it is not a command — the CLI does not support prompt files as slash commands.
 
-Nothing is broken. The file deployed to the correct place (`.github/prompts/draft-release-notes.prompt.md`); it is simply not surfaced as a CLI slash command. To run it from the CLI, reference it by path:
+The file deployed to the correct place (`.github/prompts/draft-release-notes.prompt.md`), but Copilot CLI does not expose prompt files as slash commands. To run it from the CLI, reference it by path:
 
 ```
 @.github/prompts/draft-release-notes.prompt.md
@@ -997,13 +1002,13 @@ Full details in the [Copilot app integration docs](https://microsoft.github.io/a
 
 **Time: ~5 minutes — read only, no commands to run**
 
-You built two repos. That is the right call for one plugin, but it does not scale to fifteen. Here are all three shapes and when each one wins.
+The two-repo layout works well for one plugin. As the catalog grows, an aggregator or monorepo can reduce repository overhead. The table below compares all three layouts.
 
 ### 6.1 The three repo shapes
 
 | Shape | Source files | Use when |
 |-------|--------------|----------|
-| **Single-plugin** | One `apm.yml` at the repo root | One plugin per repo. Smallest surface, fewest gotchas. *(You built this in Part 3.)* |
+| **Single-plugin** | One `apm.yml` at the repo root | One plugin per repo. Smallest surface and fewest layout decisions. *(You built this in Part 3.)* |
 | **Aggregator** | One `apm.yml` at the root with N remote `packages:` | You curate plugins that live in other repos. *(You built this in Part 4.)* |
 | **Monorepo-hybrid** | Root `apm.yml` **plus** per-plugin `apm.yml` in subdirectories | Many plugins ship together, alongside the marketplace that indexes them. |
 
@@ -1075,7 +1080,7 @@ marketplace:
 | `apm pack` | Once, at the root | Per-plugin for bundles, plus once at the root for the index |
 | Cross-plugin change | N PRs across N repos | One PR |
 
-The trade-off is real: a monorepo makes coordinated changes trivial and independent versioning awkward. Separate repos do the opposite.
+The trade-off is real: a monorepo makes coordinated changes easier but independent versioning more difficult. Separate repos do the opposite.
 
 ### 6.5 Consuming from a monorepo
 
