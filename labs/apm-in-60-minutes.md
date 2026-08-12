@@ -30,9 +30,13 @@ APM is under active development and commands change. If something looks differen
 
 You need three things before you start.
 
-**1. A GitHub account.** You will create two public repos under your own account. Throughout this lab, replace `<owner>` with your GitHub username.
+**1. A GitHub account.** You will create two private repos under your own account. Throughout this lab, replace `<owner>` with your GitHub username.
 
-**2. Git installed and configured**, with the ability to push to GitHub.
+**2. Git and the GitHub CLI installed and configured.** Confirm that `gh` is authenticated before you start:
+
+```bash
+gh auth status
+```
 
 **3. An AI harness to verify against.** Either:
 
@@ -352,14 +356,17 @@ Each primitive has a different invocation model. Use the table below to choose t
 
 In short: **prompts are called, skills are reached for, and instructions apply automatically.**
 
-### 3.2 Create and clone the repo
+### 3.2 Create the repo with GitHub CLI
 
-Create a new **public** repo on GitHub named `release-notes-plugin`, then:
+Create a private repo and clone it in one command:
 
 ```bash
-git clone https://github.com/<owner>/release-notes-plugin.git
+cd ..
+gh repo create release-notes-plugin --private --clone
 cd release-notes-plugin
 ```
+
+Private repos work with APM as long as your Git credentials can read them. To make the example public instead, replace `--private` with `--public`.
 
 ### 3.3 Scaffold the plugin
 
@@ -651,15 +658,17 @@ From here on the lab spans **two repos** — the marketplace resolves your plugi
 Run Parts 4 and 5 **locally**, or first authenticate the Codespace for multi-repo access (for example `gh auth login` with a token that covers both repos, or a Codespace configured with multi-repository permissions).
 :::
 
-### 4.1 Create and clone the repo
+### 4.1 Create the repo with GitHub CLI
 
-Create a second **public** repo named `academy-marketplace`, then:
+Create the private marketplace repo alongside the producer repo:
 
 ```bash
 cd ..
-git clone https://github.com/<owner>/academy-marketplace.git
+gh repo create academy-marketplace --private --clone
 cd academy-marketplace
 ```
+
+As in Part 3, use `--public` instead if you want anyone to browse or install from this marketplace without repository access.
 
 ### 4.2 Initialize the marketplace
 
