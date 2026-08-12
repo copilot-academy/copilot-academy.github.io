@@ -331,13 +331,13 @@ This is the single most common way to ship a broken APM package.
 
 `apm pack` (export) is permissive. `apm install` (discovery) is strict. A file in the wrong place will pack successfully, publish successfully, and then **silently never install**.
 
-| Primitive | `apm install` scans | Root alternative accepted? |
-|-----------|---------------------|----------------------------|
-| instruction | `.apm/instructions/*.instructions.md` | **No** |
-| command (prompt) | `.apm/prompts/*.prompt.md` | **No** |
-| hook | `.apm/hooks/*.json` | Yes: `hooks/*.json` |
-| agent | `.apm/agents/**/*.agent.md` | Yes: `*.agent.md` at package root |
-| skill | `.apm/skills/<name>/SKILL.md` | Yes: `skills/<name>/SKILL.md` |
+| Primitive | `apm install` scans | Root fallback |
+|-----------|---------------------|----------------|
+| instruction | `.apm/instructions/*.instructions.md` | **None** |
+| command (prompt) | `.apm/prompts/*.prompt.md` | **None** |
+| hook | `.apm/hooks/*.json` | `hooks/*.json` |
+| agent | `.apm/agents/**/*.agent.md` | `*.agent.md` at root |
+| skill | `.apm/skills/<name>/SKILL.md` | `skills/<name>/SKILL.md` |
 
 Instructions and prompts have **no** root fallback. Always author under `.apm/<type>/` and you never have to think about this table again.
 :::
