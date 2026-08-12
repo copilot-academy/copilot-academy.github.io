@@ -170,7 +170,7 @@
 /* Admonitions are narrower than the main content column, so a table nested in
    one can exceed its container. Let long inline-code paths wrap, and scroll as
    a fallback rather than clipping the last column. */
-.markdown table code {
+.theme-admonition table code {
   overflow-wrap: anywhere;
 }
 
