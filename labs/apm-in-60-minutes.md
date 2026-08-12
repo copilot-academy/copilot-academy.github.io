@@ -54,7 +54,7 @@ Three moving parts, wired together:
 │  <owner>/release-notes-plugin│   PRODUCER REPO
 │                              │
 │  apm.yml                     │   Declares the package
-│  .apm/skills/release-notes/  │   A model-invoked guide
+│  .apm/skills/academy-release-notes/ │ A model-invoked guide
 │  .apm/prompts/*.prompt.md    │   An on-demand workflow
 │  .apm/instructions/*.md      │   Scope-attached rules
 │                              │
@@ -419,7 +419,7 @@ release-notes-plugin/
 ├── plugin.json
 └── .apm/
     ├── skills/
-    │   └── release-notes/
+    │   └── academy-release-notes/
     │       └── SKILL.md
     ├── prompts/
     │   └── draft-release-notes.prompt.md
@@ -435,7 +435,7 @@ Create the tree now:
 <TabItem value="macos" label="macOS / Linux" default>
 
 ```bash
-mkdir -p .apm/skills/release-notes .apm/prompts .apm/instructions
+mkdir -p .apm/skills/academy-release-notes .apm/prompts .apm/instructions
 ```
 
 </TabItem>
@@ -443,7 +443,7 @@ mkdir -p .apm/skills/release-notes .apm/prompts .apm/instructions
 
 ```powershell
 New-Item -ItemType Directory -Force -Path `
-  .apm/skills/release-notes, `
+  .apm/skills/academy-release-notes, `
   .apm/prompts, `
   .apm/instructions | Out-Null
 ```
@@ -469,15 +469,15 @@ Only hooks and skills have a root fallback. Store every primitive under `.apm/<t
 
 A skill is a model-invoked guide. The runtime uses its `description` to decide when to load it, so describe the user request and trigger conditions clearly.
 
-Create `.apm/skills/release-notes/SKILL.md` with the command for your terminal:
+Create `.apm/skills/academy-release-notes/SKILL.md` with the command for your terminal:
 
 <Tabs groupId="os">
 <TabItem value="macos" label="macOS / Linux" default>
 
 ```bash
-cat > .apm/skills/release-notes/SKILL.md <<'EOF'
+cat > .apm/skills/academy-release-notes/SKILL.md <<'EOF'
 ---
-name: release-notes
+name: academy-release-notes
 description: Use when the user asks to write, draft, or summarize release notes, changelogs, or "what shipped" summaries from commits, PRs, or a tag range. Converts raw git history into user-facing prose grouped by impact.
 ---
 
@@ -529,7 +529,7 @@ EOF
 ```powershell
 @'
 ---
-name: release-notes
+name: academy-release-notes
 description: Use when the user asks to write, draft, or summarize release notes, changelogs, or "what shipped" summaries from commits, PRs, or a tag range. Converts raw git history into user-facing prose grouped by impact.
 ---
 
@@ -572,7 +572,7 @@ Bad — describes the code:
 Good — describes the user's world:
 
 > Sign-in now completes without a round trip on repeat visits.
-'@ | Set-Content -Path .apm/skills/release-notes/SKILL.md -Encoding utf8
+'@ | Set-Content -Path .apm/skills/academy-release-notes/SKILL.md -Encoding utf8
 ```
 
 </TabItem>
@@ -609,7 +609,7 @@ Follow these steps:
 1. Run `git log ${input:since}..HEAD --oneline --no-merges` to collect
    the raw history. If `${input:since}` is empty, resolve the latest tag
    with `git describe --tags --abbrev=0` and use that instead.
-2. Apply the **release-notes** skill to turn that history into grouped,
+2. Apply the **academy-release-notes** skill to turn that history into grouped,
    user-facing entries.
 3. Prepend the result to `CHANGELOG.md` under a
    `## ${input:version} — <today's date>` heading. Create the file if it
@@ -644,7 +644,7 @@ Follow these steps:
 1. Run `git log ${input:since}..HEAD --oneline --no-merges` to collect
    the raw history. If `${input:since}` is empty, resolve the latest tag
    with `git describe --tags --abbrev=0` and use that instead.
-2. Apply the **release-notes** skill to turn that history into grouped,
+2. Apply the **academy-release-notes** skill to turn that history into grouped,
    user-facing entries.
 3. Prepend the result to `CHANGELOG.md` under a
    `## ${input:version} — <today's date>` heading. Create the file if it
@@ -740,7 +740,7 @@ apm pack --dry-run --verbose
 The dry run reports **destination** paths inside the bundle, not your `.apm/` source paths. `apm pack` rewrites the layout as it goes, and `.prompt.md` files become `commands/*.md`:
 
 ```
-skills/release-notes/SKILL.md
+skills/academy-release-notes/SKILL.md
 commands/draft-release-notes.md
 instructions/release-notes.instructions.md
 ```
@@ -973,7 +973,7 @@ You should see all three primitives:
 ```
 .github/prompts/draft-release-notes.prompt.md
 .github/instructions/release-notes.instructions.md
-.agents/skills/release-notes/SKILL.md
+.agents/skills/academy-release-notes/SKILL.md
 ```
 
 :::danger If a file is missing, check the `.apm/` source layout
@@ -1029,10 +1029,10 @@ You should see the two commits made after the tag.
 copilot
 ```
 
-**Skills are exposed as slash commands. Prompt files are not.** Your skill is registered under its `name:` from `SKILL.md`, so:
+**Skills are exposed as slash commands. Prompt files are not.** Your skill is registered under its `name:` from `SKILL.md`. This lab uses `academy-release-notes` because Copilot CLI already includes a built-in `/release-notes` command:
 
 ```
-/release-notes
+/academy-release-notes
 ```
 
 Then verify auto-activation — describe the task without naming anything:
@@ -1041,7 +1041,7 @@ Then verify auto-activation — describe the task without naming anything:
 Summarize what shipped in this repo since the last tag.
 ```
 
-The **release-notes** skill should activate on its own. That is the difference between a skill and a prompt: you never typed its name, the model reached for it based on the `description:` you wrote in step 3.5.
+The **academy-release-notes** skill should activate on its own. That is the difference between a skill and a prompt: you never typed its name, the model reached for it based on the `description:` you wrote in step 3.5.
 
 :::warning `.prompt.md` files are not slash commands in Copilot CLI
 Typing `/draft-release-notes` will **not** work. Copilot CLI will tell you it is not a command — the CLI does not support prompt files as slash commands.
@@ -1063,7 +1063,7 @@ Both surfaces read the identical on-disk files — `.github/prompts/`, `.github/
 
 | Primitive | Copilot CLI | Copilot app |
 |-----------|-------------|-------------|
-| Skill | `/release-notes`, plus auto-activation | Auto-activation |
+| Skill | `/academy-release-notes`, plus auto-activation | Auto-activation |
 | Prompt | `@` by file path only | Appears in the prompts picker |
 | Instruction | Fires on glob match | Fires on glob match |
 
@@ -1102,7 +1102,7 @@ schedule_hour: 9
 Summarize everything merged into the default branch in the last 7 days
 as user-facing release notes.
 
-Use the release-notes skill for tone and structure. Group entries under
+Use the academy-release-notes skill for tone and structure. Group entries under
 Added, Changed, and Fixed. Skip commits that only touch CI config or
 lockfiles.
 
