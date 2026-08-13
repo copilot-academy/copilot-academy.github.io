@@ -167,6 +167,19 @@
   padding: 0.5rem 0.75rem;
 }
 
+/* Admonitions are narrower than the main content column, so a table nested in
+   one can exceed its container. Let long inline-code paths wrap, and scroll as
+   a fallback rather than clipping the last column. */
+.theme-admonition table code {
+  overflow-wrap: anywhere;
+}
+
+.theme-admonition table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 /* ---------- Footer ---------- */
 .footer__link-item {
   font-size: 0.875rem;
