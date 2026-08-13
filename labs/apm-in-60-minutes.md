@@ -781,7 +781,7 @@ echo "build/" >> .gitignore
 
 git add .
 git commit -m "Add release-notes plugin: skill, prompt, and instruction"
-git push
+git push -u origin HEAD
 
 git tag v0.1.0
 git push --tags
@@ -864,7 +864,7 @@ marketplace:
 :::
 
 :::note Watch the key names
-In `apm.yml` the key is **`packages:`**. In the generated `marketplace.json` it becomes **`plugins:`**. Copilot CLI and APM both read this generated index. No alternate marketplace outputs are configured, and the plugin remains restricted to `targets: [copilot]`.
+In `apm.yml` the key is **`packages:`**. In the generated `marketplace.json` it becomes **`plugins:`**. Copilot CLI and APM both read this generated index. No alternate marketplace outputs are configured.
 
 `owner:` is a **nested mapping** (`name:` + `url:`), not a flat string. Also note there is **no `versions[]` array**. Each compiled package carries exactly one resolved ref — the highest tag matching your range at build time. To publish a new version, re-tag the producer repo and re-run `apm pack` here.
 :::
@@ -926,7 +926,7 @@ If your repo ignores `*.json`, the generated `marketplace.json` never gets commi
 ```bash
 git add apm.yml ':(glob)**/marketplace.json'
 git commit -m "Publish academy-marketplace with release-notes v0.1.0"
-git push
+git push -u origin HEAD
 ```
 
 Your marketplace is live.
