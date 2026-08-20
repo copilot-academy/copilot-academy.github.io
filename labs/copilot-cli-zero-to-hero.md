@@ -38,7 +38,7 @@ A **Task Manager REST API** with:
 
 ### 1.1 Install the CLI
 
-Choose the method that fits your platform.  Official documentation is [here](https://github.com/features/copilot/cli).
+Choose the method that fits your platform.  Official documentation is [here](https://github.com/features/copilot/cli). Windows users can also install directly from the [Microsoft Store](https://apps.microsoft.com/preview/detail/xp8k4b1qlmzn15?hl=en-US&gl=US&key=66c19f6e-9eba-4bc3-b734-be0d760b54d8).
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -70,6 +70,11 @@ npm install -g @github/copilot
 ```bash
 winget install GitHub.Copilot
 ```
+
+</TabItem>
+<TabItem value="msstore" label="Microsoft Store (Windows)">
+
+Install GitHub Copilot CLI from the [Microsoft Store](https://apps.microsoft.com/preview/detail/xp8k4b1qlmzn15?hl=en-US&gl=US&key=66c19f6e-9eba-4bc3-b734-be0d760b54d8).
 
 </TabItem>
 </Tabs>
