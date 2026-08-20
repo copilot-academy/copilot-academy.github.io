@@ -381,7 +381,7 @@ Copilot Business and Copilot Enterprise licenses contribute included monthly AI 
 | **Simple** | Haiku / GPT-5.4 mini | Smaller models generally have lower token rates | Scaffolding, test generation, formatting |
 | **Balanced** | Sonnet / GPT-5.4 | Versatile models balance capability and token cost | Code review, refactoring, documentation |
 | **Complex** | Opus / GPT-5.5 | Powerful models generally have higher token rates, and complex sessions often consume more tokens | Architecture, orchestration, multi-step reasoning |
-| **Let Copilot route by intent** | Auto | Intent-based routing selects a model; cost depends on that model and the tokens consumed | When complexity is unpredictable |
+| **Let Copilot route by intent** | Auto | Intent-based routing selects a model, with a 10% discount on model costs for paid plans | When complexity is unpredictable |
 
 Use the [usage-based billing guide](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises) to understand included credits and [budget controls](https://docs.github.com/en/copilot/concepts/billing/budgets-for-usage-based-billing) to govern additional usage. Check [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) for current token rates rather than relying on fixed multipliers.
 
@@ -707,15 +707,15 @@ Why Sonnet for Code Review? This is **model selection optimization** in action. 
   Complex tasks ─────────►│  │  Opus  │ Higher token rates         │
   (architecture, orchestr)│  └────────┘                            │
                           │  ┌────────┐                            │
-  Unknown complexity ────►│  │  Auto  │ Intent-based routing       │
+  Unknown complexity ────►│  │  Auto  │ Intent routing, 10% off    │
                           │  └────────┘                            │
                           └────────────────────────────────────────┘
 ```
 
 Code review is a **balanced task**. It requires understanding code context and identifying patterns, but doesn't need the deep multi-step reasoning of architectural planning. Sonnet provides high quality at lower cost than Opus.
 
-:::info Auto Uses Intent-Based Routing
-Setting `model: auto` enables [intent-based routing](https://docs.github.com/en/copilot/concepts/models/auto-model-selection). Copilot evaluates the prompt's intent and task complexity, then routes the request to an appropriate available model. The interaction consumes AI credits based on the selected model and its input, output, and cached token usage.
+:::info Auto Uses Intent-Based Routing with a 10% Discount
+Setting `model: auto` enables [intent-based routing](https://docs.github.com/en/copilot/concepts/models/auto-model-selection). Copilot evaluates the prompt's intent and task complexity, then routes the request to an appropriate available model. On paid Copilot plans, Auto receives a **10% discount on model costs**. The interaction consumes AI credits based on the routed model's input, output, and cached token usage after the discount.
 :::
 
 ### 4.4 Subagent Context Isolation
@@ -789,7 +789,7 @@ implementation plans from feature requests and issues.
 - Flag tasks that need external input or decisions
 ```
 
-Notice `model: auto` — planning complexity varies widely, so intent-based routing can match each planning request to an appropriate available model. The AI-credit cost still depends on the routed model and the tokens consumed.
+Notice `model: auto` — planning complexity varies widely, so intent-based routing can match each planning request to an appropriate available model. On paid plans, the routed model cost receives a 10% discount before it is converted to AI credits.
 
 :::tip Customize the built-in planning agent 
 Do you want to see Copilot's planning agent?  In VSCode, go to the agents selector and click `Configure Custom Agents`.  Click `Plan` and it will open the markdown of the planning agent!
@@ -912,8 +912,8 @@ sub-agents at each stage.
 
 | Agent | Model | Why |
 |-------|-------|-----|
-| `dev-flow` | `auto` | Intent-based routing adapts to each orchestration request; usage follows the routed model's token rates |
-| `planner` | `auto` | Intent-based routing adapts to each planning request; usage follows the routed model's token rates |
+| `dev-flow` | `auto` | Intent-based routing adapts to each orchestration request; paid plans receive a 10% model-cost discount |
+| `planner` | `auto` | Intent-based routing adapts to each planning request; paid plans receive a 10% model-cost discount |
 | `reviewer` | `Claude Sonnet 4.6` | Balanced task, consistent quality needed |
 | `tester` | `claude-haiku-4.5` | Focused task; a smaller model generally has lower token rates |
 
@@ -1079,7 +1079,7 @@ Your DevFlow framework demonstrates the model selection best practices:
 | Principle | Implementation | Benefit |
 |-----------|---------------|---------|
 | **Match model to task complexity** | Haiku for tests, Sonnet for review, Opus for architecture | Avoid extra cost on simple tasks |
-| **Use intent-based routing when complexity varies** | Planner and orchestrator use `model: auto` | Routes each request by intent; AI-credit usage follows the routed model and tokens |
+| **Use intent-based routing when complexity varies** | Planner and orchestrator use `model: auto` | Routes each request by intent and discounts model costs by 10% on paid plans |
 | **Subagent model isolation** | Each agent specifies its own model | Different models in the same workflow |
 
 Using agents allows to pre-set the model to ensure the right level of reasoning and capability for each stage of the SDLC, while also optimizing costs.
@@ -1214,8 +1214,8 @@ Each agent is right-sized for its task:
 
 | Agent | Model | Rationale |
 |-------|-------|-----------|
-| DevFlow | Auto | Intent-based routing adapts to each orchestration request; usage follows the routed model's token rates |
-| Planner | Auto | Intent-based routing adapts to each planning request; usage follows the routed model's token rates |
+| DevFlow | Auto | Intent-based routing adapts to each orchestration request; paid plans receive a 10% model-cost discount |
+| Planner | Auto | Intent-based routing adapts to each planning request; paid plans receive a 10% model-cost discount |
 | Code Reviewer | Claude Sonnet 4.6 | Balanced task — quality matters |
 | Tester | Claude Haiku 4.5 | Focused task — speed and generally lower token rates |
 
