@@ -6,7 +6,7 @@ sidebar_position: 4
 
 # Lab: Context Engineering
 
-> **Duration:** ~2 hours | **Level:** Intermediate | **Prerequisites:** Active [GitHub Copilot subscription](https://github.com/features/copilot/plans), [GitHub Copilot CLI installed](https://github.com/features/copilot/cli), Basic familiarity with Copilot CLI (or completion of the [Zero to Hero lab](https://copilot-academy.github.io/labs/copilot-cli-zero-to-hero)), [Node.js 22+](https://nodejs.org/)
+> **Duration:** ~2 hours | **Level:** Intermediate | **Prerequisites:** Active [GitHub Copilot subscription](https://github.com/features/copilot/plans), [GitHub Copilot CLI installed](https://github.com/features/copilot/cli) (Windows users can also install from the [Microsoft Store](https://apps.microsoft.com/preview/detail/xp8k4b1qlmzn15?hl=en-US&gl=US&key=66c19f6e-9eba-4bc3-b734-be0d760b54d8)), Basic familiarity with Copilot CLI (or completion of the [Zero to Hero lab](https://copilot-academy.github.io/labs/copilot-cli-zero-to-hero)), [Node.js 22+](https://nodejs.org/)
 
 ## Objective
 
