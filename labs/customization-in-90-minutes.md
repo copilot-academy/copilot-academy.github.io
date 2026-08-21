@@ -263,7 +263,7 @@ Before building anything, let's understand *why* teams invest in customization. 
 | **Tool sprawl** | Context-switching between Copilot and external tools | MCP Servers bringing tools into Copilot |
 | **No automation** | Manual, repetitive repository maintenance | Agentic Workflows in GitHub Actions |
 | **Can't share customizations** | Each developer reinvents the wheel | Plugins or APM for packaging and distribution |
-| **Cost/performance concerns** | Using premium models for simple tasks | Per-agent model selection + Auto mode |
+| **Cost/performance concerns** | Using higher-cost models for simple tasks | Per-agent model selection + intent-based Auto routing |
 
 ### 1.1 The Customization Landscape
 
@@ -372,14 +372,18 @@ Layers 1–3 are why a bloated instructions file hurts — you're paying for it 
 
 ### 1.3 Choosing the Right Model
 
-Different tasks have different complexity. Using premium models for simple tasks wastes premium requests:
+Under usage-based billing, Copilot interactions consume **input**, **output**, and **cached** tokens. Each model has its own per-token rates, and GitHub converts the resulting cost into **GitHub AI Credits**, where 1 AI credit equals $0.01 USD. A longer agent session can therefore cost more than a short chat even when both use the same model.
 
-| Task Complexity | Recommended Model | Premium Multiplier | Example Tasks |
-|----------------|-------------------|-------------------|---------------|
-| **Simple** | Haiku / GPT-5.4 mini | 0.33x | Scaffolding, test generation, formatting |
-| **Balanced** | Sonnet / GPT-5.4 | 1x | Code review, refactoring, documentation |
-| **Complex** | Opus / GPT-5.5 | 3x - 7.5x | Architecture, orchestration, multi-step reasoning |
-| **Let Copilot decide** | Auto | Varies (10% discount) | When complexity is unpredictable |
+Copilot Business and Copilot Enterprise licenses contribute included monthly AI credits to a shared pool at the organization or enterprise billing level. If that pool is exhausted and administrators allow paid usage, additional usage is billed at the published rates; budget controls can cap or block that spending. Code completions and next edit suggestions remain unlimited on paid plans and are not billed in AI credits.
+
+| Task Complexity | Recommended Model | Usage-Based Cost Pattern | Example Tasks |
+|----------------|-------------------|--------------------------|---------------|
+| **Simple** | Haiku / GPT-5.4 mini | Smaller models generally have lower token rates | Scaffolding, test generation, formatting |
+| **Balanced** | Sonnet / GPT-5.4 | Versatile models balance capability and token cost | Code review, refactoring, documentation |
+| **Complex** | Opus / GPT-5.5 | Powerful models generally have higher token rates, and complex sessions often consume more tokens | Architecture, orchestration, multi-step reasoning |
+| **Let Copilot route by intent** | Auto | Intent-based routing selects a model, with a 10% discount on model costs for paid plans | When complexity is unpredictable |
+
+Use the [usage-based billing guide](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises) to understand included credits and [budget controls](https://docs.github.com/en/copilot/concepts/billing/budgets-for-usage-based-billing) to govern additional usage. Check [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) for current token rates rather than relying on fixed multipliers.
 
 You'll apply this throughout the lab — each agent you build will specify the right model for its job.
 
@@ -694,24 +698,24 @@ Why Sonnet for Code Review? This is **model selection optimization** in action. 
   Task Complexity         │            Model Selection             │
   ────────────────        │                                        │
                           │  ┌────────┐                            │
-  Simple tasks ──────────►│  │ Haiku  │ 0.33x multiplier           │
+  Simple tasks ──────────►│  │ Haiku  │ Lower token rates          │
   (scaffolding, tests)    │  └────────┘                            │
                           │  ┌────────┐                            │
-  Balanced tasks ────────►│  │ Sonnet │ 1x multiplier     ◄── YOU  │
+  Balanced tasks ────────►│  │ Sonnet │ Balanced cost      ◄── YOU │
   (review, refactoring)   │  └────────┘                       ARE  │
                           │  ┌────────┐                       HERE │
-  Complex tasks ─────────►│  │  Opus  │ 3x or 7.5x multiplier      │
+  Complex tasks ─────────►│  │  Opus  │ Higher token rates         │
   (architecture, orchestr)│  └────────┘                            │
                           │  ┌────────┐                            │
-  Unknown complexity ────►│  │  Auto  │ Varies (10% discount)      │
+  Unknown complexity ────►│  │  Auto  │ Intent routing, 10% off    │
                           │  └────────┘                            │
                           └────────────────────────────────────────┘
 ```
 
 Code review is a **balanced task**. It requires understanding code context and identifying patterns, but doesn't need the deep multi-step reasoning of architectural planning. Sonnet provides high quality at lower cost than Opus.
 
-:::info Auto Model Selection = 10% Discount
-Setting `model: auto` lets Copilot choose the best available model based on system health and task characteristics. Auto selection gets a **10% multiplier discount** on your premium request usage.  That is a free optimization just for trusting the system to pick.
+:::info Auto Uses Intent-Based Routing with a 10% Discount
+Setting `model: auto` enables [intent-based routing](https://docs.github.com/en/copilot/concepts/models/auto-model-selection). Copilot evaluates the prompt's intent and task complexity, then routes the request to an appropriate available model. On paid Copilot plans, Auto receives a **10% discount on model costs**. The interaction consumes AI credits based on the routed model's input, output, and cached token usage after the discount.
 :::
 
 ### 4.4 Subagent Context Isolation
@@ -785,7 +789,7 @@ implementation plans from feature requests and issues.
 - Flag tasks that need external input or decisions
 ```
 
-Notice `model: auto` — planning complexity varies widely, so let Copilot choose the right model and get the 10% discount.
+Notice `model: auto` — planning complexity varies widely, so intent-based routing can match each planning request to an appropriate available model. On paid plans, the routed model cost receives a 10% discount before it is converted to AI credits.
 
 :::tip Customize the built-in planning agent 
 Do you want to see Copilot's planning agent?  In VSCode, go to the agents selector and click `Configure Custom Agents`.  Click `Plan` and it will open the markdown of the planning agent!
@@ -819,7 +823,7 @@ maintainable tests.
 - Never modify production code unless specifically asked
 ```
 
-Notice `model: claude-haiku-4.5` — test generation is a focused, well-defined task. Haiku handles it efficiently at **0.33x** the premium multiplier cost.
+Notice `model: claude-haiku-4.5` — test generation is a focused, well-defined task. A smaller model can handle it efficiently and generally uses lower per-token rates than a powerful model. Total AI-credit usage still depends on the tokens consumed.
 
 ### 5.3 Create the DevFlow Orchestrator
 
@@ -908,10 +912,10 @@ sub-agents at each stage.
 
 | Agent | Model | Why |
 |-------|-------|-----|
-| `dev-flow` | `auto` | Orchestration complexity varies; 10% discount |
-| `planner` | `auto` | Planning complexity varies; 10% discount |
+| `dev-flow` | `auto` | Intent-based routing adapts to each orchestration request; paid plans receive a 10% model-cost discount |
+| `planner` | `auto` | Intent-based routing adapts to each planning request; paid plans receive a 10% model-cost discount |
 | `reviewer` | `Claude Sonnet 4.6` | Balanced task, consistent quality needed |
-| `tester` | `claude-haiku-4.5` | Focused task, speed matters, 0.33x cost |
+| `tester` | `claude-haiku-4.5` | Focused task; a smaller model generally has lower token rates |
 
 ### 5.5 Test the Orchestrator
 
@@ -1075,7 +1079,7 @@ Your DevFlow framework demonstrates the model selection best practices:
 | Principle | Implementation | Benefit |
 |-----------|---------------|---------|
 | **Match model to task complexity** | Haiku for tests, Sonnet for review, Opus for architecture | Avoid extra cost on simple tasks |
-| **Use Auto when unsure** | Planner and orchestrator use `model: auto` | 10% discount + system-optimized selection |
+| **Use intent-based routing when complexity varies** | Planner and orchestrator use `model: auto` | Routes each request by intent and discounts model costs by 10% on paid plans |
 | **Subagent model isolation** | Each agent specifies its own model | Different models in the same workflow |
 
 Using agents allows to pre-set the model to ensure the right level of reasoning and capability for each stage of the SDLC, while also optimizing costs.
@@ -1210,10 +1214,10 @@ Each agent is right-sized for its task:
 
 | Agent | Model | Rationale |
 |-------|-------|-----------|
-| DevFlow | Auto (10% discount) | Orchestration complexity varies |
-| Planner | Auto (10% discount) | Planning complexity varies |
+| DevFlow | Auto | Intent-based routing adapts to each orchestration request; paid plans receive a 10% model-cost discount |
+| Planner | Auto | Intent-based routing adapts to each planning request; paid plans receive a 10% model-cost discount |
 | Code Reviewer | Claude Sonnet 4.6 | Balanced task — quality matters |
-| Tester | Claude Haiku 4.5 | Focused task — speed and cost efficiency (0.33x) |
+| Tester | Claude Haiku 4.5 | Focused task — speed and generally lower token rates |
 
 ## License
 
