@@ -6,7 +6,7 @@ sidebar_position: 5
 
 # Lab: APM in 60 Minutes
 
-> **Duration:** ~60 minutes | **Level:** Intermediate | **Prerequisites:** A GitHub account, Git, and either [GitHub Copilot CLI](https://docs.github.com/copilot/how-tos/set-up/install-copilot-cli) (Windows users can also install from the [Microsoft Store](https://apps.microsoft.com/preview/detail/xp8k4b1qlmzn15?hl=en-US&gl=US&key=66c19f6e-9eba-4bc3-b734-be0d760b54d8)) or the [GitHub Copilot app](https://github.com/features/copilot)
+> **Duration:** ~60 minutes | **Level:** Intermediate | **Prerequisites:** A GitHub account, Git, and either [GitHub Copilot CLI](https://docs.github.com/copilot/how-tos/set-up/install-copilot-cli) (Windows users can also install from the [Microsoft Store](https://apps.microsoft.com/detail/xpdc8mmrvcf73p)) or the [GitHub Copilot app](https://github.com/features/copilot)
 
 ## Objective
 
@@ -40,7 +40,7 @@ gh auth status
 
 **3. An AI harness to verify against.** Either:
 
-- [GitHub Copilot CLI](https://docs.github.com/copilot/how-tos/set-up/install-copilot-cli) (or the [Microsoft Store](https://apps.microsoft.com/preview/detail/xp8k4b1qlmzn15?hl=en-US&gl=US&key=66c19f6e-9eba-4bc3-b734-be0d760b54d8) on Windows) — `copilot` on your PATH, or
+- [GitHub Copilot CLI](https://docs.github.com/copilot/how-tos/set-up/install-copilot-cli) (or the [Microsoft Store](https://apps.microsoft.com/detail/xpdc8mmrvcf73p) on Windows) — `copilot` on your PATH, or
 - The [GitHub Copilot app](https://github.com/features/copilot)
 
 Both read the same files from disk, so anything you install with APM shows up in either one.

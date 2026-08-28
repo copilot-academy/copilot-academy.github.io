@@ -106,6 +106,11 @@ const config = {
             position: 'left',
           },
           {
+            to: '/onboarding',
+            label: 'Get Started',
+            position: 'left',
+          },
+          {
             href: 'https://github.com/copilot-academy/copilot-academy.github.io',
             label: 'GitHub',
             position: 'right',
