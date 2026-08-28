@@ -181,9 +181,14 @@ export default function OnboardingGuide() {
 
             return (
               <li
-                className="onboarding-step"
+                className={
+                  isComplete
+                    ? 'onboarding-step onboarding-step--complete'
+                    : 'onboarding-step'
+                }
                 id={`onboarding-step-${step.id}`}
-                key={step.id}>
+                key={step.id}
+                data-complete={isComplete ? 'true' : 'false'}>
                 <article aria-labelledby={`onboarding-step-title-${step.id}`}>
                   <p className="onboarding-step__eyebrow">
                     {step.eyebrow || `Step ${index + 1}`}

@@ -464,8 +464,8 @@
     'platform platform'
     'detect detect'
     'rail content'
-    'reset reset'
-    'feedback feedback';
+    '. reset'
+    '. feedback';
   grid-template-columns: minmax(210px, 260px) minmax(0, 1fr);
   align-items: start;
   gap: 1.5rem clamp(1.5rem, 4vw, 4rem);

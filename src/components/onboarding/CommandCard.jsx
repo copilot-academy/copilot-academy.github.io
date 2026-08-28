@@ -6,8 +6,14 @@ export default function CommandCard({label, command, note, primary = false}) {
 
   function selectCommand() {
     const selection = window.getSelection();
+    const commandNode = commandRef.current;
+
+    if (!selection || !commandNode) {
+      return;
+    }
+
     const range = document.createRange();
-    range.selectNodeContents(commandRef.current);
+    range.selectNodeContents(commandNode);
     selection.removeAllRanges();
     selection.addRange(range);
   }
