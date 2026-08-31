@@ -90,6 +90,11 @@ function HeroBanner() {
       <div className="container">
         <h1 className="hero-banner__title">{siteConfig.title}</h1>
         <p className="hero-banner__subtitle">{siteConfig.tagline}</p>
+        <div className="hero-banner__actions">
+          <Link className="button button--primary button--lg" to="/onboarding">
+            Get Started
+          </Link>
+        </div>
       </div>
     </header>
   );

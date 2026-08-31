@@ -1,0 +1,1089 @@
+.root {
+  --onboarding-border: var(--ifm-color-emphasis-300);
+  --onboarding-muted: var(--ifm-font-color-secondary);
+  --onboarding-canvas: var(--ifm-background-color);
+  --onboarding-surface: var(--ifm-background-surface-color);
+  --onboarding-accent: var(--ifm-color-primary);
+  --onboarding-accent-strong: var(--ifm-color-primary-dark);
+  --onboarding-success: #1a7f37;
+  --onboarding-success-surface: #dafbe1;
+  --onboarding-terminal: #0d1117;
+  --onboarding-terminal-border: #30363d;
+  --onboarding-terminal-text: #e6edf3;
+  min-height: calc(100vh - var(--ifm-navbar-height));
+  background: var(--onboarding-canvas);
+  color: var(--ifm-font-color-base);
+}
+
+.root :global(.onboarding-guide),
+.root :global(.onboarding-container) {
+  width: min(100% - 2rem, 1280px);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 5vw, 4.5rem);
+}
+
+.root :global(.onboarding-header),
+.root :global(.onboarding-intro) {
+  max-width: 760px;
+  margin-bottom: 2rem;
+}
+
+.root :global(.onboarding-eyebrow) {
+  margin: 0 0 0.5rem;
+  color: var(--onboarding-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.root :global(.onboarding-title) {
+  margin-bottom: 0.75rem;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.root :global(.onboarding-subtitle),
+.root :global(.onboarding-description),
+.root :global(.onboarding-lede) {
+  color: var(--onboarding-muted);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.65;
+}
+
+.root :global(.onboarding-controls) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem 1.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-surface);
+}
+
+.root :global(.onboarding-platform-picker),
+.root :global(.onboarding-os-selector) {
+  display: flex;
+  flex: 1 1 340px;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.root :global(.onboarding-platform-label),
+.root :global(.onboarding-control-label) {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-platform-option),
+.root :global(.onboarding-os-button),
+.root :global(.onboarding-tab) {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-canvas);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-platform-option:hover),
+.root :global(.onboarding-os-button:hover),
+.root :global(.onboarding-tab:hover) {
+  border-color: var(--onboarding-accent);
+}
+
+.root :global(.onboarding-platform-option[aria-pressed='true']),
+.root :global(.onboarding-platform-option[aria-selected='true']),
+.root :global(.onboarding-os-button[aria-pressed='true']),
+.root :global(.onboarding-tab[aria-selected='true']),
+.root :global(.onboarding-platform-option--active),
+.root :global(.onboarding-os-button--active) {
+  border-color: var(--onboarding-accent);
+  background: var(--onboarding-accent);
+  color: #fff;
+}
+
+.root :global(.onboarding-progress-compact),
+.root :global(.onboarding-mobile-progress) {
+  display: none;
+}
+
+.root :global(.onboarding-layout),
+.root :global(.onboarding-journey) {
+  display: grid;
+  grid-template-columns: minmax(210px, 260px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.root :global(.onboarding-progress),
+.root :global(.onboarding-step-rail),
+.root :global(.onboarding-sidebar) {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1.5rem);
+  padding: 1rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-surface);
+}
+
+.root :global(.onboarding-progress-title),
+.root :global(.onboarding-rail-title) {
+  margin: 0 0 0.75rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.root :global(.onboarding-progress-list),
+.root :global(.onboarding-step-list) {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.root :global(.onboarding-progress-item),
+.root :global(.onboarding-step-link) {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.65rem;
+  border-left: 3px solid transparent;
+  border-radius: 0 var(--ifm-global-radius) var(--ifm-global-radius) 0;
+  color: var(--onboarding-muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.root :global(.onboarding-progress-item--active),
+.root :global(.onboarding-progress-item[aria-current='step']),
+.root :global(.onboarding-step-link[aria-current='step']) {
+  border-left-color: var(--onboarding-accent);
+  background: color-mix(in srgb, var(--onboarding-accent) 10%, transparent);
+  color: var(--ifm-font-color-base);
+  font-weight: 600;
+}
+
+.root :global(.onboarding-progress-item--complete),
+.root :global(.onboarding-progress-item[data-complete='true']) {
+  color: var(--onboarding-success);
+}
+
+.root :global(.onboarding-progress-marker),
+.root :global(.onboarding-step-number) {
+  display: inline-grid;
+  flex: 0 0 1.6rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.root :global(.onboarding-main),
+.root :global(.onboarding-content),
+.root :global(.onboarding-steps) {
+  min-width: 0;
+}
+
+.root :global(.onboarding-step),
+.root :global(.onboarding-step-card),
+.root :global(.onboarding-product) {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-canvas);
+  box-shadow: var(--ifm-global-shadow-lw);
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem);
+}
+
+.root :global(.onboarding-step--complete),
+.root :global(.onboarding-step[data-complete='true']),
+.root :global(.onboarding-step-card--complete) {
+  border-color: var(--onboarding-success);
+}
+
+.root :global(.onboarding-step-heading),
+.root :global(.onboarding-step-header) {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--onboarding-border);
+}
+
+.root :global(.onboarding-step-title) {
+  margin: 0;
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+}
+
+.root :global(.onboarding-step-meta),
+.root :global(.onboarding-step-kicker) {
+  margin: 0 0 0.25rem;
+  color: var(--onboarding-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-status),
+.root :global(.onboarding-complete-badge) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: 2rem;
+  color: var(--onboarding-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.root :global(.onboarding-status--complete),
+.root :global(.onboarding-complete-badge) {
+  border-color: var(--onboarding-success);
+  background: var(--onboarding-success-surface);
+  color: #116329;
+}
+
+.root :global(.onboarding-actions),
+.root :global(.onboarding-action-group) {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1rem;
+}
+
+.root :global(.onboarding-action),
+.root :global(.onboarding-recommended),
+.root :global(.onboarding-alternative) {
+  padding: 1rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+}
+
+.root :global(.onboarding-recommended),
+.root :global(.onboarding-action--recommended) {
+  border-color: color-mix(in srgb, var(--onboarding-accent) 55%, var(--onboarding-border));
+  background: color-mix(in srgb, var(--onboarding-accent) 6%, var(--onboarding-canvas));
+}
+
+.root :global(.onboarding-alternative),
+.root :global(.onboarding-action--alternative) {
+  color: var(--onboarding-muted);
+  font-size: 0.92rem;
+}
+
+.root :global(.onboarding-action-label),
+.root :global(.onboarding-recommended-label) {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--onboarding-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.root :global(.onboarding-command),
+.root :global(.onboarding-command-block),
+.root :global(.onboarding-terminal) {
+  position: relative;
+  overflow-x: auto;
+  padding: 1rem 3.25rem 1rem 1rem;
+  margin-block: 0.75rem;
+  border: 1px solid var(--onboarding-terminal-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-terminal);
+  color: var(--onboarding-terminal-text);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  tab-size: 2;
+  white-space: pre;
+}
+
+.root :global(.onboarding-command code),
+.root :global(.onboarding-command-block code),
+.root :global(.onboarding-terminal code) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  white-space: inherit;
+}
+
+.root :global(.onboarding-copy-button) {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #6e7681;
+  border-radius: var(--ifm-global-radius);
+  background: #21262d;
+  color: #f0f6fc;
+  cursor: pointer;
+  font: inherit;
+}
+
+.root :global(.onboarding-command) :global(.onboarding-copy-button),
+.root :global(.onboarding-command-block) :global(.onboarding-copy-button),
+.root :global(.onboarding-terminal) :global(.onboarding-copy-button) {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+}
+
+.root :global(.onboarding-button),
+.root :global(.onboarding-primary-action),
+.root :global(.onboarding-complete-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--onboarding-accent-strong);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-accent);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.root :global(.onboarding-button--secondary),
+.root :global(.onboarding-secondary-action) {
+  border-color: var(--onboarding-border);
+  background: var(--onboarding-canvas);
+  color: var(--ifm-font-color-base);
+}
+
+.root :global(.onboarding-button:hover),
+.root :global(.onboarding-primary-action:hover),
+.root :global(.onboarding-complete-button:hover) {
+  background: var(--onboarding-accent-strong);
+  color: #fff;
+  text-decoration: none;
+}
+
+.root :global(.onboarding-troubleshooting),
+.root :global(.onboarding-details) {
+  margin-top: 1rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-surface);
+}
+
+.root :global(.onboarding-troubleshooting summary),
+.root :global(.onboarding-details summary) {
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-troubleshooting[open] summary),
+.root :global(.onboarding-details[open] summary) {
+  border-bottom: 1px solid var(--onboarding-border);
+}
+
+.root :global(.onboarding-troubleshooting-content),
+.root :global(.onboarding-details-content) {
+  padding: 1rem;
+}
+
+.root :global(.onboarding-verification),
+.root :global(.onboarding-completion) {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--onboarding-success);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-success-surface);
+  color: #116329;
+}
+
+.root :global(a:focus-visible),
+.root :global(button:focus-visible),
+.root :global(summary:focus-visible),
+.root :global(input:focus-visible),
+.root :global(select:focus-visible) {
+  outline: 3px solid color-mix(in srgb, var(--onboarding-accent) 65%, transparent);
+  outline-offset: 3px;
+}
+
+:global([data-theme='dark']) .root {
+  --onboarding-success: #3fb950;
+  --onboarding-success-surface: #12261a;
+  --onboarding-accent-strong: var(--ifm-color-primary-darker);
+}
+
+:global([data-theme='dark'])
+  .root
+  :global(.onboarding-platform-selector__option[aria-pressed='true']),
+:global([data-theme='dark'])
+  .root
+  :global(.onboarding-install-action__link--primary),
+:global([data-theme='dark'])
+  .root
+  :global(.onboarding-step__complete:not([aria-pressed='true'])) {
+  color: #0d1117;
+}
+
+:global([data-theme='dark'])
+  .root
+  :global(.onboarding-step__complete[aria-pressed='true']) {
+  color: #aff5b4;
+}
+
+:global([data-theme='dark']) .root :global(.onboarding-status--complete),
+:global([data-theme='dark']) .root :global(.onboarding-complete-badge),
+:global([data-theme='dark']) .root :global(.onboarding-verification),
+:global([data-theme='dark']) .root :global(.onboarding-completion) {
+  color: #aff5b4;
+}
+
+/* Component contract: the guide uses BEM-style onboarding classes. */
+.root :global(.onboarding-guide) {
+  display: grid;
+  grid-template-areas:
+    'header header'
+    'platform platform'
+    'detect detect'
+    'rail content'
+    '. reset'
+    '. feedback';
+  grid-template-columns: minmax(210px, 260px) minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
+}
+
+.root :global(.onboarding-guide__header) {
+  grid-area: header;
+  max-width: 760px;
+}
+
+.root :global(.onboarding-guide__title) {
+  margin-bottom: 0.75rem;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.root :global(.onboarding-guide__intro) {
+  margin: 0;
+  color: var(--onboarding-muted);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.65;
+}
+
+.root :global(.onboarding-platform-selector) {
+  grid-area: platform;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-surface);
+}
+
+.root :global(.onboarding-platform-selector__legend) {
+  padding-inline: 0.35rem;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-platform-selector__options) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.root :global(.onboarding-platform-selector__option) {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-canvas);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-platform-selector__option:hover) {
+  border-color: var(--onboarding-accent);
+}
+
+.root :global(.onboarding-platform-selector__option[aria-pressed='true']) {
+  border-color: var(--onboarding-accent);
+  background: var(--onboarding-accent);
+  color: #fff;
+}
+
+.root :global(.onboarding-platform-selector:disabled) {
+  opacity: 0.7;
+}
+
+.root :global(.onboarding-guide__detecting) {
+  grid-area: detect;
+  margin: -0.75rem 0 0;
+  color: var(--onboarding-muted);
+  font-size: 0.9rem;
+}
+
+.root :global(.onboarding-guide__progress) {
+  grid-area: rail;
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1.5rem);
+  padding: 1rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-surface);
+}
+
+.root :global(.onboarding-guide__progress h2) {
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+.root :global(.onboarding-guide__progress p) {
+  margin-bottom: 0.75rem;
+  color: var(--onboarding-muted);
+  font-size: 0.85rem;
+}
+
+.root :global(.onboarding-guide__progress-bar) {
+  display: block;
+  width: 100%;
+  height: 0.5rem;
+  margin-bottom: 1rem;
+  accent-color: var(--onboarding-success);
+}
+
+.root :global(.onboarding-step-progress__list) {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.root :global(.onboarding-step-progress__link) {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--ifm-global-radius);
+  color: var(--onboarding-muted);
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.root :global(.onboarding-step-progress__link:hover),
+.root :global(.onboarding-step-progress__link[aria-current='step']) {
+  background: color-mix(in srgb, var(--onboarding-accent) 10%, transparent);
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+}
+
+.root :global(.onboarding-step-progress__link[aria-current='step']) {
+  box-shadow: inset 2px 0 var(--onboarding-accent);
+  font-weight: 600;
+}
+
+.root :global(.onboarding-step-progress__number) {
+  display: inline-grid;
+  width: 1.6rem;
+  height: 1.6rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.root :global(.onboarding-step-progress__status) {
+  grid-column: 2;
+  color: var(--onboarding-muted);
+  font-size: 0.72rem;
+}
+
+.root
+  :global(.onboarding-step-progress__item[data-complete='true'])
+  :global(.onboarding-step-progress__link) {
+  color: var(--onboarding-success);
+}
+
+.root :global(.onboarding-guide__steps) {
+  grid-area: content;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.root :global(.onboarding-step:has(.onboarding-step__complete[aria-pressed='true'])) {
+  border-color: var(--onboarding-success);
+}
+
+.root :global(.onboarding-step__eyebrow) {
+  margin: 0 0 0.35rem;
+  color: var(--onboarding-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.root :global(.onboarding-step__description) {
+  color: var(--onboarding-muted);
+  line-height: 1.6;
+}
+
+.root :global(.onboarding-step__section) {
+  padding-top: 1.1rem;
+  margin-top: 1.1rem;
+  border-top: 1px solid var(--onboarding-border);
+}
+
+.root :global(.onboarding-step__section-heading) {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.root :global(.onboarding-step__requirements),
+.root :global(.onboarding-step__instructions) {
+  padding-left: 1.4rem;
+}
+
+.root :global(.onboarding-step__requirements li),
+.root :global(.onboarding-step__instructions li) {
+  padding-left: 0.25rem;
+  margin-block: 0.45rem;
+}
+
+.root :global(.onboarding-step__actions) {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.root :global(.onboarding-install-action) {
+  padding: 0.9rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+}
+
+.root :global(.onboarding-install-action__link) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-install-action__link--primary) {
+  justify-content: center;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--onboarding-accent-strong);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-accent);
+  color: #fff;
+}
+
+.root :global(.onboarding-install-action__link--primary:hover) {
+  background: var(--onboarding-accent-strong);
+  color: #fff;
+  text-decoration: none;
+}
+
+:global([data-theme='dark'])
+  .root
+  :global(.onboarding-install-action__link--primary),
+:global([data-theme='dark'])
+  .root
+  :global(.onboarding-install-action__link--primary:hover) {
+  background: var(--onboarding-accent);
+  color: #0d1117;
+}
+
+.root :global(.onboarding-install-action__external) {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.root :global(.onboarding-install-action__note),
+.root :global(.onboarding-command-card__note),
+.root :global(.onboarding-command-card__feedback) {
+  margin: 0.5rem 0 0;
+  color: var(--onboarding-muted);
+  font-size: 0.82rem;
+}
+
+.root :global(.onboarding-command-card) {
+  overflow: hidden;
+  border: 1px solid var(--onboarding-terminal-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-terminal);
+  color: var(--onboarding-terminal-text);
+}
+
+.root :global(.onboarding-command-card--primary) {
+  border-color: var(--onboarding-accent);
+  box-shadow: 0 0 0 1px var(--onboarding-accent);
+}
+
+.root :global(.onboarding-command-card__header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--onboarding-terminal-border);
+  background: #161b22;
+}
+
+.root :global(.onboarding-command-card__label) {
+  color: #8c959f;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-command-card__copy) {
+  min-height: 2rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #6e7681;
+  border-radius: var(--ifm-global-radius);
+  background: #21262d;
+  color: #f0f6fc;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-command-card__command) {
+  overflow-x: auto;
+  padding: 1rem;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.root :global(.onboarding-command-card__command code) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.root :global(.onboarding-command-card__note),
+.root :global(.onboarding-command-card__feedback) {
+  padding-inline: 0.75rem;
+  color: #8c959f;
+}
+
+.root :global(.onboarding-command-card__feedback) {
+  min-height: 1.3rem;
+  margin-bottom: 0.55rem;
+}
+
+.root :global(.onboarding-step__expected),
+.root :global(.onboarding-step__managed-note) {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-surface);
+}
+
+.root :global(.onboarding-step__managed-note h3) {
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+}
+
+.root :global(.onboarding-step__managed-note p) {
+  margin: 0;
+}
+
+.root :global(.onboarding-step__troubleshooting) {
+  margin-block: 1rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-surface);
+}
+
+.root :global(.onboarding-step__troubleshooting summary) {
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-step__troubleshooting[open] summary) {
+  border-bottom: 1px solid var(--onboarding-border);
+}
+
+.root :global(.onboarding-step__troubleshooting p),
+.root :global(.onboarding-step__troubleshooting ul) {
+  margin: 1rem;
+}
+
+.root :global(.onboarding-step__complete) {
+  min-height: 2.75rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--onboarding-accent-strong);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-accent);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-step__complete[aria-pressed='true']) {
+  border-color: var(--onboarding-success);
+  background: var(--onboarding-success-surface);
+  color: #116329;
+}
+
+.root :global(.onboarding-guide__reset) {
+  grid-area: reset;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--onboarding-border);
+}
+
+.root :global(.onboarding-guide__reset h2) {
+  font-size: 1.1rem;
+}
+
+.root :global(.onboarding-guide__reset button) {
+  min-height: 2.5rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--onboarding-canvas);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.root :global(.onboarding-guide__reset-confirmation) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.root :global(.onboarding-guide__reset-confirmation p) {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+.root :global(.onboarding-guide__feedback) {
+  grid-area: feedback;
+  min-height: 1.5rem;
+  margin: 0;
+  color: var(--onboarding-muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 996px) {
+  .root :global(.onboarding-guide),
+  .root :global(.onboarding-container) {
+    width: min(100% - 1.5rem, 760px);
+    padding-block: 2rem;
+  }
+
+  .root :global(.onboarding-layout),
+  .root :global(.onboarding-journey),
+  .root :global(.onboarding-guide) {
+    grid-template-areas:
+      'header'
+      'platform'
+      'detect'
+      'rail'
+      'content'
+      'reset'
+      'feedback';
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .root :global(.onboarding-progress),
+  .root :global(.onboarding-step-rail),
+  .root :global(.onboarding-sidebar) {
+    position: static;
+    padding: 0.75rem;
+  }
+
+  .root :global(.onboarding-guide__progress) {
+    position: static;
+    padding: 0.75rem;
+  }
+
+  .root :global(.onboarding-progress-list),
+  .root :global(.onboarding-step-list),
+  .root :global(.onboarding-step-progress__list) {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: thin;
+  }
+
+  .root :global(.onboarding-progress-item),
+  .root :global(.onboarding-step-link),
+  .root :global(.onboarding-step-progress__item) {
+    flex: 0 0 auto;
+    min-height: 2.5rem;
+    border-left: 0;
+  }
+
+  .root :global(.onboarding-step-progress__link) {
+    min-width: 9rem;
+    box-shadow: none;
+  }
+
+  .root :global(.onboarding-step-progress__link[aria-current='step']) {
+    box-shadow: inset 0 -2px var(--onboarding-accent);
+  }
+
+  .root :global(.onboarding-progress-compact),
+  .root :global(.onboarding-mobile-progress) {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .root :global(.onboarding-title) {
+    font-size: 2rem;
+  }
+
+  .root :global(.onboarding-controls),
+  .root :global(.onboarding-step),
+  .root :global(.onboarding-step-card),
+  .root :global(.onboarding-product) {
+    padding: 1rem;
+  }
+
+  .root :global(.onboarding-step-heading),
+  .root :global(.onboarding-step-header) {
+    display: block;
+  }
+
+  .root :global(.onboarding-status),
+  .root :global(.onboarding-complete-badge) {
+    margin-top: 0.75rem;
+  }
+
+  .root :global(.onboarding-button),
+  .root :global(.onboarding-primary-action),
+  .root :global(.onboarding-complete-button),
+  .root :global(.onboarding-step__complete),
+  .root :global(.onboarding-install-action__link--primary) {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media print {
+  .root {
+    min-height: auto;
+    color: #000;
+  }
+
+  .root :global(.onboarding-guide),
+  .root :global(.onboarding-container) {
+    width: 100%;
+    padding: 0;
+  }
+
+  .root :global(.onboarding-layout),
+  .root :global(.onboarding-journey) {
+    display: block;
+  }
+
+  .root :global(.onboarding-progress),
+  .root :global(.onboarding-step-rail),
+  .root :global(.onboarding-sidebar),
+  .root :global(.onboarding-controls),
+  .root :global(.onboarding-copy-button),
+  .root :global(.onboarding-command-card__copy),
+  .root :global(.onboarding-button),
+  .root :global(.onboarding-primary-action),
+  .root :global(.onboarding-complete-button),
+  .root :global(.onboarding-step__complete),
+  .root :global(.onboarding-guide__reset) {
+    display: none !important;
+  }
+
+  .root :global(.onboarding-step),
+  .root :global(.onboarding-step-card),
+  .root :global(.onboarding-product),
+  .root :global(.onboarding-troubleshooting),
+  .root :global(.onboarding-details) {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .root :global(.onboarding-command),
+  .root :global(.onboarding-command-block),
+  .root :global(.onboarding-terminal) {
+    overflow: visible;
+    border-color: #555;
+    background: #fff;
+    color: #000;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .root :global(.onboarding-troubleshooting-content),
+  .root :global(.onboarding-details-content) {
+    display: block !important;
+  }
+
+  .root :global(.onboarding-command-card) {
+    break-inside: avoid;
+    border-color: #555;
+    background: #fff;
+    color: #000;
+  }
+
+  .root :global(.onboarding-command-card__header) {
+    border-color: #555;
+    background: #fff;
+  }
+
+  .root :global(.onboarding-command-card__command) {
+    overflow: visible;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}

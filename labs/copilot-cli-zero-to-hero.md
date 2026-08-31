@@ -38,46 +38,25 @@ A **Task Manager REST API** with:
 
 ### 1.1 Install the CLI
 
-Choose the method that fits your platform.  Official documentation is [here](https://github.com/features/copilot/cli). Windows users can also install directly from the [Microsoft Store](https://apps.microsoft.com/preview/detail/xp8k4b1qlmzn15?hl=en-US&gl=US&key=66c19f6e-9eba-4bc3-b734-be0d760b54d8).
+:::tip Start with the onboarding guide
+For the complete account, environment, installation, and verification flow, follow the [Copilot onboarding guide](/onboarding). Return here once Copilot CLI is ready.
+:::
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+For a concise standalone setup, install Copilot CLI with the option for your platform:
 
-<Tabs>
-<TabItem value="curl" label="Install script (macOS / Linux)" default>
+- **macOS (Homebrew)**
+```bash
+brew install --cask copilot-cli
+```
 
+- **Linux (install script)**
 ```bash
 curl -fsSL https://gh.io/copilot-install | bash
 ```
 
-</TabItem>
-<TabItem value="brew" label="Homebrew (macOS / Linux)">
+- **Windows:** Install from the [Microsoft Store](https://apps.microsoft.com/detail/xpdc8mmrvcf73p).
 
-```bash
-brew install copilot-cli
-```
-
-</TabItem>
-<TabItem value="npm" label="npm (all platforms)">
-
-```bash
-npm install -g @github/copilot
-```
-
-</TabItem>
-<TabItem value="winget" label="WinGet (Windows)">
-
-```bash
-winget install GitHub.Copilot
-```
-
-</TabItem>
-<TabItem value="msstore" label="Microsoft Store (Windows)">
-
-Install GitHub Copilot CLI from the [Microsoft Store](https://apps.microsoft.com/preview/detail/xp8k4b1qlmzn15?hl=en-US&gl=US&key=66c19f6e-9eba-4bc3-b734-be0d760b54d8).
-
-</TabItem>
-</Tabs>
+See the [official Copilot CLI page](https://github.com/features/copilot/cli) for additional installation options.
 
 ### 1.2 Create Your Project Directory
 
