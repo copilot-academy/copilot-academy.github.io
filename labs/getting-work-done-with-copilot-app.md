@@ -6,7 +6,7 @@ sidebar_position: 3
 
 # Lab: Getting Work Done with GitHub Copilot App
 
-> **Duration:** ~75–90 minutes (core path) | **Level:** Beginner — no coding or terminal required | **Prerequisites:** Active [GitHub Copilot subscription](https://github.com/features/copilot/plans), [Git installed](https://git-scm.com/downloads), and the [GitHub Copilot app](https://github.com/features/ai/github-app) installed and signed in
+> **Duration:** ~75–90 minutes (core path) | **Level:** Beginner — no coding or terminal required | **Prerequisites:** Active [GitHub Copilot subscription](https://github.com/features/copilot/plans) and the [GitHub Copilot app](https://github.com/features/ai/github-app) installed and signed in
 
 ## Objective
 
@@ -94,7 +94,7 @@ Feel free to substitute your own real (or realistic) project notes instead. Ever
 ### 1.1 Install and sign in
 
 :::tip Start with the onboarding guide
-For the complete account, environment, and installation flow, follow the [Copilot onboarding guide](/onboarding). Return here once the GitHub Copilot app is installed and you're signed in.
+If you need setup help, open the [Copilot onboarding guide](/onboarding) and complete the GitHub Copilot app installation and sign-in step. The GitHub CLI and Copilot CLI steps are optional for this lab.
 :::
 
 1. Visit the [GitHub Copilot app download page](https://github.com/features/ai/github-app) and install the app for your platform.

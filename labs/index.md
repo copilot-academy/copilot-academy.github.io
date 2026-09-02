@@ -1,11 +1,11 @@
 ---
 title: Labs
-description: Hands-on labs for GitHub Copilot — focused, self-contained exercises you can complete in 15–30 minutes
+description: Hands-on labs for GitHub Copilot — self-contained learning experiences from quick exercises to in-depth guided labs
 ---
 
 # Hands-on Labs
 
-Focused, self-contained exercises you can complete in 15–30 minutes. Each lab covers a single topic and can be done independently.
+Choose from quick exercises and in-depth guided labs. Each lab is self-contained and can be completed independently.
 
 ## Getting Started
 
