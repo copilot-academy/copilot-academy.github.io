@@ -34,8 +34,9 @@ sidebar_position: 5
 
 If the issue does not exist, create it with the title `Improve test coverage for API`. Ask for coverage of the API routes, error paths, and database failures, with `make test-coverage` as the validation command. Return to **My work** after creating it.
 
-> [!TIP]
-> Use sections and filters in **My work** to separate active issues, review requests, and completed work. This gives you one queue for issue and pull request work across repositories.
+:::tip
+Use sections and filters in **My work** to separate active issues, review requests, and completed work. This gives you one queue for issue and pull request work across repositories.
+:::
 
 ## Step 2: Start an Issue-Scoped Session
 
@@ -51,8 +52,9 @@ If the issue does not exist, create it with the title `Improve test coverage for
 5. Review the proposed plan and approve it only when the scope matches the issue.
 6. Follow the session as the agent explores the repository, changes files, and runs validation.
 
-> [!NOTE]
-> A session in a new worktree uses its own branch and isolated checkout. If your organization enables cloud-based sessions, you can instead delegate the task to Copilot cloud agent in a GitHub-hosted environment.
+:::note
+A session in a new worktree uses its own branch and isolated checkout. If your organization enables cloud-based sessions, you can instead delegate the task to Copilot cloud agent in a GitHub-hosted environment.
+:::
 
 ## Step 3: Delegate to a Repository Custom Agent
 
@@ -91,8 +93,9 @@ Keep both sessions running so you can practice directing parallel workstreams:
 
 Because each session is isolated, the agents can work concurrently without overwriting one another's uncommitted changes.
 
-> [!IMPORTANT]
-> Parallel work still needs coordination. Avoid assigning overlapping files or contradictory requirements to separate sessions unless you plan to reconcile the changes.
+:::important
+Parallel work still needs coordination. Avoid assigning overlapping files or contradictory requirements to separate sessions unless you plan to reconcile the changes.
+:::
 
 ## Step 5: Review the Resulting Pull Requests
 

@@ -36,8 +36,9 @@ sidebar_position: 6
    - CI check status
    - Merge blockers
 
-> [!IMPORTANT]
-> Treat the overview as a starting point, not an approval. You remain responsible for understanding the change and deciding whether it is safe to merge.
+:::important
+Treat the overview as a starting point, not an approval. You remain responsible for understanding the change and deciding whether it is safe to merge.
+:::
 
 ## Step 2: Review the Changed Files
 
@@ -78,8 +79,9 @@ Copilot code review on GitHub.com remains useful when you want an independent, a
 
 Copilot code review can use repository context and custom instructions, including path-specific instructions in `.github/instructions/`. Its comments behave like human review comments: reviewers can reply, react, hide, or resolve them.
 
-> [!NOTE]
-> By default, Copilot submits a comment review rather than an approval or request for changes. It does not replace required human review unless your organization explicitly configures Copilot approvals.
+:::note
+By default, Copilot submits a comment review rather than an approval or request for changes. It does not replace required human review unless your organization explicitly configures Copilot approvals.
+:::
 
 ## Step 5: Resolve Comments and Failing Checks
 
@@ -99,8 +101,9 @@ Copilot cloud agent can implement fixes in an isolated environment and push comm
 
 If agent merge is available and your facilitator approves its use, you can enable **agent merge** at the top of the app. The workspace's Copilot session will monitor the pull request, attempt to fix blockers, and merge only when GitHub allows.
 
-> [!CAUTION]
-> Enable agent merge only after a human reviews the diff, workflow changes, and CI results. Agent merge does not bypass branch protection, required checks, required approvals, or organization policies. A Copilot-authored pull request may still require approval from another eligible reviewer.
+:::caution
+Enable agent merge only after a human reviews the diff, workflow changes, and CI results. Agent merge does not bypass branch protection, required checks, required approvals, or organization policies. A Copilot-authored pull request may still require approval from another eligible reviewer.
+:::
 
 You can leave agent merge disabled and complete the merge manually. It is not required for this exercise.
 

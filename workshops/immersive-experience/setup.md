@@ -66,4 +66,4 @@ If you're working in a codespace, make ports **3000** and **5137** public so you
 
 ## Next Steps
 
-Once your environment is ready, take the [GitHub Copilot App Tour](/workshops/immersive-experience/copilot_app), then continue to Feature Development.
+Once your environment is ready, take the [GitHub Copilot App Tour](/workshops/immersive-experience/copilot_app), then continue to [Feature Development](/workshops/immersive-experience/feature_development).
