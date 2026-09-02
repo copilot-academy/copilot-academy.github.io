@@ -394,8 +394,8 @@ export const STEPS = [
         },
         {
           kind: 'link',
-          label: 'Start GitHub Copilot App: Zero to Hero',
-          href: '/labs/copilot-app-zero-to-hero',
+          label: 'Start Getting Work Done with Copilot App',
+          href: '/labs/getting-work-done-with-copilot-app',
         },
         {
           kind: 'link',

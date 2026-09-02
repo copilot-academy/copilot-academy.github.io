@@ -1,10 +1,10 @@
 ---
-title: "Lab: GitHub Copilot App: Zero to Hero"
+title: "Lab: Getting Work Done with GitHub Copilot App"
 description: Assess product launch readiness as a project manager — build a launch brief, trackers, a live dashboard, and recurring status automation with the GitHub Copilot app.
 sidebar_position: 3
 ---
 
-# Lab: GitHub Copilot App: Zero to Hero
+# Lab: Getting Work Done with GitHub Copilot App
 
 > **Duration:** ~75–90 minutes (core path) | **Level:** Beginner — no coding or terminal required | **Prerequisites:** Active [GitHub Copilot subscription](https://github.com/features/copilot/plans), [Git installed](https://git-scm.com/downloads), and the [GitHub Copilot app](https://github.com/features/ai/github-app) installed and signed in
 
