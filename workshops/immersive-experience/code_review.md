@@ -1,74 +1,128 @@
 ---
 title: "Code Review"
-description: "Speed up code reviews with the Code Review Agent"
+description: "Review pull requests and resolve feedback with the GitHub Copilot app and Copilot code review"
 sidebar_position: 6
 ---
 
 # Use Case 5: "PRs take forever to review"
 
-> **Scenario:** Your team has a backlog of 15 PRs. Reviews are shallow because reviewers are overwhelmed.
+> **Scenario:** Your team has a backlog of 15 pull requests. Reviews are shallow because reviewers are overwhelmed.
 >
 > **Time:** ~15 minutes
 >
-> **Copilot Features:** Code Review Agent
+> **Copilot Features:** GitHub Copilot app, PR-scoped sessions, Copilot code review, Copilot cloud agent
 
-**Your Challenge:** Use agentic AI-assisted code review to catch issues faster and more consistently.
+**Your Challenge:** Combine human judgment with agentic review and remediation to catch issues and move a pull request through CI.
 
-## Step 1: Assign Code Review Agent
+## Table of Contents
 
-1. In your repo, find the pull request `Feature: Add ToS Download` and open it.  
-2. Assign **Copilot** as a reviewer 
-3. Scroll down to the bottom of the pull request and you should see a message that you requested a review from Copilot.
+- [Step 1: Open the Pull Request Overview](#step-1-open-the-pull-request-overview)
+- [Step 2: Review the Changed Files](#step-2-review-the-changed-files)
+- [Step 3: Start a PR-Scoped Review Session](#step-3-start-a-pr-scoped-review-session)
+- [Step 4: Retain Copilot Code Review on GitHub.com](#step-4-retain-copilot-code-review-on-githubcom)
+- [Step 5: Resolve Comments and Failing Checks](#step-5-resolve-comments-and-failing-checks)
+- [Optional: Enable Agent Merge](#optional-enable-agent-merge)
+- [What You Learned](#what-you-learned)
+- [Next Steps](#next-steps)
 
-## Step 2: Review Runs in GitHub Actions
+## Step 1: Open the Pull Request Overview
 
-1. Navigate to **Actions → Copilot Code Review**
-2. Notice it runs:
-   - **CodeQL** security analysis
-   - **ESLint** code quality checks
-3. For awareness, Code Review agent has access to the **Code Graph** to analyze broader context.  Meaning it not only sees the PR changes, but also related files and dependencies.
-4. Review runs independently - no blocking your workflow
+1. Open the GitHub Copilot app.
+2. Select **My work**.
+3. Find and open the cart pull request you created in Feature Development.
+4. Review the pull request overview:
+   - Summary and linked issue
+   - Review activity
+   - CI check status
+   - Merge blockers
 
-## Step 3: Review Enhanced Feedback
+> [!IMPORTANT]
+> Treat the overview as a starting point, not an approval. You remain responsible for understanding the change and deciding whether it is safe to merge.
 
-Once the Actions run has completed, go back to the pull request.  You should see Copilot's review (typically starting with a 'Pull Request Overview' section).  The review includes:
+## Step 2: Review the Changed Files
 
-- **Security findings** from CodeQL scan
-- **Code quality issues** from ESLint
-- **Best practices** violations such as missing swagger docs and not using React Query as per team standards
-- **Additional context** from Code Graph (not just PR changes)
-- **Instructions-based feedback** (checks against your `.github/instructions/`)
+1. Open the **Files changed** tab.
+2. Read the diff and verify that it matches the pull request description.
+3. Pay particular attention to:
+   - Cart state and navigation behavior
+   - Quantity, shipping, and total calculations
+   - Accessibility and the supplied design
+   - Tests and error handling
+   - Unexpected or unrelated changes
+4. Leave review comments on any lines that need clarification or correction.
 
-## Step 4: Implement Suggestions Automatically
+## Step 3: Start a PR-Scoped Review Session
 
-Don't like manual fixes? Click **"Implement Suggestions"** to hand feedback back to Coding Agent for automatic fixes.  This will open a new pull request that merges into your existing PR with all suggested fixes applied.
+1. From the pull request, click **New session**.
+2. Keep the model set to **Auto**.
+3. Ask Copilot to inspect the pull request:
 
-Alternatively you can open a new comment:
+   ```text
+   Review this pull request for correctness, missing tests, compliance gaps, and unintended changes. Prioritize concrete issues that could block merging, and explain each finding with file references.
+   ```
 
-```text
-@Copilot implement all your review suggestions
-```
+4. Compare the agent's findings with your own review of **Files changed**.
+5. Ask follow-up questions or steer the session when a finding needs more evidence.
+6. Return to the pull request and click **Review** when you are ready to submit your comments.
 
-## Step 5: Grouped Changes (Optional)
+The PR-scoped session keeps the conversation, diff, and pull request lifecycle together. It can help investigate a concern, draft a review comment, or make an approved fix.
 
-### Copilot Group Changes in PRs
+## Step 4: Retain Copilot Code Review on GitHub.com
 
-Copilot is not able to group changes in existing pull requests created by humans. (Not yet on AI generated PRs).  This is intended to help reviewers better understand large PRs by breaking them into logical sections.
+Copilot code review on GitHub.com remains useful when you want an independent, agentic review in the standard pull request workflow:
 
-1. Switch to the `feature-add-cart-page` branch and click the **Contribute** button to open a pull request against the `main` branch.
-2. Create a description for the pull request.  (Click the Copilot icon to have Copilot help you write this!)
-3. Click **Create pull request** to complete this process.  
-4. Navigate to the `Files changed` tab of the PR.
-5. On the top right, notice how Copilot grouped changes into logical sections, making it easier to review and understand the modifications.
+1. Open the same pull request on GitHub.com.
+2. Under **Reviewers**, request a review from **Copilot**.
+3. Wait for Copilot to add its pull request overview and inline review comments.
+4. Validate each finding before applying a suggested change.
+
+Copilot code review can use repository context and custom instructions, including path-specific instructions in `.github/instructions/`. Its comments behave like human review comments: reviewers can reply, react, hide, or resolve them.
+
+> [!NOTE]
+> By default, Copilot submits a comment review rather than an approval or request for changes. It does not replace required human review unless your organization explicitly configures Copilot approvals.
+
+## Step 5: Resolve Comments and Failing Checks
+
+Return to the pull request in the GitHub Copilot app:
+
+1. Scroll to a review comment that requires a code change.
+2. Click **Fix** to start or direct a Copilot session with the comment context.
+3. Review the proposed edit and focused validation before accepting it.
+4. At the bottom of the pull request overview, inspect the latest CI results.
+5. If a check fails, open its logs to understand the failure, then click **Fix failing checks**.
+6. Review the resulting commits and **Files changed** again.
+7. Re-run or wait for CI, then confirm that required checks pass and review threads are resolved.
+
+Copilot cloud agent can implement fixes in an isolated environment and push commits to the pull request branch. Human reviewers should still verify the final diff and test results.
+
+## Optional: Enable Agent Merge
+
+If agent merge is available and your facilitator approves its use, you can enable **agent merge** at the top of the app. The workspace's Copilot session will monitor the pull request, attempt to fix blockers, and merge only when GitHub allows.
+
+> [!CAUTION]
+> Enable agent merge only after a human reviews the diff, workflow changes, and CI results. Agent merge does not bypass branch protection, required checks, required approvals, or organization policies. A Copilot-authored pull request may still require approval from another eligible reviewer.
+
+You can leave agent merge disabled and complete the merge manually. It is not required for this exercise.
+
+Before End-to-End Tests, either merge the cart pull request or keep its branch available. The E2E exercise must start from code that includes the cart feature.
 
 ## What You Learned
 
-✅ **Enhanced Code Review** - Security scanning built-in  
-✅ **Actions Integration** - Reviews run independently and are auditable  
-✅ **Automatic Implementation** - Hand fixes back to agent  
+✅ **Pull Request Overview** - See review activity, CI status, and merge blockers together
 
-**Time Investment:** 15 minutes  
-**Value:** Thorough reviews in less time, higher quality feedback
+✅ **Files Changed** - Validate the actual diff before approving changes
+
+✅ **PR-Scoped Sessions** - Investigate findings and direct fixes with pull request context
+
+✅ **Copilot Code Review** - Add agentic feedback to the GitHub.com review workflow
+
+✅ **Targeted Remediation** - Use Copilot to address comments and failing checks
+
+✅ **Human-Controlled Merge** - Preserve approvals, required checks, and repository policies
+
+**Time Investment:** 15 minutes
+
+**Value:** Faster review cycles without giving up human accountability
 
 ## Next Steps
 

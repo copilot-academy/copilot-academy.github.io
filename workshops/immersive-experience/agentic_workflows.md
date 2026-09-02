@@ -1,28 +1,57 @@
 ---
-title: "Agentic Workflows"
-description: "Build intelligent workflows in GitHub Actions with Copilot"
+title: "Automations and Agentic Workflows"
+description: "Choose between personal Copilot app automations and version-controlled GitHub Agentic Workflows"
 sidebar_position: 13
 ---
 
-# Use Case 12: "Agentic Workflows"
+# Use Case 12: "Automate recurring repository work"
 
-> **Scenario:** You want to add a review workflow to ensure your site renders appropriately across mobile, tablet, and desktop devices.
+> **Scenario:** Pull requests repeatedly arrive without enough unit-test coverage, and build failures require the same initial investigation each time.
 >
-> **Time:** ~35 minutes
+> **Time:** ~40 minutes
 >
-> **Copilot Features:** GitHub Actions, Agentic Workflows
+> **Copilot Features:** GitHub Copilot app automations, Copilot cloud agent, GitHub Agentic Workflows, GitHub Actions
+>
+> **Availability:** GitHub Agentic Workflows are in public preview.
 
-**Your Challenge:** Create an agentic workflow in GitHub Actions that reviews and updates your responsive design code based on natural language prompts.
+**Your Challenge:** Choose the right automation surface, create a personal pull request coverage reviewer, and inspect a repository-owned workflow that analyzes build failures.
 
-## What Are Agentic Workflows?
+## Table of Contents
 
-Agentic Workflows are AI-powered GitHub Actions workflows that can reason, make decisions, and take actions autonomously. Unlike traditional YAML-based workflows that follow rigid, predefined steps, agentic workflows are written in markdown and use natural language to describe what the agent should accomplish.
+- [Choose the Right Automation Surface](#choose-the-right-automation-surface)
+- [Repository-Level Agentic Workflows](#repository-level-agentic-workflows)
+- [Key Concepts](#key-concepts)
+- [Exercise 1: Create a Pull Request Coverage Automation](#exercise-1-create-a-pull-request-coverage-automation)
+- [Exercise 2: Inspect the Build-Failure Agentic Workflow](#exercise-2-inspect-the-build-failure-agentic-workflow)
+- [What You Learned](#what-you-learned)
+- [Resources](#resources)
+- [Next Steps](#next-steps)
+
+## Choose the Right Automation Surface
+
+Copilot app automations and GitHub Agentic Workflows both repeat agent tasks, but they solve different ownership and operational needs.
+
+| Area | Copilot app automation | Repository-level agentic workflow |
+|------|------------------------|-----------------------------------|
+| **Ownership** | Personal to its creator and stored outside Git. Other repository users cannot view or edit the automation, although they can see the sessions it starts. | Owned with the repository. The Markdown source and compiled workflow are versioned, reviewed, and maintained through pull requests. |
+| **Runtime** | Runs locally in the GitHub Copilot app or as a Copilot cloud agent session. Local runs require your computer and project workspace; cloud runs continue when your computer is off. | Runs in a firewalled GitHub Actions environment using the configured coding agent. |
+| **Triggers** | Manual; hourly, daily, weekly, or local CRON schedules; issue creation; pull request open; or pull request synchronization when new commits arrive. | Supports GitHub Actions triggers, including manual dispatch, schedules, issues, pull requests, and completed workflow runs. |
+| **Best fit** | A recurring task that you own, want to configure quickly, or want to run against a project without adding repository files. | Team-owned, auditable automation that must be stored as code, reviewed, reused across maintainers, or guarded with explicit permissions and safe outputs. |
+
+Use a **local automation** for an on-demand or scheduled task that needs your local checkout and tools. Use a **cloud automation** for unattended schedules and repository events. Choose a **repository-level agentic workflow** when the automation itself is part of the repository's operating model.
+
+> [!IMPORTANT]
+> Copilot cloud automations require a private or internal repository, write access, and organization policies that enable both Copilot cloud agent and automations. If your workshop copy is public, keep **Run in the cloud** disabled, use a **Manual** trigger, and run the automation locally from the app.
+
+## Repository-Level Agentic Workflows
+
+GitHub Agentic Workflows are AI-powered GitHub Actions workflows that can reason, make decisions, and take actions autonomously. Unlike traditional YAML-based workflows that follow rigid, predefined steps, agentic workflows are written in Markdown and use natural language to describe what the agent should accomplish.
 
 The agent interprets the instructions, gathers context, and dynamically determines the best path to achieve the goal - including error handling, retries, and adaptive decision-making. Execution is secured within a sandbox with explicit permissions and safe outputs to ensure security.
 
 ## Key Concepts
 
-### Custom Front matter - e.g. Schedule Jittering
+### Custom Frontmatter and Schedule Jittering
 
 Agentic workflow markdown files have custom frontmatter properties that look similar to Actions properties. There are differences though: for example, `schedule: daily` runs at a **random time** each day. This "jittering" prevents multiple workflows from executing simultaneously and overwhelming resources.
 
@@ -71,150 +100,163 @@ safe-outputs:
 
 The [Safe Outputs documentation](https://github.github.io/gh-aw/reference/safe-outputs/) outlines available output types and how to configure them.
 
-## Step 1: Install GitHub CLI and the Agentic Workflows Extension
+## Exercise 1: Create a Pull Request Coverage Automation
 
-* Install the GitHub CLI: [https://cli.github.com/](https://cli.github.com/).  Skip this in Codespaces since it's pre-installed.
-* Install the Agentic Workflows extension:
+Create an app automation that reviews unit-test coverage whenever a pull request opens or receives new commits. It reports gaps for human review but does not modify code.
+
+### Step 1: Define the Runtime and Triggers
+
+1. Open **Automations** in the GitHub Copilot app.
+2. Select **New automation**.
+3. Name it `PR unit-test coverage review`.
+4. If your repository is private or internal, add these **Pull request** triggers:
+   - **When a pull request is opened**
+   - **When a pull request is synchronized**
+5. If your repository is public, use a **Manual** trigger instead.
+6. Add a changed-file filter if you only want to review application or test code.
+7. For a private or internal repository, enable **Run in the cloud** so Copilot cloud agent can respond when your computer is off.
+
+This exercise uses pull request events, but the same editor also supports **Manual**, scheduled (**Hourly**, **Daily**, and **Weekly**), **Issue**, and local **CRON** triggers. Start with a manual trigger while refining a prompt, then add an unattended trigger after the output is reliable.
+
+### Step 2: Apply Least Privilege
+
+In **Tools**, grant only the capabilities required to:
+
+- Read the repository and triggering pull request.
+- Run the repository's focused unit-test and coverage commands.
+- Add a comment to the triggering pull request.
+
+Do not grant tools for pushing changes, merging pull requests, updating issues, or creating new pull requests. Those actions are outside this reviewer's responsibility.
+
+> [!WARNING]
+> Automation prompts and the resulting Copilot cloud agent session logs are visible to people who can access the repository. Never place credentials or other sensitive values in the prompt.
+
+### Step 3: Add the Review Prompt
+
+Use this prompt:
+
+```text
+Review the pull request that triggered this automation for unit-test coverage.
+
+1. Read the repository instructions and identify the supported focused test and coverage commands.
+2. Inspect the changed production code and the tests changed or added with it.
+3. Run only the focused tests and coverage checks needed to validate the affected behavior.
+4. Identify meaningful behavior, branches, error paths, or regressions that are not covered.
+5. Add one concise pull request comment with:
+   - the commands run and their results,
+   - the most important coverage gaps, with file references,
+   - specific tests the author should add, and
+   - a clear statement when no material gaps are found.
+
+Do not change files, push commits, create another pull request, or duplicate existing review comments.
+Prioritize behavioral coverage over reaching an arbitrary percentage.
+```
+
+If you are using the public-repository manual path, replace the first line with:
+
+```text
+Review this pull request for unit-test coverage: <paste the pull request URL>
+```
+
+The prompt defines a narrow objective, a bounded output, and explicit non-goals. This makes the selected tools easier to audit.
+
+### Step 4: Select the Model, Reasoning, Agent, and Project
+
+1. Keep the model set to **Auto**. This is the recommended default for learner exercises and avoids a stale dependency on a fixed model.
+2. Keep the default reasoning level for a focused review. Increase reasoning only while authoring or revising a complex automation, then return to the default for routine runs.
+3. Use the default agent unless the selected repository provides a testing custom agent with instructions and tools that match this task.
+4. Click **Select project**, then choose the project and repository that contain the pull requests to review.
+5. Select **Create and run** to test the automation immediately.
+
+> [!TIP]
+> The automation inherits repository custom instructions, agent skills, firewall rules, secrets, and variables. Keep general testing conventions in repository instructions instead of repeating them in every automation prompt.
+
+### Step 5: Verify and Refine
+
+1. Open the session started by the test run. This is a local app session for the public-repository manual path and a Copilot cloud agent session when **Run in the cloud** is enabled.
+2. Confirm that it used only the tools you selected.
+3. Review the test commands, evidence, and pull request comment.
+4. Tighten the prompt or remove tools if the run exceeded its scope.
+5. Keep the automation enabled only after its manual test produces a useful, non-duplicative review.
+
+The automation remains private to you. Cloud sessions, logs, comments, and attribution are visible to people with repository access; local run details remain in your app, while any pull request comments remain visible in the repository.
+
+## Exercise 2: Inspect the Build-Failure Agentic Workflow
+
+The existing build-failure workflow is the repository-level counterpart to your personal app automation. Repository maintainers can review its source and guardrails through Git.
+
+### Step 1: Install GitHub CLI and the Agentic Workflows Extension
+
+- Install [GitHub CLI](https://cli.github.com/). Skip this in Codespaces, where it is preinstalled.
+- Install and verify the Agentic Workflows extension:
+
   ```bash
-  curl -sL https://raw.githubusercontent.com/github/gh-aw/main/install-gh-aw.sh | bash
-  ```
-  * Note that outside of Codespaces you can likely just use `gh extension install github/gh-aw` to install.  
-* Test the CLI and extension to ensure they respond:
-  ```bash
+  gh extension install github/gh-aw
   gh --version
   gh aw version
   ```
 
-## Step 2: Setup - Token Configuration
+If the extension install is unavailable in your environment, use the installation command from the [GitHub Agentic Workflows documentation](https://github.github.io/gh-aw/).
 
-Before creating agentic workflows, you need to configure tokens with appropriate permissions.  Currently this is 2 tokens: 
+### Step 2: Review Authentication and Guardrails
 
-- One for allowing Copilot requests in the Actions workflow 
-- One to allow Copilot to assign issues to itself (for the "assign-to-agent" output)
+Open `.github/workflows/auto-analyze-failures.md` and its generated `.github/workflows/auto-analyze-failures.lock.yml`.
 
-Note that this is expected to be simplified in the future with org-level support (so the built-in Actions token can be used rather than needing personal tokens). 
+Review how the Markdown source defines:
 
-* **COPILOT_GITHUB_TOKEN (Copilot Authentication)** Setup 
-  * Go to [Create a fine-grained PAT](https://github.com/settings/personal-access-tokens/new?name=COPILOT_GITHUB_TOKEN&description=GitHub+Agentic+Workflows+-+Copilot+engine+authentication&user_copilot_requests=read).  This link will pre-fill the token name, description, and Copilot Requests permission.  
-  * **Resource owner** is your user account (not the organization).  This is because the Copilot seat is owned by you!
-  * Set an appropriate expiration 
-  * For repos the setting really doesn't matter since we're not giving any repo permissions to the token
-  * Permissions - should already be set under Account permissions to 'Copilot Requests:Read'
-  * Click 'Generate token' and copy the token value.  
-  * Add it to your repository by going to your repository's Settings → Secrets and variables → Actions → New repository secret
-    * Name: `COPILOT_GITHUB_TOKEN`
-    * Value: the token value you just copied
-    * Click 'Add secret' to save it
+- A completed workflow-run trigger that checks the conclusion before acting.
+- Read permissions for repository, issue, pull request, and workflow context.
+- The minimum toolset needed to inspect the failed run.
+- Safe outputs that bound issue creation and assignment.
+- Network access limited to required services.
 
-This token authenticates the Copilot agent to run within GitHub Actions.  The authentication reference is [here](https://github.github.com/gh-aw/reference/auth/).
+The `.md` file is the human-maintained source. The `.lock.yml` file is the hardened GitHub Actions workflow generated by `gh aw compile`; commit both when the repository workflow changes.
 
-* **AGENT_ISSUE_TOKEN (Issue Creation and Assignment)** Setup 
-  * Go to [Create a fine-grained PAT](https://github.com/settings/personal-access-tokens/new?name=GH_AW_AGENT_TOKEN&description=GitHub+Agentic+Workflows+-+Agent+assignment&actions=write&contents=write&issues=write&pull_requests=write).  This link will pre-fill the token name, description, and necessary permissions for issue creation and assignment.
-  * Resource owner should be the organization if these are organization-owned repositories.  Otherwise it can be your user account if they are in your personal namespace.  
-  * For repo access, select the specific repository where the agentic workflow will run
-  * For repository permissions, set: 
-    * Actions: Write
-    * Contents: Write
-    * Issues: Write
-    * Pull requests: Write
-  * Click 'Generate token' and copy the token value.  
-  * Add it to your repository by going to your repository's Settings → Secrets and variables → Actions → New repository secret
-    * Name: `GH_AW_AGENT_TOKEN`
-    * Value: the token value you just copied
-    * Click 'Add secret' to save it
+> [!NOTE]
+> For organization-owned repositories with Copilot enabled, prefer the built-in `GITHUB_TOKEN` and declare `copilot-requests: write` in workflow permissions. Use a dedicated `COPILOT_GITHUB_TOKEN` secret only when the organization policy does not provide Copilot access to the Actions token. Any separate token used by a safe-output job should be fine-grained, repository-scoped, and limited to the required operation.
 
-This token allows the agentic workflow to [assign to Copilot](https://github.github.com/gh-aw/reference/assign-to-copilot/) using safe outputs.  We will use it for a workflow that auto-analyzes build failures.  
+### Step 3: Enable and Trigger the Workflow
 
-## Step 3: Create a New Workflow from Scratch
+1. Open the repository's **Actions** tab.
+2. Select **Auto Analyze Build Failures** and enable it if necessary.
+3. Select **Test Auto-Analysis (Intentional Failure)** and choose **Run workflow**.
+4. Select a failure type such as `compilation_error` or `test_failure`, then start the run.
+5. Wait for the intentional workflow to fail. Its completed failure triggers **Auto Analyze Build Failures** without changing a learner branch or pull request.
 
-Here we will use Copilot Coding Agent to create an agentic workflow from scratch.  Note that while you can create this manually it is much easier to just have Copilot do it.  This can take anywhere from 10-30 minutes so we will start here and then focus on other aspects of agentic workflows in the next steps.
+### Step 4: Review the Agentic Result
 
-1. In your repo in GitHub.com, go to the `Agents` tab
-2. Choose 'Claude Opus 4.6' as your model and enter this prompt:
-   ```text
-   Create a workflow for GitHub Agentic Workflows using https://github.com/github/gh-aw/blob/main/create.md. The purpose of the workflow is to import multi-device resolution tester agentic workflow from github/gh-aw and adapt it to test the website in this repo.  Ensure that the build steps are followed in docs/build.md.  Please create a pull request with these changes and ensure it can be triggered from workflow_dispatch as well as scheduled weekly.  
-   ```
-3. Click the send button to send the request to Copilot Coding Agent
-4. Let Copilot Coding Agent Cook - it will:
-   - Fetch the creation guide
-   - Create the markdown file describing the intent of the workflow
-   - Create the workflow file in `.github/workflows/`
-5. While waiting, proceed to the next step
+After CI fails, open the **Auto Analyze Build Failures** run and verify that the agent:
 
-## Step 4: Auto-Analyzing Build Failures
+- Reads the failed run and relevant logs.
+- Classifies the failure as code, test, configuration, dependency, infrastructure, or transient.
+- Avoids creating an issue for a transient failure.
+- Creates at most the safe-output limit for actionable failures.
+- Includes a failure summary, remediation plan, and link to the failed run.
+- Assigns eligible work to Copilot cloud agent only when the workflow's safe-output policy allows it.
 
-With the addition of Copilot into a GitHub Actions workflow, you can create workflows that automatically analyze build failures and even create issues with findings and recommended fixes.  
-
-1. The workflow `.github/workflows/auto-analyze-failures.md` is already configured.  Open it and review the contents.  Notice the frontmatter shows the trigger (on workflow run completed), permissions, the toolset enabled, safe outputs (create an issue and assign to copilot), as well as network access limitations.  The body of the markdown describes the workflow in natural language, and references `${{ github.xxx }}` context variables to pull in dynamic information about the workflow run and failure.
-    1. Note the `auto-analyze-failures.lock.yml` file is auto-generated.  Review it and you will see a typical GitHub Actions workflow. 
-2. Enable the `auto-analyze-failures.lock.yml` workflow
-    1. Go to the **Actions** tab in your repository 
-    2. Select **"Auto Analyze Build Failures"** from the left sidebar.  You might need to click **Show More** to find it. 
-    3. Click the **Enable workflow** button
-3. Create an intentional failure in the code to trigger the workflow
-    1. In your Codespace, hit *Cmd-shift-P* or *Ctrl-shift-P* and select `Tasks: Run Task` and then select `Copilot: Self-healing DevOps`.
-    2. Say `Yes` to create a new branch.  
-    3. This will create a breaking code change.  The branch should be called `update-branch-route-behavior`
-    4. Commit and push this change and create a pull request to trigger the CI workflow, which should fail.
-       ```bash
-       git add . 
-       git commit -m "Update branch route behavior"
-       git push --set-upstream origin update-branch-route-behavior
-       ## Now create a pull request in GitHub.com from this branch to main to trigger the CI workflow
-       ```
-4. Wait for the CI build to fail (this should take a few moments)
-5. The `auto-analyze-failures` workflow automatically triggers on the failure
-6. Inspect the workflow run:
-   - The agent reads the failure logs
-   - Classifies the failure type (code, test, config, dependency, etc.)
-   - Determines if it's transient or requires action
-5. If not transient, an issue is automatically created with:
-   - Failure analysis summary
-   - Remediation plan
-   - Links to the failed run
-6. For certain failure categories, the issue is automatically assigned to Copilot Coding Agent
-7. Open Issues tab to show the newly created issue.  Be aware that the issue is assigned to Copilot and it will work on a fix.  
-
-## Step 5: (Optional) Daily Repo Activity Summary
-
-You can also create agentic workflows that run on a schedule.  For example, you could create a workflow that runs daily and summarizes all PR activity in the repo, identifies stale issues, or surfaces security vulnerabilities.  
-
-1. Navigate to **Actions** tab in GitHub
-2. Find the workflow: **"Daily Repo Activity Summary"**
-3. Click **"Run workflow"** to trigger manually
-   - Note: In production, this runs daily at a random time (jittered)
-4. Wait for completion (~2-5 minutes)
-5. Check the **Issues** tab for the new summary issue
-6. Review the generated content:
-   - Issues opened/closed in last 24 hours
-   - Pull requests activity
-   - Notable high-activity items
-   - Direct links to all referenced items
-7. Review the `.github/workflows/daily-repo-activity-summary.md`.  Note the `safe-outputs` section restricts the agent to only creating a maximum of 1 issue per run and the `title-prefix` ensures all issues created by this workflow are easily identifiable.  Also note the `network` section only allows access to the GitHub API, preventing any external calls. 
-
-## Step 6: Returning to our original workflow
-
-At this point hopefully the workflow that we created earlier has finished generating.  Check the **Pull requests** tab for a pull request with a title like 'Add Multi-Device Site Tester Agentic Workflow'.  If it's not there, go to the `Agents` tab in your repository and look at the session for the workflow creation.  
-
-1. Review the pull request.  Check the frontmatter (triggers, permissions, tools, safe-outputs).  Review the natural language instructions and notice how it references `${{ github.xxx }}` context variables.  
-2. Merge the pull request.   
-3. After merging, go to the **Actions** tab and find the new workflow that was created.  It should be called something like "Multi-Device Site Tester".  Click **Run Workflow** to trigger it manually for testing. 
-4. Watch the workflow run in real-time to see how the agent executes the instructions, gathers information, and takes actions based on the defined workflow.  This workflow should be testing the responsiveness of your site across different device types and providing a summary of findings in the workflow logs.
-5. Once complete, review the issue created by the workflow with the summary of findings.  
-
-## Step 7: Look At Examples
-
-This was a brief overview of agentic workflows. There are a couple key places to find inspiration and examples for agentic workflows:
-
-* [Peli's Agent Factory](https://github.github.com/gh-aw/blog/2026-01-12-welcome-to-pelis-agent-factory/)
-* [The Agentics Repo](https://github.com/githubnext/agentics)
+Open the resulting issue and confirm that the proposed next step is specific and reviewable.
 
 ## What You Learned
 
-✅ **Agentic Workflows** - Agentic workflows can autonomously gather data, synthesize insights, and create structured reports on a schedule. They can be used for monitoring, reporting, and automating routine tasks with AI-driven insights.
+- ✅ **Automation selection** - Personal app automations and repository workflows have different owners, runtimes, triggers, and use cases
+- ✅ **Local and cloud execution** - Local automations use your environment; cloud automations run unattended with Copilot cloud agent
+- ✅ **Trigger design** - Manual, scheduled, issue, pull request, and workflow-run triggers fit different operating needs
+- ✅ **Least privilege** - Tools, permissions, network access, and safe outputs should match one narrow responsibility
+- ✅ **Model and agent selection** - Auto and the default agent are strong defaults; higher reasoning and custom agents should serve a specific need
+- ✅ **Automation as code** - Agentic workflow source and compiled Actions workflows provide team review and version history
 
-**Time Investment:** 45 minutes  
-**Value:** Agentic Workflows provide a way to schedule and trigger automation based on natural language instructions.  This allows you to create powerful automations that can analyze data, generate reports, and even take actions like creating issues or commenting on PRs - all without writing traditional code.  The secure sandbox and safe outputs ensure that these workflows can run safely with limited permissions.
+**Time Investment:** 40 minutes
+
+**Value:** Automate repetitive repository work while choosing the ownership model and guardrails that match the task.
+
+## Resources
+
+- [Using automations in the GitHub Copilot app](https://docs.github.com/en/copilot/how-tos/github-copilot-app/using-automations)
+- [About Copilot automations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations)
+- [About GitHub Agentic Workflows](https://docs.github.com/en/copilot/concepts/agents/about-github-agentic-workflows)
+- [GitHub Agentic Workflows documentation](https://github.github.io/gh-aw/)
+- [Agentic Workflows security architecture](https://github.github.io/gh-aw/introduction/architecture/)
+- [Safe Outputs reference](https://github.github.io/gh-aw/reference/safe-outputs/)
 
 ## Next Steps
 

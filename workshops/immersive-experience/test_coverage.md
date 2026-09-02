@@ -18,7 +18,7 @@ sidebar_position: 3
 
 Manually prompting for test coverage improvements can work.  However, it also means that the process may be inconsistent between developers and you never learn from mistakes. Instead, (have Copilot) create a documented prompt file checked into your repository.  Utilize this and enhance it over time based on responses where Copilot struggled.  Here we have provided a starting point (well, Copilot has)!
 
-1. If you haven't already, click the `+` button in the Copilot Chat panel to clear your history.  This is a best practice when switching between use cases or activities to avoid sending unrelated context.
+1. Start a new session or chat for this exercise. This keeps unrelated context from earlier activities out of the request.
 2. Review `.github/prompts/demo-unit-test-coverage.prompt.md`
 3. Notice it defines:
    - Objective and routes to focus on
@@ -29,7 +29,7 @@ Manually prompting for test coverage improvements can work.  However, it also me
 
 ## Step 2: Execute the Prompt
 
-1. Switch to `Agent` mode, select the `Claude Sonnet 4.6` model
+1. Use **Interactive** mode in the GitHub Copilot app or **Agent** mode in your IDE. Leave the model on **Auto** unless the task needs deeper reasoning.
 2. Run the prompt:
    - **Option A:** Click the play button when the prompt file is open
    - **Option B:** Type `/demo-unit-test-coverage` in chat.  The prompt name automatically becomes a slash command.
@@ -48,7 +48,7 @@ Agent will:
 ## Step 4: Verify Results Yourself
 
 ```bash
-make test
+make test-coverage
 ```
 
 Review the coverage report - it should be significantly improved. 

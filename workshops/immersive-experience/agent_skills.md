@@ -16,7 +16,7 @@ sidebar_position: 9
 
 ## What are Skills?
 
-Agent Skills are folders of instructions, scripts, and resources that GitHub Copilot can load when relevant to perform specialized tasks. Skills are an [open standard](https://agentskills.io/) that works across multiple AI agents, including GitHub Copilot in VS Code, GitHub Copilot CLI, and GitHub Copilot coding agent.
+Agent Skills are folders of instructions, scripts, and resources that GitHub Copilot can load when relevant to perform specialized tasks. Skills are an [open standard](https://agentskills.io/) that works across multiple AI agents, including GitHub Copilot in VS Code, the GitHub Copilot app, GitHub Copilot CLI, and the Copilot cloud agent.
 
 **Key benefits of Agent Skills:**
 
@@ -34,9 +34,18 @@ Agent Skills are folders of instructions, scripts, and resources that GitHub Cop
 
 ### Skill Structure
 
-Skills are defined in `.github/skills/` or `.claude/skills/` directories and contain:
+Skills live in a skills directory and each one gets its own folder containing:
 - `SKILL.md` - The skill definition with YAML frontmatter (name, description) and detailed instructions
 - Additional resources - Scripts, examples, templates, and reference documentation
+
+| Scope | Location |
+| --- | --- |
+| Repository skills (recommended) | `.github/skills/` |
+| Personal skills | `~/.copilot/skills/` |
+| Cross-agent installs | `.agents/skills/` (used by installers such as `skills.sh`) |
+| Legacy | `.claude/skills/` |
+
+You can browse the skills, plugins, agents, and MCP servers available to you from the **Customize** surface in the GitHub Copilot app.
 
 ## Step 1: Explore the `api-endpoint` Skill
 
@@ -47,7 +56,7 @@ Skills are defined in `.github/skills/` or `.claude/skills/` directories and con
 
 ## Step 2: Generate the DeliveryVehicle Entity
 
-1. Open Copilot Chat and switch to **Agent** mode.  Select `Claude Opus 4.6`. 
+1. Start an app session in **Interactive** mode and leave the model set to **Auto**. In VS Code, use **Agent** mode. If the generated code misses parts of the skill's guidance, escalate to a higher-reasoning model and re-run the prompt.
 2. Enter the following prompt:
    ```txt
    Add a new API endpoint for a new Entity called 'DeliveryVehicle'. Vehicles belong to branches.
@@ -74,8 +83,8 @@ Skills are defined in `.github/skills/` or `.claude/skills/` directories and con
 5. (Optional) Verify the implementation
    ```bash
    make build-api             # Build the API
-   make test                  # Run unit tests
-   make run-api               # Start the API server    
+   make test-api              # Run API unit tests
+   make dev-api               # Start the API server
    # Open the Swagger UI at `http://localhost:3000/api-docs` and show the new DeliveryVehicle endpoints
    ```
 

@@ -18,16 +18,14 @@ Playwright is a popular end-to-end testing framework for web applications.  GitH
 
 ## Step 1: Start Playwright MCP
 
-1. Open Command Palette (Cmd/Ctrl + Shift + P)
-2. Select **MCP: List Servers**
-3. Select the Playwright server
-4. Click **Start Server**
+1. In the GitHub Copilot app, open **Customize → MCP servers** and enable the Playwright server for the session.
+2. If you are using VS Code instead, open the Command Palette (Cmd/Ctrl + Shift + P), select **MCP: List Servers**, select the Playwright server, and click **Start Server**.
 
 ## Step 2: Generate Test Scenarios
 
-Note this requires that you've already implemented a shopping cart feature (from Use Case 1).
+This requires the shopping cart from Use Case 1. Start the session from the merged default branch or from the cart pull request branch; do not start from a branch that lacks the cart changes.
 
-1. In the chat window, clear history, switch to `Agent` mode, and select the `Claude Sonnet 4.6` model
+1. Start a focused session in **Interactive** mode and leave the model on **Auto**. In VS Code, use **Agent** mode.
 2. Prompt:
    ```text
    Create a Playwright e2e feature file testing:
@@ -48,8 +46,8 @@ Note this requires that you've already implemented a shopping cart feature (from
    ```text
    Run these tests in headless mode and show me results
    ```
-2. You'll be prompted to install some dependencies for Chromium...
-3. Agent executes tests using MCP and discusses results in chat
+2. You may be prompted to install Chromium dependencies.
+3. Copilot executes the tests using MCP and discusses the results in the session.
 
 ## What You Learned
 

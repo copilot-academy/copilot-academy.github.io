@@ -59,7 +59,7 @@ Co-authored-by: GitHub Copilot <copilot@github.com>" --no-verify 2>/dev/null || 
 }
 ```
 
-3. Create a new branch (`git branch checkpoint-hook-test`) and start an agent session.  Use the following prompt:
+3. Create and switch to a new branch (`git switch -c checkpoint-hook-test`) and start an agent session. Use the following prompt:
 
 ```text
 Add two rocket emojis 🚀🚀 to the title in the README.
@@ -67,11 +67,12 @@ Add two rocket emojis 🚀🚀 to the title in the README.
 
 4. Once the session stops, check the git history by running `git log -1`.  You should see a new commit with the message starting with `[Checkpoint-commit]` and the co-author trailer for GitHub Copilot.  Note you could also search all commit history with `git log --grep="Co-authored-by: GitHub Copilot" --oneline`
 
-Note if you accidentally commit to main branch, you can reset to undo the commit and move it to a new branch:
+If you accidentally commit to the default branch, preserve the commit immediately by creating a branch at the current position:
 ```bash
-git reset HEAD~1  # Undo last commit but keep changes staged
-git checkout -b checkpoint-hook-test  # Move to new branch
+git switch -c checkpoint-hook-test
 ```
+
+Return to the default branch only after you have decided whether to keep or discard the checkpoint commit.
 
 ## What You Learned
 

@@ -13,6 +13,11 @@ const sidebars = {
     },
     {
       type: 'doc',
+      id: 'copilot_app',
+      label: 'Copilot App Tour',
+    },
+    {
+      type: 'doc',
       id: 'feature_development',
       label: 'Feature Development',
     },
@@ -69,7 +74,7 @@ const sidebars = {
     {
       type: 'doc',
       id: 'agentic_workflows',
-      label: 'Agentic Workflows',
+      label: 'Automations & Agentic Workflows',
     },
     {
       type: 'doc',
