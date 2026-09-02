@@ -28,7 +28,7 @@ Agent Skills are folders of instructions, scripts, and resources that GitHub Cop
 **Comparing Customization Options:**
 
 - **Custom Instructions**: Apply universally to all interactions, ideal for broad guidelines and standards. However, they lack the ability to execute scripts or provide structured resources.
-- **Prompt Files**: Reusable templates for specific tasks, but require manual invocation and don't support dynamic execution or structured resources.
+- **Prompt Files**: IDE-only reusable templates for specific tasks. They require manual invocation in IDE chat and don't support dynamic execution or structured resources.
 - **Agent Skills**: Automatically load based on context, can include executable scripts and structured resources, ideal for complex workflows that require multiple steps or specialized knowledge.
 - **MCP Servers:** Extend capabilities with external tools and APIs, but require separate setup and management outside of Copilot's native environment.
 

@@ -75,14 +75,18 @@ TAO is a fictitious observability framework for this workshop.  You can read abo
 
 ## Step 4: Create a Handoff
 
-Sometimes you need to pass context to a teammate, a new chat session, or an agent.  Custom prompts can help with this.  Lets create a plan and then use a **handoff** to generate a summary document.
+Sometimes you need to pass context to a teammate, a new chat session, or an agent. Reusable prompt files can help with this in IDE chat. Let's create a plan and then use a **handoff** to generate a summary document.
 
-1. Start a new session in **Plan** mode. **Auto** is a good default; if the plan comes back shallow, escalate to a higher-reasoning model.
+:::important IDE-only feature
+The `/handoff` command comes from a reusable prompt file and is available in IDE chat, not in GitHub Copilot app sessions.
+:::
+
+1. Open the companion repository in your IDE and start a new Copilot Chat. Use **Plan** mode if available, or ask **Agent** mode to create a plan without changing files. **Auto** is a good default; if the plan comes back shallow, escalate to a higher-reasoning model.
 2. Prompt:
    ```text
    Create a plan for a user profile page with edit capability and picture upload
    ```
-3. Approve the plan or switch to **Interactive** mode, then run the handoff command:
+3. When the plan is ready, run the handoff command in IDE chat:
    ```text
    /handoff
    ```
@@ -93,7 +97,7 @@ Sometimes you need to pass context to a teammate, a new chat session, or an agen
    - Key decisions/assumptions
    - Next steps
 
-The steps are just defined in `.github/prompts/handoff.prompt.md`.  You can of course customize this.  For example, you might want it to automatically create a file in your workspace or create a GitHub issue.  You could always ask a follow up question to do that too. 
+The steps are defined in `.github/prompts/handoff.prompt.md`. You can customize this IDE prompt file, for example to create a file in your workspace. You can also ask a follow-up question to extend the result.
 
 ## Step 5: Add external documentation as context with Agent Skills
 

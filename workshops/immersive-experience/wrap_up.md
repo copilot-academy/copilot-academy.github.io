@@ -18,7 +18,7 @@ sidebar_position: 14
 |----------|------------|
 | Copilot App | Sessions, My Work, and isolated worktrees keep agent-driven work organized |
 | Feature Development | Plan first, then choose Interactive or Autopilot based on how much control you need |
-| Test Coverage | Prompt files create reusable, documented workflows |
+| Test Coverage | IDE prompt files create reusable, documented workflows |
 | Team Standards | Custom instructions enforce consistency automatically |
 | Task Management | Parallel app sessions let you delegate and steer independent workstreams |
 | Complex Workflows | Agent Skills encode complex workflows and patterns for consistent execution |
@@ -35,7 +35,7 @@ sidebar_position: 14
 1. **This Week:**
    - Add custom instructions for your team's standards
      - Use the 'Generate Chat Instructions' feature at the top of Copilot Chat to get started or consult examples in the [awesome-copilot repo](https://github.com/github/awesome-copilot/tree/main/instructions)
-   - Create one reusable [prompt file](https://code.visualstudio.com/docs/copilot/customization/prompt-files) for a common task
+   - Create one reusable [prompt file](https://code.visualstudio.com/docs/copilot/customization/prompt-files) for a common IDE chat task
    
 2. **This Month:**
    - Configure custom agents for specialized domains
@@ -46,7 +46,7 @@ sidebar_position: 14
 
 3. **This Quarter:**
    - Establish team patterns for agent usage
-   - Build a library of prompt files and skills
+   - Build a library of IDE prompt files and cross-surface skills
    - Measure productivity impact
    - Try Spec-Driven Development for a new feature
 

@@ -17,7 +17,7 @@ This workshop uses the [Octocat Supply](https://github.com/copilot-academy/octoc
 | 0 | [Setup](/workshops/immersive-experience/setup) | Environment preparation | 10 min | Prerequisites |
 | Tour | [GitHub Copilot App Tour](/workshops/immersive-experience/copilot_app) | Learn the workspace | 10 min | Sessions, My Work, Automations, Customize |
 | 1 | [Feature Development](/workshops/immersive-experience/feature_development) | "Build a shopping cart feature" | 30 min | Plan mode, Vision, Pull requests |
-| 2 | [Test Coverage](/workshops/immersive-experience/test_coverage) | "Improve our test coverage" | 20 min | Prompt Files, Self-Healing |
+| 2 | [Test Coverage](/workshops/immersive-experience/test_coverage) | "Improve our test coverage" | 20 min | IDE Prompt Files, Self-Healing |
 | 3 | [Consistent Standards](/workshops/immersive-experience/consistent_standards) | "Enforce team standards" | 30 min | Custom Instructions, Handoffs, Agent Skills |
 | 4 | [Delegate Tasks](/workshops/immersive-experience/delegate_tasks) | "I can't keep up with tickets" | 30 min | Parallel Sessions, My Work, Custom Agents |
 | 5 | [Code Review](/workshops/immersive-experience/code_review) | "Speed up code reviews" | 15 min | PR Sessions, Copilot Code Review, Agent Merge |
