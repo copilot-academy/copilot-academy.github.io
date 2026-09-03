@@ -18,7 +18,7 @@ sidebar_position: 7
 
 The fastest security fix is the one you make before anyone else sees the code. Copilot's `/security-review` command (**public preview**) runs an AI-driven review of your in-flight changes right in your session — no PR, no CI run, no waiting.
 
-1. Make sure you have uncommitted or unpushed changes in your working tree. If your tree is clean, reuse the work from an earlier use case, or introduce a deliberate issue such as building a SQL query with string concatenation from a request parameter.
+1. Make sure your working tree contains **uncommitted changes**. `/security-review` reviews the working-tree diff; a committed change is not included merely because it has not been pushed. If your tree is clean, modify earlier exercise code or introduce a deliberate issue such as building a SQL query with string concatenation from a request parameter.
 2. In an active GitHub Copilot app session or GitHub Copilot CLI session, run:
 
    ```text

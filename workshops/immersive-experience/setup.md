@@ -55,7 +55,7 @@ make db-init
 
 Both commands should complete without errors before you continue.
 
-> **Automation module:** Copilot cloud automations require a private or internal repository. If your workshop copy is public, you can still complete the local, manually triggered automation path in the final module.
+> **Automation module:** Copilot app automations require a private or internal repository, including local and manually triggered automations. Use an approved private/internal workshop copy to complete the app-automation exercise; with a public copy, review that exercise without creating or running the automation.
 
 ## Step 4: Codespaces only — expose the ports
 

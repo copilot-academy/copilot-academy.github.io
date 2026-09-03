@@ -14,7 +14,7 @@ sidebar_position: 13
 >
 > **Availability:** GitHub Agentic Workflows are in public preview.
 
-**Your Challenge:** Choose the right automation surface, create a personal pull request coverage reviewer, and inspect a repository-owned workflow that analyzes build failures.
+**Your Challenge:** Choose the right automation surface, create a personal pull request coverage reviewer when your repository is eligible, and inspect a repository-owned workflow that analyzes build failures.
 
 ## Table of Contents
 
@@ -38,10 +38,10 @@ Copilot app automations and GitHub Agentic Workflows both repeat agent tasks, bu
 | **Triggers** | Manual; hourly, daily, weekly, or local CRON schedules; issue creation; pull request open; or pull request synchronization when new commits arrive. | Supports GitHub Actions triggers, including manual dispatch, schedules, issues, pull requests, and completed workflow runs. |
 | **Best fit** | A recurring task that you own, want to configure quickly, or want to run against a project without adding repository files. | Team-owned, auditable automation that must be stored as code, reviewed, reused across maintainers, or guarded with explicit permissions and safe outputs. |
 
-Use a **local automation** for an on-demand or scheduled task that needs your local checkout and tools. Use a **cloud automation** for unattended schedules and repository events. Choose a **repository-level agentic workflow** when the automation itself is part of the repository's operating model.
+For an eligible private or internal repository, use a **local automation** for an on-demand or scheduled task that needs your local checkout and tools. Use a **cloud automation** for unattended schedules and repository events. Choose a **repository-level agentic workflow** when the automation itself is part of the repository's operating model.
 
 :::important
-Copilot cloud automations require a private or internal repository, write access, and organization policies that enable both Copilot cloud agent and automations. If your workshop copy is public, keep **Run in the cloud** disabled, use a **Manual** trigger, and run the automation locally from the app.
+All Copilot app automations require a private or internal repository, including local runs and Manual triggers. You also need write access and organization policies that enable automations; cloud runs additionally require Copilot cloud agent. If your workshop copy is public, review Exercise 1 without creating or running the automation, or switch to an approved private/internal copy.
 :::
 
 ## Repository-Level Agentic Workflows
@@ -105,17 +105,18 @@ The [Safe Outputs documentation](https://github.github.io/gh-aw/reference/safe-o
 
 Create an app automation that reviews unit-test coverage whenever a pull request opens or receives new commits. It reports gaps for human review but does not modify code.
 
+Before continuing, confirm the workshop repository is private or internal and that your organization enables Copilot automations. If it is public, read through the configuration choices in this exercise but do not select **New automation**.
+
 ### Step 1: Define the Runtime and Triggers
 
 1. Open **Automations** in the GitHub Copilot app.
 2. Select **New automation**.
 3. Name it `PR unit-test coverage review`.
-4. If your repository is private or internal, add these **Pull request** triggers:
+4. Add these **Pull request** triggers:
    - **When a pull request is opened**
    - **When a pull request is synchronized**
-5. If your repository is public, use a **Manual** trigger instead.
-6. Add a changed-file filter if you only want to review application or test code.
-7. For a private or internal repository, enable **Run in the cloud** so Copilot cloud agent can respond when your computer is off.
+5. Add a changed-file filter if you only want to review application or test code.
+6. Enable **Run in the cloud** if Copilot cloud agent is enabled and you want the automation to respond when your computer is off. Otherwise, keep it local.
 
 This exercise uses pull request events, but the same editor also supports **Manual**, scheduled (**Hourly**, **Daily**, and **Weekly**), **Issue**, and local **CRON** triggers. Start with a manual trigger while refining a prompt, then add an unattended trigger after the output is reliable.
 
@@ -154,12 +155,6 @@ Do not change files, push commits, create another pull request, or duplicate exi
 Prioritize behavioral coverage over reaching an arbitrary percentage.
 ```
 
-If you are using the public-repository manual path, replace the first line with:
-
-```text
-Review this pull request for unit-test coverage: <paste the pull request URL>
-```
-
 The prompt defines a narrow objective, a bounded output, and explicit non-goals. This makes the selected tools easier to audit.
 
 ### Step 4: Select the Model, Reasoning, Agent, and Project
@@ -176,7 +171,7 @@ The automation inherits repository custom instructions, agent skills, firewall r
 
 ### Step 5: Verify and Refine
 
-1. Open the session started by the test run. This is a local app session for the public-repository manual path and a Copilot cloud agent session when **Run in the cloud** is enabled.
+1. Open the session started by the test run. This is a local app session when **Run in the cloud** is disabled and a Copilot cloud agent session when it is enabled.
 2. Confirm that it used only the tools you selected.
 3. Review the test commands, evidence, and pull request comment.
 4. Tighten the prompt or remove tools if the run exceeded its scope.
