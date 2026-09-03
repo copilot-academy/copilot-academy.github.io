@@ -62,14 +62,15 @@ Start a second session for specialized test work:
 
 1. Open the relevant cart-testing issue in **My work**, or create a small issue that asks for behavior-driven development (BDD) coverage of the cart.
 2. Click **New session**.
-3. Select the repository-provided **BDD Specialist** custom agent.
-4. Keep the model set to **Auto**, and prompt:
+3. Select the branch from the cart pull request created in Feature Development. If that pull request has already merged, select the updated default branch instead.
+4. Select the repository-provided **BDD Specialist** custom agent.
+5. Keep the model set to **Auto**, and prompt:
 
    ```text
    Add comprehensive BDD tests for the Cart page feature. Follow the issue acceptance criteria, run the focused test suite, and open a pull request when the tests pass.
    ```
 
-5. Start the session.
+6. Start the session.
 
 The custom agent definition in `.github/agents/bdd-specialist.agent.md` provides repository-specific instructions and tools. Teams can add other custom agents for areas such as APIs, documentation, or security.
 

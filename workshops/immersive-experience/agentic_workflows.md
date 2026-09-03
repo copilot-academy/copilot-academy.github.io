@@ -219,7 +219,35 @@ The `.md` file is the human-maintained source. The `.lock.yml` file is the harde
 For organization-owned repositories with Copilot enabled, prefer the built-in `GITHUB_TOKEN` and declare `copilot-requests: write` in workflow permissions. Use a dedicated `COPILOT_GITHUB_TOKEN` secret only when the organization policy does not provide Copilot access to the Actions token. Any separate token used by a safe-output job should be fine-grained, repository-scoped, and limited to the required operation.
 :::
 
-### Step 3: Enable and Trigger the Workflow
+### Step 3: Complete the Facilitator Preflight
+
+Do not enable or run the workflow until the workshop repository passes this preflight:
+
+1. In `auto-analyze-failures.md`, confirm `permissions` includes `copilot-requests: write`.
+2. Compile the Markdown source with `gh aw compile` and commit the regenerated lock workflow.
+3. Confirm the generated lock workflow uses the built-in GitHub token and does not require a missing `COPILOT_GITHUB_TOKEN` repository secret.
+4. In `test-auto-analysis.yml`, confirm Node caching identifies the nested lockfiles:
+
+   ```yaml
+   cache-dependency-path: |
+     api/package-lock.json
+     frontend/package-lock.json
+   ```
+
+5. Confirm dependency installation and simulated commands run from the correct nested projects, for example:
+
+   ```yaml
+   - run: npm ci --prefix api
+   - run: npm ci --prefix frontend
+   ```
+
+   Use `npm run build --prefix api`, `npm run test --prefix api -- --run`, and `npm run lint --prefix frontend` for the corresponding simulations instead of root workspace commands.
+
+:::warning
+If any preflight item fails, keep the workflow disabled and treat the remainder of this exercise as a source-review walkthrough. A fresh repository copy does not inherit repository secrets, and this repository has no root Node package from which root-level `npm ci` or workspace commands can run.
+:::
+
+### Step 4: Enable and Trigger the Workflow
 
 1. Open the repository's **Actions** tab.
 2. Select **Auto Analyze Build Failures** and enable it if necessary.
@@ -227,7 +255,7 @@ For organization-owned repositories with Copilot enabled, prefer the built-in `G
 4. Select a failure type such as `compilation_error` or `test_failure`, then start the run.
 5. Wait for the intentional workflow to fail. Its completed failure triggers **Auto Analyze Build Failures** without changing a learner branch or pull request.
 
-### Step 4: Review the Agentic Result
+### Step 5: Review the Agentic Result
 
 After CI fails, open the **Auto Analyze Build Failures** run and verify that the agent:
 
