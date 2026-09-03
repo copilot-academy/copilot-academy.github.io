@@ -150,7 +150,7 @@ While the session runs in the background, explore the sidebar:
 
 - **Sessions** — every active or past agent session, grouped by project. A session can work in your local folder, in a separate working tree, or in a cloud sandbox, depending on the run location you choose.
 - **Chats** — a conversation-only mode with no dedicated workspace behind it. Good for brainstorming or asking quick questions before you commit to a task.
-- **My work** (sometimes labeled **Needs Your Attention**) — an account-wide view of issues and pull requests from your GitHub repositories. You may see unrelated work here even if this lab uses only a local folder.
+- **My work** (sometimes labeled **Needs Your Attention**) — an account-wide view of **issues** (tracked tasks or problems) and **pull requests** (proposed changes waiting for review) from your GitHub repositories. You may see unrelated work here even if this lab uses only a local folder.
 - **Automations** — recurring or scheduled tasks you set up once and run again and again (you'll build one in Exercise 10).
 - **Customize** — where you manage skills, MCP servers, plugins, custom agents, and canvases (you'll tour this in Exercise 9).
 
@@ -388,12 +388,13 @@ Open the new files from the side panel's file tree and review them.
 
 ### 7.2 Optional: see parallel execution with Fleet
 
-Fleet creates multiple agent sessions for separate workstreams. It is easiest to demonstrate with a Git-backed project because each session can use its own working tree and branch.
+Fleet creates multiple agent sessions for separate workstreams. It is easiest to demonstrate with a Git-backed copy of the same launch-readiness project because each session can use its own working tree and branch while still seeing the source artifacts.
 
 1. Check **Settings > Experimental Flags** for **Agent tools / Fleet mode**, if your app still places Fleet behind a flag.
-2. Start or open an active session for a Git-backed practice project.
-3. Select **Claude Opus** (latest available) or **GPT-5.6 Sol** for the orchestrating session.
-4. In Plan mode, approve the plan with **Approve and implement with Fleet** if that option appears. You can also type `/fleet` inside the active session:
+2. Select a Git-backed project that contains copies of `launch-readiness-brief.md`, `launch-readiness-plan.md`, `action-tracker.csv`, and `executive-summary.md`. Do not use an unrelated empty practice project. If you do not have a Git-backed copy with these files, skip this optional exercise.
+3. Open an active session for that project and confirm the files appear in the side panel's file tree.
+4. Select **Claude Opus** (latest available) or **GPT-5.6 Sol** for the orchestrating session.
+5. In Plan mode, approve the plan with **Approve and implement with Fleet** if that option appears. You can also type `/fleet` inside the active session:
 
 ```text
 /fleet Review the project launch materials and produce independent drafts for:
@@ -418,7 +419,7 @@ You may see unrelated items from other repositories. If this lab uses only a pla
 ### 8.2 Optional: connect a GitHub repository for issues and pull requests
 
 :::important Prerequisites for this step
-This part requires a GitHub repository (not just a local folder) that you have write access to. If you don't have one handy, skip to the fallback below — it produces an equivalent artifact without GitHub.
+This part requires a GitHub repository that you have write access to and that contains `action-tracker.csv`. If your repository does not contain the launch artifacts, copy them from the local `product-launch-readiness` folder into the repository folder with Finder or File Explorer, then confirm they appear in the app's file tree. If you don't have a suitable repository, skip to the fallback below — it produces an equivalent artifact without GitHub.
 :::
 
 If you do have a repository connected:
