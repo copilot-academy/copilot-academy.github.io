@@ -1,17 +1,18 @@
 ---
 title: Labs
-description: Hands-on labs for GitHub Copilot — focused, self-contained exercises you can complete in 15–30 minutes
+description: Hands-on labs for GitHub Copilot — self-contained learning experiences from quick exercises to in-depth guided labs
 ---
 
 # Hands-on Labs
 
-Focused, self-contained exercises you can complete in 15–30 minutes. Each lab covers a single topic and can be done independently.
+Choose from quick exercises and in-depth guided labs. Each lab is self-contained and can be completed independently.
 
 ## Getting Started
 
 | Lab | Duration | Description |
 |-----|----------|-------------|
 | [Copilot CLI: Zero to Hero](/labs/copilot-cli-zero-to-hero) | ~1 hour | Learn GitHub Copilot CLI from first install to advanced agentic workflows |
+| [Getting Work Done with GitHub Copilot App](/labs/getting-work-done-with-copilot-app) | ~75–90 minutes | Assess product launch readiness with coordinated artifacts, an interactive dashboard, and recurring status automation |
 | [Copilot SDK](/labs/copilot-sdk) | ~1 hour | Build a Smart Changelog Generator CLI using the Copilot SDK |
 
 ## Intermediate

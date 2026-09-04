@@ -11,6 +11,7 @@ const sidebars = {
       label: 'Getting Started',
       items: [
         'copilot-cli-zero-to-hero',
+        'getting-work-done-with-copilot-app',
         'copilot-sdk',
       ],
     },

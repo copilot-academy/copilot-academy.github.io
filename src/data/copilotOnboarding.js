@@ -394,6 +394,11 @@ export const STEPS = [
         },
         {
           kind: 'link',
+          label: 'Start Getting Work Done with Copilot App',
+          href: '/labs/getting-work-done-with-copilot-app',
+        },
+        {
+          kind: 'link',
           label: 'Browse all hands-on labs',
           href: '/labs',
         },
