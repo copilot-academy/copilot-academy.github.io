@@ -1,6 +1,6 @@
 ---
 title: "Test Coverage"
-description: "Improve test coverage using Prompt Files and Self-Healing capabilities"
+description: "Improve test coverage using IDE Prompt Files and Self-Healing capabilities"
 sidebar_position: 3
 ---
 
@@ -10,15 +10,19 @@ sidebar_position: 3
 >
 > **Time:** ~20 minutes
 >
-> **Copilot Features:** Prompt Files, Self-Healing
+> **Copilot Features:** IDE Prompt Files, Self-Healing
 
 **Your Challenge:** Systematically improve test coverage across all API routes.
 
 ## Step 1: Use a Reusable Prompt File
 
-Manually prompting for test coverage improvements can work.  However, it also means that the process may be inconsistent between developers and you never learn from mistakes. Instead, (have Copilot) create a documented prompt file checked into your repository.  Utilize this and enhance it over time based on responses where Copilot struggled.  Here we have provided a starting point (well, Copilot has)!
+Manually prompting for test coverage improvements can work. However, it also means that the process may be inconsistent between developers and you never learn from mistakes. Instead, have Copilot create a documented prompt file checked into your repository. Use it and enhance it over time based on responses where Copilot struggled. Here we have provided a starting point.
 
-1. If you haven't already, click the `+` button in the Copilot Chat panel to clear your history.  This is a best practice when switching between use cases or activities to avoid sending unrelated context.
+:::important IDE-only feature
+Reusable prompt files are supported in IDE chat, not in GitHub Copilot app sessions. Complete this exercise in a supported IDE such as VS Code.
+:::
+
+1. Open the companion repository in your IDE and start a new Copilot Chat. This keeps unrelated context from earlier activities out of the request.
 2. Review `.github/prompts/demo-unit-test-coverage.prompt.md`
 3. Notice it defines:
    - Objective and routes to focus on
@@ -29,7 +33,7 @@ Manually prompting for test coverage improvements can work.  However, it also me
 
 ## Step 2: Execute the Prompt
 
-1. Switch to `Agent` mode, select the `Claude Sonnet 4.6` model
+1. Use **Agent** mode in your IDE. Leave the model on **Auto** unless the task needs deeper reasoning.
 2. Run the prompt:
    - **Option A:** Click the play button when the prompt file is open
    - **Option B:** Type `/demo-unit-test-coverage` in chat.  The prompt name automatically becomes a slash command.
@@ -48,14 +52,14 @@ Agent will:
 ## Step 4: Verify Results Yourself
 
 ```bash
-make test
+make test-coverage
 ```
 
 Review the coverage report - it should be significantly improved. 
 
 ## What You Learned
 
-✅ **Prompt Files** - Reusable, documented workflows  
+✅ **IDE Prompt Files** - Reusable, documented workflows invoked from IDE chat
 ✅ **Iteration** - Agent iterates to fix failing tests automatically  
 ✅ **CodeQL Integration** - Agent runs security scans after changes
 

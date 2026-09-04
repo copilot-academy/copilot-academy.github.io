@@ -30,10 +30,13 @@ const config = {
         theme: {
           customCss: './src/css/custom.css',
         },
-        gtag: {
-          trackingID: 'G-W78GTEX0V3',
-          anonymizeIP: true,
-        },
+        gtag:
+          process.env.NODE_ENV === 'production'
+            ? {
+                trackingID: 'G-W78GTEX0V3',
+                anonymizeIP: true,
+              }
+            : false,
       }),
     ],
   ],

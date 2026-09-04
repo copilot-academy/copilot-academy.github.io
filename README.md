@@ -9,7 +9,7 @@ A collection of self-paced workshops and hands-on labs for understanding and lev
 ## Workshops
 
 * Copilot Customization - A comprehensive workshop on customizing GitHub Copilot with instructions, prompts, agents, and skills.
-* Immersive Experience - A scenario-based workshop where you tackle real development problems using Planning Mode, Agent Mode, custom agents, security tools, and more.
+* Immersive Experience - A scenario-based workshop using the GitHub Copilot app, IDE, CLI, custom agents, security tools, and automations.
 
 ## Standalone Labs
 

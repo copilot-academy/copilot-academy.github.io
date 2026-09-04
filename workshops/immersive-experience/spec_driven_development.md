@@ -41,25 +41,29 @@ With AI, specifications can now be:
    # This should say "Specify CLI is ready to use!"
    ```
    
-2. Initialize your project:
+2. Initialize the IDE command integration:
    ```bash
    # Run this in the root of your repo - Say yes to continue with the risk of overwriting files
-   specify init . --ai copilot --script sh
+   specify init . --integration copilot --integration-options="--commands" --script sh
 
    # If you run into auth issues, try this:
-   # `env -u GITHUB_TOKEN specify init . --ai copilot --script sh`
+   # `env -u GITHUB_TOKEN specify init . --integration copilot --integration-options="--commands" --script sh`
    ```
-   
+
    This creates:
    - `.specify/` directory with templates and scripts
-   - Command shortcuts (`/speckit.specify`, `/speckit.plan`, etc.)
+   - IDE prompt commands (`/speckit.specify`, `/speckit.plan`, etc.)
    - Constitution template for project principles
+
+:::important IDE-only exercise
+The dotted `/speckit.*` commands in this module are reusable prompt commands and run in IDE chat, not in GitHub Copilot app sessions. The `--commands` integration option intentionally selects that IDE-oriented layout instead of Spec Kit's default skills layout.
+:::
 
 ## Step 2: Establish Project Constitution
 
 The **constitution** is your project's immutable architectural DNA - the principles that govern every specification and implementation.
 
-1. Clear your chat history, ensure you are on `Agent` mode with `Claude Sonnet 4.6`
+1. Open the companion repository in your IDE and start a focused Copilot Chat in **Agent** mode. Leave the model on **Auto**. Use a higher-reasoning model if the constitution requires substantial architectural tradeoff analysis.
 2. Run the constitution command with the following prompt:
    ```text
    /speckit.constitution  Our OctoCAT Supply Chain application follows these principles:
@@ -72,7 +76,7 @@ The **constitution** is your project's immutable architectural DNA - the princip
    - Minimal dependencies - evaluate before adding
    ```
 3. Review the generated `.specify/memory/constitution.md`
-4. When happy with it, click `Keep` to save changes
+4. Review the changes and retain them in your IDE workspace.
 5. The constitution will now guide all subsequent specifications and plans
 
 ## Step 3: Create a Feature Specification
@@ -144,11 +148,11 @@ Now translate the business spec into a technical plan with your chosen architect
    ```
 
 3. **Agent will generate multiple artifacts**:
-   - `specs/004-purchase-orders/plan.md` - High-level implementation plan
-   - `specs/004-purchase-orders/research.md` - Technology evaluation and tradeoffs
-   - `specs/004-purchase-orders/data-model.md` - Database schema and relationships
-   - `specs/004-purchase-orders/contracts/` - API endpoint specifications
-   - `specs/004-purchase-orders/quickstart.md` - Key validation scenarios
+   - `specs/001-purchase-orders/plan.md` - High-level implementation plan
+   - `specs/001-purchase-orders/research.md` - Technology evaluation and tradeoffs
+   - `specs/001-purchase-orders/data-model.md` - Database schema and relationships
+   - `specs/001-purchase-orders/contracts/` - API endpoint specifications
+   - `specs/001-purchase-orders/quickstart.md` - Key validation scenarios
    
 4. Review the plan - notice:
    - Every technical decision references a requirement
@@ -164,7 +168,7 @@ Convert the implementation plan into actionable, executable tasks.
    ```text
    /speckit.tasks
    ```
-2. Agent analyzes the plan and creates `specs/004-purchase-orders/tasks.md` with:
+2. Agent analyzes the plan and creates `specs/001-purchase-orders/tasks.md` with:
    - Database migration tasks (schema, indexes, foreign keys)
    - Repository layer tasks (CRUD operations per entity)
    - API endpoint tasks (one per contract)
@@ -213,7 +217,7 @@ Now execute the implementation plan.
 1. Once implementation completes, test the feature:
    ```bash
    make build
-   make test
+   make test-api
    make dev
    ```
 2. Test in the browser:
