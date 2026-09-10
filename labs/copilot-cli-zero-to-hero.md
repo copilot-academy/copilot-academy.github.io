@@ -371,9 +371,13 @@ Scroll left to right to see the different file changes.
 
 This shows a summary of everything that's changed since your last commit. Good habit before committing.
 
+### 5.6 Use `/security-review` to check for vulnerabilities
+
+While `/review` performs a general review of changes, `/security-review` will specifically search for vulnerabilities in staged and unstaged changes. Use this to validate your code prior to push.  
+
 ### ✅ Checkpoint
 
-You found and fixed a bug using conversational debugging and the `/review` agent. You also used `/diff` to review changes.
+You found and fixed a bug using conversational debugging and the `/review` agent. You also used `/diff` to review changes. You also learned that a `security-review` can be used to search for vulnerabilities before pushing changes.
 
 ## Exercise 6 — Automate with `copilot -p`
 
@@ -975,6 +979,10 @@ cd ../task-manager-feature-b && copilot
 
 Each session has its own file context, so there are no conflicts as both agents read and write files independently.
 
+:::tip
+The `/worktree` command was recently introduced. You can use this within the CLI to create a worktree as a shortcut to running the commands manually!
+:::
+
 **Combine with `/fleet`** — within a single session, `/fleet` spawns parallel subagents that work on different parts of a task simultaneously. Worktrees are for when you need completely independent sessions (different features, different branches).
 
 **Cleanup when done:**
@@ -990,13 +998,37 @@ git worktree remove ../task-manager-feature-b
 git branch -l
 ```
 
+### 10.5 Automation
+
+The CLI provides a number of commands that are useful for automating tasks.  
+
+* `/after` is used to schedule a prompt after a given delay.  
+
+```text
+/after 30m Give me details of changes to README.md made in the last 30 minutes
+```
+
+* `/every` and `/loop` provide a way to schedule a prompt or skill on a recurring basis.  `/loop` is an alias of `/every`.
+
+```text
+/every 1h run the test suite and summarize any new failures
+
+/every 1d Use the refactor skill to adjust the architecture of this project to improve the responsiveness of the client UI
+```
+
+* `/goal` provides a way to focus an auto-pilot session by giving an objective and setting a limit. The execution will pause once the limit is reached.
+
+```text
+/goal Refactor the auth module --max-ai-credits 500
+```
+
 ### ✅ Checkpoint
 
-You understand the permission model from `/allow-all` down to granular `--allow-tool` patterns. You've seen how solutions such as Copilot Cloud Agent, Codespaces, and Docker Sandboxes isolate Copilot for safe autonomous operation. In addition, you've seen how Git worktrees enable parallel CLI sessions on the same repo.
+You understand the permission model from `/allow-all` down to granular `--allow-tool` patterns. You've seen how solutions such as Copilot Cloud Agent, Codespaces, and Docker Sandboxes isolate Copilot for safe autonomous operation. In addition, you've seen how Git worktrees enable parallel CLI sessions on the same repo. Finally, we reviewed ways to automate commands within the CLI.
 
-## Exercise 11 — IDE Integration & Advanced Tips
+## Exercise 11 — Integration & Advanced Tips
 
-### 11.1 Connect CLI to VS Code
+### 11.1 Connect CLI to VS Code or the Copilot Desktop App
 
 If you use VS Code, you can bridge the CLI session to your editor:
 
@@ -1010,15 +1042,21 @@ This lets the CLI agent see your open files, editor state, and project context. 
 2. **VS Code** for visual diffs, inline editing, and detailed refinement
 3. **Both connected** for shared context
 
+Similarly you can use `/app` to open up the Copilot Desktop App to continue in a visual interface.
+
 ### 11.2 Deep Research
 
 Need to understand something before coding? Use the research agent:
+
+:::tip 
+You may want to `/allow-all` prior to doing research to avoid needing to approve all URLs.
+:::
 
 ```text
 /research What are the best practices for rate limiting Express.js APIs in production?
 ```
 
-This performs a deep investigation using GitHub search and web sources.
+This performs a deep investigation using GitHub search and web sources and outputs a research paper with sources cited! 
 
 ### 11.3 Session Management
 
@@ -1112,24 +1150,24 @@ Each prompt (interactive or `-p`) counts as one premium request. Keep an eye on 
 
 ### 11.8 Querying CLI Session History
 
-Copilot CLI stores your entire session history — prompts, responses, tool calls, and outcomes — in a SQLite database in `~/.copilot/`. This database has a full-text search index, which means you can ask Copilot natural language questions about your past sessions.
+Copilot CLI stores your entire session history (prompts, responses, tool calls, and outcomes) in a SQLite database in `~/.copilot/`. This database has a full-text search index, which means you can ask Copilot natural language questions about your past sessions.
+
+`/chronicle` is a built in command used to interact with your session history.  It is useful for providing insight into your usage.  Try out the following commands: 
+
+* `/chronicle tips` Gives tips based on your usage patterns
+* `/chronicle cost-tips` Gives suggestions to optimize cost based on your usage
+* `/chronicle standup` Creates a standup report based on your usage for the past day
+* `/chronicle search` Search session history based on keywords
+* `/chronicle improve` Suggest updates to copilot instructions based on your usage
+
 
 :::note
-This feature uses the experimental `sql` tool. Enable it with `/experimental on` if it's not already active. As an experimental feature, the syntax and availability may change.
+It is likely you can also just query session history by prompting.  For example, `Search my session history for when I fixed the DELETE endpoint bug.`.  This feature may still rely on the `sql` tool which requires expirimental settings be turned on. 
 :::
 
-Try querying your session history:
+This is useful for:
 
-```text
-Search my session history for when I fixed the DELETE endpoint bug.
-```
-
-```text
-Show me all sessions where I used the expert-react-frontend-engineer agent.
-```
-
-Copilot translates your natural language question into a SQL query against the session database and returns matching results. This is useful for:
-
+- **Guidance based on your usage** - How can I improve my usage as well as my cost? 
 - **Finding past solutions** — "How did I configure the Playwright tests last time?"
 - **Auditing work** — "What files did I modify in yesterday's session?"
 - **Onboarding teammates** — share session exports from `/share` and let them search for context
@@ -1165,7 +1203,9 @@ You now know how to bridge CLI and VS Code, manage sessions, switch models, and 
 | `/compact` | Compress conversation history |
 | `/context` | Show token usage |
 | `/diff` | Review local changes |
+| `/worktree` | Create a new git worktree from the base |
 | `/review` | AI code review |
+| `/security-review` | Review for security vulerabilities |
 | `/share` | Export session |
 | `/resume` | Resume previous session |
 | `/init` | Bootstrap repo instructions |
@@ -1173,6 +1213,7 @@ You now know how to bridge CLI and VS Code, manage sessions, switch models, and 
 | `/mcp` | Manage MCP servers (show, add, edit, delete) |
 | `/agent` | Browse/select agents |
 | `/skills` | Manage skills (list, info, add, remove, reload) |
+| `/app` | Connect to the Copilot Desktop App |
 | `/ide` | Connect to VS Code |
 | `/delegate` | Send session to GitHub → PR |
 | `/research` | Deep research with web sources |
@@ -1181,6 +1222,11 @@ You now know how to bridge CLI and VS Code, manage sessions, switch models, and 
 | `/allow-all` | Auto-approve all actions |
 | `/update` | Update CLI |
 | `copilot plugin` | Manage plugins (install, list, uninstall, update) |
+| `/after` | Schedule a one-shot prompt or skill |
+| `/every` | Schedule a recurring prompt or skill |
+| `/loop` | An alias of `/every` |
+| `/goal` | Set an objective with constraints |
+ 
 
 ### Custom Instruction Locations
 
