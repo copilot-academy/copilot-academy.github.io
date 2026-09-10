@@ -33,6 +33,13 @@ const labs = [
     link: '/labs/copilot-cli-zero-to-hero',
   },
   {
+    title: 'Getting Work Done with GitHub Copilot App',
+    description: 'Coordinate a product launch with sessions, canvases, and automations. No coding required.',
+    duration: '~75–90 min',
+    level: 'Beginner',
+    link: '/labs/getting-work-done-with-copilot-app',
+  },
+  {
     title: 'Copilot SDK',
     description: 'Learn how to use the Copilot SDK to integrate Copilot in your app.',
     duration: '~1 hour',
@@ -168,7 +175,7 @@ export default function Home() {
           <div className="container">
             <h2 className="landing-section__title">Hands-on Labs</h2>
             <p className="landing-section__subtitle">
-              Focused, self-contained exercises you can complete in less than 1 hour.
+              Self-contained learning experiences ranging from quick exercises to in-depth labs.
             </p>
             <div className="row">
               {labs.map((props, idx) => (
