@@ -377,7 +377,7 @@ While `/review` performs a general review of changes, `/security-review` will sp
 
 ### ✅ Checkpoint
 
-You found and fixed a bug using conversational debugging and the `/review` agent. You also used `/diff` to review changes. You also learned that a `security-review` can be used to search for vulnerabilities before pushing changes.
+You found and fixed a bug using conversational debugging and the `/review` agent. You also used `/diff` to review changes. You also learned that the `/security-review` command can be used to search for vulnerabilities before pushing changes.
 
 ## Exercise 6 — Automate with `copilot -p`
 
@@ -1056,7 +1056,7 @@ You may want to `/allow-all` prior to doing research to avoid needing to approve
 /research What are the best practices for rate limiting Express.js APIs in production?
 ```
 
-This performs a deep investigation using GitHub search and web sources and outputs a research paper with sources cited! 
+This performs a deep investigation using GitHub search and web sources and outputs a research report with cited sources.
 
 ### 11.3 Session Management
 
@@ -1157,12 +1157,12 @@ Copilot CLI stores your entire session history (prompts, responses, tool calls, 
 * `/chronicle tips` Gives tips based on your usage patterns
 * `/chronicle cost-tips` Gives suggestions to optimize cost based on your usage
 * `/chronicle standup` Creates a standup report based on your usage for the past day
-* `/chronicle search` Search session history based on keywords
+* `/chronicle search KEYWORD` searches session history for a specific keyword or topic
 * `/chronicle improve` Suggest updates to copilot instructions based on your usage
 
 
 :::note
-It is likely you can also just query session history by prompting.  For example, `Search my session history for when I fixed the DELETE endpoint bug.`.  This feature may still rely on the `sql` tool which requires expirimental settings be turned on. 
+You can also query session history with a free-form prompt. For example: `Search my session history for when I fixed the DELETE endpoint bug.`
 :::
 
 This is useful for:
@@ -1203,9 +1203,9 @@ You now know how to bridge CLI and VS Code, manage sessions, switch models, and 
 | `/compact` | Compress conversation history |
 | `/context` | Show token usage |
 | `/diff` | Review local changes |
-| `/worktree` | Create a new git worktree from the base |
+| `/worktree` | Create a new Git worktree from the current checkout and switch to it |
 | `/review` | AI code review |
-| `/security-review` | Review for security vulerabilities |
+| `/security-review` | Review for security vulnerabilities |
 | `/share` | Export session |
 | `/resume` | Resume previous session |
 | `/init` | Bootstrap repo instructions |
