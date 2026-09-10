@@ -30,13 +30,14 @@ const config = {
         theme: {
           customCss: './src/css/custom.css',
         },
-        gtag:
-          process.env.NODE_ENV === 'production'
-            ? {
+        ...(process.env.NODE_ENV === 'production'
+          ? {
+              gtag: {
                 trackingID: 'G-W78GTEX0V3',
                 anonymizeIP: true,
-              }
-            : false,
+              },
+            }
+          : {}),
       }),
     ],
   ],

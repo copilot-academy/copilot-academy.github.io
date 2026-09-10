@@ -118,6 +118,18 @@
   color: #ffffff;
 }
 
+/* The navbar background is always dark regardless of the active color
+   mode, but the color-mode toggle icon uses `currentColor`, which by
+   default follows the light-mode text color. Force it to the same light
+   navbar-link color so the toggle stays visible in light mode too. */
+.navbar [class*='colorModeToggle'] {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar [class*='colorModeToggle']:hover {
+  color: #ffffff;
+}
+
 /* ---------- Sidebar ---------- */
 .menu__link {
   border-radius: 6px;
