@@ -1,87 +1,137 @@
 ---
 title: "Delegate Tasks"
-description: "Delegate tasks using Coding Agent, Mission Control, and Custom Agents"
+description: "Delegate parallel work with the GitHub Copilot app, custom agents, and Copilot cloud agent"
 sidebar_position: 5
 ---
 
 # Use Case 4: "I have too many tasks"
 
-> **Scenario:** You have 5 tickets in your sprint: bug fixes, new features, tech debt. You can't do them all synchronously.
+> **Scenario:** You have five tickets in your sprint: bug fixes, new features, and technical debt. You cannot complete them all synchronously.
 >
 > **Time:** ~30 minutes
 >
-> **Copilot Features:** Coding Agent, Mission Control, Custom Agents
+> **Copilot Features:** GitHub Copilot app, My work, custom agents, Copilot cloud agent
 
-**Your Challenge:** Delegate work to Coding Agent while you focus on high-value tasks.
+**Your Challenge:** Direct several isolated agent sessions while you stay focused on prioritization, architecture, and review.
 
-## Step 1: Use Custom Agents for Specialized Work
+## Table of Contents
 
-**Scenario:** You need BDD tests for the cart feature.
+- [Step 1: Triage Work in the Copilot App](#step-1-triage-work-in-the-copilot-app)
+- [Step 2: Start an Issue-Scoped Session](#step-2-start-an-issue-scoped-session)
+- [Step 3: Delegate to a Repository Custom Agent](#step-3-delegate-to-a-repository-custom-agent)
+- [Step 4: Direct Concurrent Sessions](#step-4-direct-concurrent-sessions)
+- [Step 5: Review the Resulting Pull Requests](#step-5-review-the-resulting-pull-requests)
+- [Optional: Use Mission Control on the Web](#optional-use-mission-control-on-the-web)
+- [What You Learned](#what-you-learned)
+- [Next Steps](#next-steps)
 
-1. Go to your GitHub repository
-2. Click **Agents Panel** (top right icon next to Copilot...)
-3. Select the main branch for working (should be preselected)
-4. Choose **BDD Specialist** agent
-5. Prompt:
+## Step 1: Triage Work in the Copilot App
+
+1. Open the GitHub Copilot app.
+2. Select **My work** in the sidebar.
+3. Find the `Improve test coverage for API` issue for your workshop repository.
+4. Open the issue and review its description, labels, assignees, and repository context.
+
+If the issue does not exist, create it with the title `Improve test coverage for API`. Ask for coverage of the API routes, error paths, and database failures, with `make test-coverage` as the validation command. Return to **My work** after creating it.
+
+:::tip
+Use sections and filters in **My work** to separate active issues, review requests, and completed work. This gives you one queue for issue and pull request work across repositories.
+:::
+
+## Step 2: Start an Issue-Scoped Session
+
+1. From the issue details, click **New session**. The session starts with the issue context already attached.
+2. Select the repository and `main` as the base branch if the app prompts you, then choose a **new worktree** for the session.
+3. Keep the model set to **Auto**. Increase reasoning only when the task requires deeper architectural analysis.
+4. Choose **Plan** mode, then prompt:
+
    ```text
-   Add comprehensive BDD tests for the Cart page feature
-   ```
-6. Click the **Start Task** button
-7. Agent starts working - **you can close the tab and do other work**
-
-> If interested, you can look at `.github/agents/bdd-specialist.agent.md` to see how this custom agent is defined.  You can create your own custom agents for your team as well!
-
-## Step 2: Assign Issues to Coding Agent
-
-1. In your IDE, open `.github/prompts/demo-cart-page.prompt.md`
-2. The GitHub MCP server should already be started (from Use Case 3).  If not, start it now by hitting Cmd/Ctrl + Shift + P and selecting **MCP: List Servers**, selecting `github-remote`, and clicking `Start Server`.
-3. In the Copilot Chat panel, clear your history, ensure you are in agent mode and select a base model like `GPT-5 mini`.  Have Copilot open an issue for you.  Prompt:
-   ```text
-   Create a GitHub issue with the title "Implement Recommendations Feature" using the contents in the demo-cart-page.prompt.md file as the body.
-   ```
-4. Click Allow to let Copilot execute the create issue command.  It should return with a new issue URL.  
-5. Have Copilot assign the issue to the Coding Agent.  Prompt:
-   ```text
-   Assign this issue to the Copilot coding agent.
-   ```
-   Note an alternative approach is do this directly in GitHub by manually creating the issue and then assigning it to `Copilot`.
-6. Open the issue in GitHub and you should see the 👀 indicator showing that Copilot saw the issue.  It should also have a link to a work in progress pull request shortly after.
-
-## Step 3: Monitor from Mission Control
-
-1. Navigate to [https://github.com/copilot/agents](https://github.com/copilot/agents)
-2. See all your active agent sessions (in this case you should have the BDD Specialist session we started first and the cart feature coding session we started second)
-3. Click on the BDD session that should be in progress:
-   - Note you can view real-time progress and see commands executed
-   - Also see the pull request contents
-4. **Steer mid-session by prompting Copilot:**
-   ```text
-   While you're at it, add error handling for network failures
+   Implement this issue. First confirm the acceptance criteria and propose a concise plan. Run make test-coverage and open a pull request when validation passes.
    ```
 
-## Step 4: Use API Specialist for Backend Work
+5. Review the proposed plan and approve it only when the scope matches the issue.
+6. Follow the session as the agent explores the repository, changes files, and runs validation.
 
-1. Go back to your repository and open the agents panel like we did for the **BDD Specialist**.  This time select **API Specialist**
-2. Prompt with the following and click to **Start Task**:
+:::note
+A session in a new worktree uses its own branch and isolated checkout. If your organization enables cloud-based sessions, you can instead delegate the task to Copilot cloud agent in a GitHub-hosted environment.
+:::
+
+## Step 3: Delegate to a Repository Custom Agent
+
+Start a second session for specialized test work:
+
+1. Open the relevant cart-testing issue in **My work**, or create a small issue that asks for behavior-driven development (BDD) coverage of the cart.
+2. Click **New session**.
+3. Select the branch from the cart pull request created in Feature Development. If that pull request has already merged, select the updated default branch instead.
+4. Select the repository-provided **BDD Specialist** custom agent.
+5. Keep the model set to **Auto**, and prompt:
+
    ```text
-   Create CRUD endpoints for user profiles: 
-   GET /api/profiles/:id
-   POST /api/profiles
-   PUT /api/profiles/:id
-   DELETE /api/profiles/:id
+   Add comprehensive BDD tests for the Cart page feature. Follow the issue acceptance criteria, run the focused test suite, and open a pull request when the tests pass.
    ```
-3. Copilot Coding Agent will spin up another environment and implement the endpoint with proper error handling, validation, and Swagger docs
+
+6. Start the session.
+
+The custom agent definition in `.github/agents/bdd-specialist.agent.md` provides repository-specific instructions and tools. Teams can add other custom agents for areas such as APIs, documentation, or security.
+
+## Step 4: Direct Concurrent Sessions
+
+Keep both sessions running so you can practice directing parallel workstreams:
+
+1. Switch between the sessions in the app sidebar.
+2. In each session, review:
+   - Current progress and completed steps
+   - Commands and validation results
+   - Changed files
+   - The session branch or worktree
+3. Steer the API coverage session with a follow-up:
+
+   ```text
+   Also cover database connection failures and malformed request parameters.
+   ```
+
+4. Confirm that the agent incorporates the new instruction without expanding beyond the issue's intent.
+
+Because each session is isolated, the agents can work concurrently without overwriting one another's uncommitted changes.
+
+:::important
+Parallel work still needs coordination. Avoid assigning overlapping files or contradictory requirements to separate sessions unless you plan to reconcile the changes.
+:::
+
+## Step 5: Review the Resulting Pull Requests
+
+When a session finishes:
+
+1. Review its summary, changed files, and validation results.
+2. Ask the agent to correct incomplete work before creating a pull request.
+3. Open or create the pull request from the session.
+4. Return to **My work** and open the resulting pull request.
+5. Confirm that the pull request links to the correct issue and that its description explains the changes and validation.
+
+Do not merge yet. You will review the pull request in the next use case.
+
+## Optional: Use Mission Control on the Web
+
+If you prefer a browser, open [Mission Control](https://github.com/copilot/agents) to monitor and steer Copilot cloud agent sessions. Mission Control is a useful web alternative, but the GitHub Copilot app remains the primary workflow for this exercise.
 
 ## What You Learned
 
-✅ **Custom Agents** - Specialized tools for specific domains  
-✅ **Mission Control** - Manage multiple agents like a project manager  
-✅ **Async Workflows** - Delegate and move on, check back later  
-✅ **Mid-Session Steering** - Guide agents as they work
+✅ **My work** - Triage issues and pull requests in one place
 
-**Time Investment:** 30 minutes setup, agents work asynchronously  
-**Value:** 3-5 tickets completed while you focus on architecture/design
+✅ **Issue-Scoped Sessions** - Start with repository and issue context already attached
+
+✅ **Custom Agents** - Apply specialized repository instructions and tools
+
+✅ **Isolated Worktrees** - Run concurrent sessions without sharing uncommitted changes
+
+✅ **Steering and Progress** - Review activity, changed files, and validation while work is in progress
+
+✅ **Pull Request Handoff** - Turn validated session work into reviewable pull requests
+
+**Time Investment:** 30 minutes to delegate, steer, and review agent work
+
+**Value:** Advance several independent tickets while retaining human direction and review
 
 ## Next Steps
 
-Continue to [Code Review](/workshops/immersive-experience/code_review) to learn how to speed up code reviews with Copilot.
+Continue to [Code Review](/workshops/immersive-experience/code_review) to learn how to review pull requests and resolve feedback with Copilot.

@@ -37,7 +37,7 @@ sidebar_position: 8
    Add comprehensive JSDoc comments to all functions in suppliersRepo.ts.
    Include parameter descriptions, return types, and example usage.
    ```
-3. Agent will add structured documentation.  Review changes and keep one by one in the editor or keep all at once in the chat window.  
+3. Copilot will add structured documentation. Review the diff and refine or retain the changes.
 
 ## Step 3: Refactor with Test Guardrails
 
@@ -73,7 +73,7 @@ sidebar_position: 8
 
 1. Prompt:
    ```text
-   Analyze the SQL migrations in api/sql/migrations/ and create an ERD (Entity Relationship Diagram) in Mermaid format.
+   Analyze the SQL migrations in api/database/migrations/ and create an ERD (Entity Relationship Diagram) in Mermaid format.
    Include all tables, relationships, and cardinality.
    
    Save to docs/database-schema.md
@@ -92,7 +92,7 @@ sidebar_position: 8
    - Link to all other documentation
    ```
 
-Copilot is great at reviewing code and generating documentation.  Keep in mind you could always assign this type of task to Coding Agent if you wanted to delegate it.
+Copilot is great at reviewing code and generating documentation. You can also move this work into a separate app session or delegate it to Copilot cloud agent.
 
 ## What You Learned
 

@@ -16,8 +16,8 @@ const workshops = [
   {
     title: 'Immersive Experience',
     description:
-      'A scenario-based workshop where you tackle real development problems using Planning Mode, Agent Mode, custom agents, security tools, and more.',
-    modules: 13,
+      'A scenario-based workshop using the GitHub Copilot app, IDE, CLI, custom agents, security tools, and automations.',
+    modules: 14,
     duration: 'Full day',
     level: 'Beginner → Advanced',
     link: '/workshops/immersive-experience',

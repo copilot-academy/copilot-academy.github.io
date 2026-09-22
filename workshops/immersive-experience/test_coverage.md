@@ -1,6 +1,6 @@
 ---
 title: "Test Coverage"
-description: "Improve test coverage using Prompt Files and Self-Healing capabilities"
+description: "Improve test coverage with an agentic GitHub Copilot app session"
 sidebar_position: 3
 ---
 
@@ -10,33 +10,38 @@ sidebar_position: 3
 >
 > **Time:** ~20 minutes
 >
-> **Copilot Features:** Prompt Files, Self-Healing
+> **Copilot Features:** GitHub Copilot app, test execution, self-healing
 
 **Your Challenge:** Systematically improve test coverage across all API routes.
 
-## Step 1: Use a Reusable Prompt File
+## Step 1: Start a Focused App Session
 
-Manually prompting for test coverage improvements can work.  However, it also means that the process may be inconsistent between developers and you never learn from mistakes. Instead, (have Copilot) create a documented prompt file checked into your repository.  Utilize this and enhance it over time based on responses where Copilot struggled.  Here we have provided a starting point (well, Copilot has)!
+1. Open the companion repository in the GitHub Copilot app.
+2. Start a new session from the branch that contains your latest workshop changes.
+3. Choose **Interactive** mode and leave the model on **Auto**. This task is well bounded, so a higher-reasoning model is only necessary if failures span several layers or the first approach stalls.
 
-1. If you haven't already, click the `+` button in the Copilot Chat panel to clear your history.  This is a best practice when switching between use cases or activities to avoid sending unrelated context.
-2. Review `.github/prompts/demo-unit-test-coverage.prompt.md`
-3. Notice it defines:
-   - Objective and routes to focus on
-   - Testing patterns to follow (examples)
-   - Success Criteria
-   - Links to relevant documentation
-4. Notice the prompt does not say the percentage desired is greater than 80%.  If that was important it could be added here.
+Starting a new session keeps unrelated context from earlier activities out of the request while preserving the app workflow used throughout this workshop.
 
-## Step 2: Execute the Prompt
+## Step 2: Ask Copilot to Improve Coverage
 
-1. Switch to `Agent` mode, select the `Claude Sonnet 4.6` model
-2. Run the prompt:
-   - **Option A:** Click the play button when the prompt file is open
-   - **Option B:** Type `/demo-unit-test-coverage` in chat.  The prompt name automatically becomes a slash command.
+Enter the following prompt:
+
+```text
+Improve API unit-test coverage to at least 80%.
+
+Focus on the product and supplier routes, including success cases, validation
+errors, missing records, and database failures. Follow the existing test
+patterns and avoid changing production behavior unless a small testability
+improvement is necessary.
+
+Run make test-coverage, fix any failures, and iterate until the focused tests
+pass and the coverage target is met. Summarize the tests added and any
+remaining gaps.
+```
 
 ## Step 3: Agent Self-Heals Failures
 
-Agent will:
+Copilot will:
 - Analyze current coverage
 - Generate new test cases for product and supplier routes
 - **Run tests automatically**
@@ -48,16 +53,17 @@ Agent will:
 ## Step 4: Verify Results Yourself
 
 ```bash
-make test
+make test-coverage
 ```
 
 Review the coverage report - it should be significantly improved. 
 
 ## What You Learned
 
-✅ **Prompt Files** - Reusable, documented workflows  
+✅ **Focused Sessions** - Give a bounded task clean context without leaving the app
+✅ **Explicit Success Criteria** - State the coverage target, scope, validation command, and non-goals
 ✅ **Iteration** - Agent iterates to fix failing tests automatically  
-✅ **CodeQL Integration** - Agent runs security scans after changes
+✅ **Independent Verification** - Re-run the repository command before accepting the result
 
 **Time Investment:** 20 minutes  
 **Value:** Comprehensive test suite that would take days to write manually
