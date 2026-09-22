@@ -68,16 +68,23 @@ Treat the overview as a starting point, not an approval. You remain responsible 
 
 The PR-scoped session keeps the conversation, diff, and pull request lifecycle together. It can help investigate a concern, draft a review comment, or make an approved fix.
 
+:::tip Using Copilot CLI instead?
+`/review` is a built-in Copilot CLI command for reviewing changes in your current checkout. You can optionally add a prompt, path, or file pattern to narrow its scope. `/code-review` is not a standard built-in command; if it appears in your environment, it comes from an installed customization.
+:::
+
 ## Step 4: Retain Copilot Code Review on GitHub.com
 
 Copilot code review on GitHub.com remains useful when you want an independent, agentic review in the standard pull request workflow:
 
 1. Open the same pull request on GitHub.com.
-2. Under **Reviewers**, request a review from **Copilot**.
+2. Under **Reviewers**, choose **Balanced** effort for this exercise, then request a review from **Copilot**. The cart change crosses UI state, calculations, and tests, so the deeper analysis is appropriate. Use **Lite** for routine changes where fast, targeted feedback is sufficient.
 3. Wait for Copilot to add its pull request overview and inline review comments.
-4. Validate each finding before applying a suggested change.
+4. Notice the **High**, **Medium**, or **Low** severity on each finding. Severity prioritizes the output; it is separate from the Lite or Balanced effort selected before the review.
+5. Validate each finding before applying a suggested change.
 
-Copilot code review can use repository context and custom instructions, including path-specific instructions in `.github/instructions/`. Its comments behave like human review comments: reviewers can reply, react, hide, or resolve them.
+Copilot code review can use repository context and custom instructions, including path-specific instructions in `.github/instructions/`. Its comments behave like human review comments: reviewers can reply, react, hide, or resolve them. Unlike the app session in Step 3, Copilot code review uses a purpose-built model configuration; you choose the review effort rather than an individual chat model.
+
+Copilot code review can also invoke relevant **Agent Skills** from `.github/skills` and use read-only tools from repository-configured **MCP servers**. The refreshed Octocat Supply source includes a review-focused skill at `.github/skills/code-review/SKILL.md` that loads linked issue context through the GitHub MCP server and checks implementation correctness, type safety, error handling, test coverage, and performance. If your workshop copy includes that skill, review it and look for skill or MCP attribution in Copilot's comments. Configuring a new skill or MCP server is optional and outside the scope of this exercise.
 
 :::note
 By default, Copilot submits a comment review rather than an approval or request for changes. It does not replace required human review unless your organization explicitly configures Copilot approvals.

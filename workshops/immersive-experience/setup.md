@@ -29,9 +29,10 @@ New to the app? Take the short [GitHub Copilot app tour](/workshops/immersive-ex
 
 ### Alternatives
 
-The exercises also work in an IDE, with two differences: you'll use **Agent** mode instead of the app's **Interactive** mode, and you won't get isolated worktrees per exercise — so use a branch per exercise and commit before moving on.
+Many exercises also work in an IDE or Copilot CLI. These alternatives operate in your current checkout instead of creating an isolated app worktree, so use a branch per exercise and commit before moving on. App-specific exercises that use **My work**, app automations, or pull request sessions should still be completed in the GitHub Copilot app.
 
 - **VS Code** — install the [GitHub Copilot extension](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) and sign in.
+- **GitHub Copilot CLI** — [install Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli), run `copilot` from the repository, and use its interactive session from your exercise branch.
 - **GitHub Codespaces** — open the demo repository in a codespace. Copilot is already available; skip the local install steps below.
 
 ## Step 2: Get the demo repository

@@ -1,6 +1,6 @@
 ---
 title: "Consistent Standards"
-description: "Enforce team standards using Custom Instructions, Handoffs, and Agent Skills"
+description: "Enforce team standards using Custom Instructions and Agent Skills"
 sidebar_position: 4
 ---
 
@@ -10,7 +10,7 @@ sidebar_position: 4
 >
 > **Time:** ~30 minutes
 >
-> **Copilot Features:** Custom Instructions, Handoffs, Agent Skills
+> **Copilot Features:** Custom Instructions, Agent Skills
 
 **Your Challenge:** Encode team standards so Copilot enforces them automatically.
 
@@ -73,33 +73,7 @@ TAO is a fictitious observability framework for this workshop.  You can read abo
 
 4. Click 'Undo' to revert all changes.  We don't want to keep these changes as TAO is fictitious and it will break our app! 
 
-## Step 4: Create a Handoff
-
-Sometimes you need to pass context to a teammate, a new chat session, or an agent. Reusable prompt files can help with this in IDE chat. Let's create a plan and then use a **handoff** to generate a summary document.
-
-:::important IDE-only feature
-The `/handoff` command comes from a reusable prompt file and is available in IDE chat, not in GitHub Copilot app sessions.
-:::
-
-1. Open the companion repository in your IDE and start a new Copilot Chat. Use **Plan** mode if available, or ask **Agent** mode to create a plan without changing files. **Auto** is a good default; if the plan comes back shallow, escalate to a higher-reasoning model.
-2. Prompt:
-   ```text
-   Create a plan for a user profile page with edit capability and picture upload
-   ```
-3. When the plan is ready, run the handoff command in IDE chat:
-   ```text
-   /handoff
-   ```
-   **NOT** the `/handoff-to-copilot-coding-agent` unless you want to have an agent to implement it right away.  We'll cover that later...
-4. Review generated `handoff.md` - contains:
-   - Requirements summary
-   - Implementation plan
-   - Key decisions/assumptions
-   - Next steps
-
-The steps are defined in `.github/prompts/handoff.prompt.md`. You can customize this IDE prompt file, for example to create a file in your workspace. You can also ask a follow-up question to extend the result.
-
-## Step 5: Add external documentation as context with Agent Skills
+## Step 4: Add external documentation as context with Agent Skills
 
 Copilot instructions is great for driving behavior in your current repo/workspace. But what about shared context across multiple repos?  For example, your team may have a shared design system, style guide, or architecture principles. You can use an agent skill that is automatically invoked to provide context. Agent skills are a capability that combine a markdown prompt with the ability to reference other resources or run packaged scripts. In this lab we have an agent skill that contains the documentation directly. However, you could also build this to pull data from remote sources.
 
@@ -131,15 +105,12 @@ Copilot instructions is great for driving behavior in your current repo/workspac
     We need to implement a Cookie Banner. Implement it according to the compliance requirements in our compliance documentation.
     ```
 
-The compliance skill provided additional compliance context for Copilot to reference when analyzing your code changes.  
-
-**Optional alternative — Copilot Spaces.** If your team prefers a browser-based, hosted bundle of context, the same compliance documentation can be published as a **Copilot Space** and referenced by name in your prompts. Spaces are useful for sharing curated context with people who aren't working in the repository. For this workshop, the agent skill is the recommended path: it travels with the repo, works across VS Code, the CLI, and the Copilot cloud agent, and loads automatically when relevant.
+The compliance skill provided additional compliance context for Copilot to reference when analyzing your code changes.
 
 ## What You Learned
 
 ✅ **Custom Instructions** - Team standards encoded once, applied everywhere  
 ✅ **Path-Specific Instructions** - Different rules for different file types  
-✅ **Handoff Files** - Transfer context between sessions or developers  
 ✅ **Agent Skills** - Providing curated, shared context for use with GitHub Copilot
 ✅ **Customize surface** - One place to discover and manage instructions, agents, skills, plugins, and MCP servers
 
