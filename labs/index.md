@@ -24,6 +24,7 @@ Choose from quick exercises and in-depth guided labs. Each lab is self-contained
 | [Customization in 90 Minutes](/labs/customization-in-90-minutes) | ~90 min | Build an SDLC multi-agent framework with skills, agents, orchestration, and model optimization |
 | [Context Engineering — Every Token Counts](/labs/context-engineering-lab) | ~2 hours | Measure, optimize, and engineer AI context windows — cutting token waste and reducing costs |
 | [APM in 60 Minutes](/labs/apm-in-60-minutes) | ~60 min | Package, publish, and consume AI agent primitives with APM — build a plugin repo and a marketplace repo |
+| [Copilot Memory](/labs/copilot-memory) | ~45–60 min | Add and verify repository and user-level memories in the Copilot app, with optional CLI import and Copilot Dreaming |
 
 ## Advanced
 
