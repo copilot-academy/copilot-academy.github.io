@@ -89,7 +89,7 @@ Notes from the readiness meeting:
 Feel free to substitute your own real (or realistic) project notes instead. Every exercise below still applies — just swap in your project's names, dates, and risks.
 :::
 
-## Exercise 1 — Install, Sign In, and Add Your Project
+## Exercise 1 — Install, Sign In, and Connect a Local Folder
 
 ### 1.1 Install and sign in
 
@@ -101,16 +101,20 @@ If you need setup help, open the [Copilot onboarding guide](/onboarding) and com
 2. Open the app and click **Sign in to GitHub**.
 3. If prompted, choose a Copilot plan (or configure your own model provider) and complete onboarding.
 
-### 1.2 Add a project folder
+### 1.2 Connect a local folder from a new session
 
-The app organizes work around **projects**. A project can be a GitHub repository, a repository from another Git host, or simply a local folder on your computer — you do not need an existing codebase to follow this lab.
+All work in this lab happens in **sessions**. A session starts in a connected GitHub repository, a cloned repository, or simply a local folder on your computer — you do not need an existing codebase to follow this lab.
 
 1. Click the **+** button in the sidebar next to **Sessions**.
-2. Under **Add project from**, choose **Local folder or repository** (or the closest matching option in your version).
+2. Under **Start session in**, choose **Open local folder**.
 3. In the folder picker, create a new empty folder:
    - **macOS:** Navigate to Documents, click **New Folder**, name it `product-launch-readiness`, and click **Open**.
    - **Windows:** Navigate to Documents, click **New folder**, name it `product-launch-readiness`, select it, and click **Select Folder**.
-4. Confirm that `product-launch-readiness` appears as a project in the app sidebar.
+4. Confirm that `product-launch-readiness` is selected under **Start session in**. Leave the new-session page open — you'll send your first prompt from it in Exercise 2.
+
+:::note What about Projects?
+The sidebar also has a **Projects** section, a preview feature that lets Copilot coordinate a broader goal across several sessions and repositories. This lab doesn't use Projects — every exercise runs in a session started in the `product-launch-readiness` folder.
+:::
 
 :::note Repository, in plain language
 A **repository** is just a tracked folder — GitHub remembers every version of every file inside it, plus who changed what and when. You don't need one to complete the core exercises in this lab; a plain local folder works fine.
@@ -118,7 +122,7 @@ A **repository** is just a tracked folder — GitHub remembers every version of 
 
 ### ✅ Checkpoint
 
-You're signed in and have a project connected — a local folder is enough to continue.
+You're signed in and the `product-launch-readiness` folder is connected — a local folder is enough to continue.
 
 ## Exercise 2 — Kick Off Your First Session, Then Tour the App
 
@@ -126,10 +130,10 @@ The fastest way to learn this app is to start an agent working immediately, then
 
 ### 2.1 Start a launch-readiness brief session
 
-1. Click **+** next to **Sessions** to start a new session in your project.
-2. If a run-location dropdown appears under the prompt box, choose **Local repository** (or **Local** for a plain folder). This core session must work in the `product-launch-readiness` folder so every artifact remains available later in the lab.
+1. On the new-session page from Exercise 1 (or click **+** next to **Sessions** again), make sure **Start session in** is set to `product-launch-readiness`.
+2. Below the prompt box, set **Environment** to **This computer**. If a **Workspace** dropdown appears, choose **Current checkout**. This is the **local setup** used throughout the lab: every session works directly in the `product-launch-readiness` folder so each artifact remains available to later sessions.
 3. From the mode dropdown below the prompt box, choose **Interactive**. You'll compare all three modes in Exercise 3.
-4. Leave the model set to **Auto**. This is a routine summarization task, so the app can select an appropriate model.
+4. In the model picker, choose **Copilot Fusion** with **Standard** effort. This is a routine summarization task, so Fusion can route it to a single efficient model.
 5. Paste the following prompt, followed by the full launch-readiness notes block from above. Paste both together as one message; use **Shift+Enter** for a new line and **Enter** to send.
 
 ```text
@@ -137,7 +141,7 @@ Act as a project manager preparing for a go/no-go review. Turn these rough
 launch notes into a concise, one-page readiness brief with sections for Launch
 Goal, Success Measures, Readiness by Team, Milestones, Open Decisions, and Top
 Risks. Include an overall Red, Yellow, or Green status with a short rationale.
-Save it as launch-readiness-brief.md in this project.
+Save it as launch-readiness-brief.md in this folder.
 
 <paste your launch-readiness notes here>
 ```
@@ -148,7 +152,7 @@ Save it as launch-readiness-brief.md in this project.
 
 While the session runs in the background, explore the sidebar:
 
-- **Sessions** — every active or past agent session, grouped by project. A session can work in your local folder, in a separate working tree, or in a cloud sandbox, depending on the run location you choose.
+- **Sessions** — every active or past agent session, grouped by repository or folder. A session can work in your local folder, in a separate worktree, or in a cloud sandbox, depending on the **Environment** and **Workspace** you choose.
 - **Chats** — a conversation-only mode with no dedicated workspace behind it. Good for brainstorming or asking quick questions before you commit to a task.
 - **My work** (sometimes labeled **Needs Your Attention**) — an account-wide view of **issues** (tracked tasks or problems) and **pull requests** (proposed changes waiting for review) from your GitHub repositories. You may see unrelated work here even if this lab uses only a local folder.
 - **Automations** — recurring or scheduled tasks you set up once and run again and again (you'll build one in Exercise 10).
@@ -157,11 +161,11 @@ While the session runs in the background, explore the sidebar:
 Click back into your running session and open the side panel. Depending on the task, you may see the **plan**, a running **to-do list**, a **file tree**, and a summary of **changes** the agent is making — all live, updating as the agent works.
 
 :::note What's a worktree?
-When an agent works inside a connected GitHub repository, it can use an isolated copy called a **worktree**, tied to its own **branch** (a parallel line of changes). That is useful for independent work you want to review before combining. For the core path in this lab, you selected the local run location so each exercise can keep using the same files in `product-launch-readiness`.
+When an agent works inside a connected GitHub repository, it can use an isolated copy called a **worktree**, tied to its own **branch** (a parallel line of changes). That is useful for independent work you want to review before combining. For the core path in this lab, you selected **This computer** and **Current checkout** so each session keeps using the same files in `product-launch-readiness`.
 :::
 
 :::warning Can't find a file from an earlier exercise?
-Check the session's run location. If the agent says it cannot find `launch-readiness-brief.md`, return to the project and start or reopen a session that runs in **Local repository** (or **Local**) rather than a separate working tree.
+Check the session's **Environment** and **Workspace**. If the agent says it cannot find `launch-readiness-brief.md`, start a new session in `product-launch-readiness` with **This computer** and **Current checkout** rather than a new worktree or the cloud.
 :::
 
 ### ✅ Checkpoint
@@ -181,7 +185,7 @@ support documentation is incomplete. What's the single biggest threat to a
 successful launch? Talk it through with me without creating files.
 ```
 
-Notice that a chat is conversational — no plan, no file changes, and no dedicated workspace containing `launch-readiness-brief.md`. That is why the prompt includes the facts it needs. Use a session when the agent must read or update project files.
+Notice that a chat is conversational — no plan, no file changes, and no dedicated workspace containing `launch-readiness-brief.md`. That is why the prompt includes the facts it needs. Use a session when the agent must read or update files.
 
 ### 3.2 Choose a session mode
 
@@ -195,34 +199,35 @@ Every session runs in one of three modes, selectable from a dropdown near the pr
 
 For project-coordination work like this lab, **Plan** mode is usually the sweet spot: you stay in control of direction without approving every small step.
 
-### 3.3 Choose a model intentionally
+### 3.3 Choose a Copilot Fusion effort level
 
-The model picker is separate from the session mode:
+The model picker is separate from the session mode. This lab uses [**Copilot Fusion**](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/models/copilot-fusion) for every task. Instead of picking a specific model, you pick Copilot Fusion and an **effort level**; Fusion then selects the models, reasoning effort, and execution pattern (single model, cascade, or critique) for each prompt.
 
-| Task | Recommended model |
-|------|-------------------|
-| Summaries, trackers, short updates, and issue drafts | **Auto** |
-| Complex planning, custom canvas creation, or several connected deliverables | **Claude Opus** (latest available) or **GPT-5.6 Sol** |
+| Task | Recommended effort level |
+|------|--------------------------|
+| Summaries, trackers, short updates, and issue drafts | **Fusion Standard** |
+| Complex planning, custom canvas creation, or several connected deliverables | **Fusion High** |
+| Tasks needing the deepest possible reasoning (not required in this lab) | **Fusion Max** |
 
-Use **Auto** unless the task clearly needs deeper reasoning. For the larger tasks in this lab, select Claude Opus or GPT-5.6 Sol and choose **High** reasoning effort if that control is available.
+Use **Standard** unless the task clearly needs deeper reasoning. Higher effort levels may add review steps, which take longer and use more AI credits. When a response finishes, hover over the effort level name below it to see which models were used.
 
 :::note Model availability
-Available models depend on your Copilot plan and organization policy. If Claude Opus or GPT-5.6 Sol is not listed, use **Auto** and continue.
+Copilot Fusion and its effort levels depend on your Copilot plan and organization policy. If **Fusion Max** is missing, one of the models it needs may be disabled. If Copilot Fusion isn't listed at all, choose any available model and continue.
 :::
 
 ### ✅ Checkpoint
 
-You can explain the difference between a chat and a session, what each session mode does, and when to use Auto versus a higher-capability model.
+You can explain the difference between a chat and a session, what each session mode does, and when to use Fusion Standard versus Fusion High.
 
 ## Exercise 4 — Plan the Launch as Parallel Workstreams
 
 ### 4.1 Start a Plan-mode session
 
-Start a **new session** for the `product-launch-readiness` project:
+Start a **new session** in the `product-launch-readiness` folder:
 
-1. Choose **Local repository** (or **Local**) as the run location so it can read `launch-readiness-brief.md`.
+1. Use the local setup (**This computer**, **Current checkout**) so it can read `launch-readiness-brief.md`.
 2. Set the mode to **Plan**.
-3. Select **Claude Opus** (latest available) or **GPT-5.6 Sol**, with **High** reasoning effort if available.
+3. Select **Copilot Fusion** with **High** effort.
 4. Use this prompt:
 
 ```text
@@ -266,11 +271,11 @@ You have a reviewed plan saved as `launch-readiness-plan.md`. The planning sessi
 
 ## Exercise 5 — Produce Your First Artifacts
 
-Different pieces of a project call for different formats. Ask for documents, spreadsheets, or slide-style outputs directly — if your app version includes built-in document, spreadsheet, or presentation work surfaces, the agent opens the artifact right there for you to review and edit alongside it.
+Different pieces of a launch call for different formats. Ask for documents, spreadsheets, or slide-style outputs directly — if your app version includes built-in document, spreadsheet, or presentation work surfaces, the agent opens the artifact right there for you to review and edit alongside it.
 
 ### 5.1 Start a new Interactive session
 
-Start a **new session** for `product-launch-readiness`, choose **Local repository** (or **Local**) as the run location, set the mode to **Interactive**, and leave the model on **Auto**. This session can read both `launch-readiness-brief.md` and `launch-readiness-plan.md`, demonstrating a clean handoff from planning to execution.
+Start a **new session** in `product-launch-readiness`, use the local setup (**This computer**, **Current checkout**), set the mode to **Interactive**, and select **Copilot Fusion** with **Standard** effort. This session can read both `launch-readiness-brief.md` and `launch-readiness-plan.md`, demonstrating a clean handoff from planning to execution.
 
 ### 5.2 Create an action tracker
 
@@ -296,21 +301,21 @@ executive-summary.md with one heading per slide. If an editable presentation
 surface is available in the app, open the same content there too.
 ```
 
-Use the side panel's **file tree** to open either file. You can also reveal the `product-launch-readiness` folder in Finder or File Explorer from the project's menu.
+Use the side panel's **file tree** to open either file. You can also open the `product-launch-readiness` folder directly in Finder or File Explorer.
 
 ### ✅ Checkpoint
 
 You have an action tracker and an executive summary, in whichever format your app supports — spreadsheet and slides if available, CSV and markdown if not.
 
-## Exercise 6 — Build a Custom Project Dashboard Canvas
+## Exercise 6 — Build a Custom Launch Dashboard Canvas
 
 A **canvas** is a shared, interactive surface both you and the agent can work in — not just a chat reply. Canvases can represent a plan, a kanban board, a markdown document, a spreadsheet, a dashboard, and more. Once created, a canvas opens in the app's side panel and stays there for you to keep using.
 
 ### 6.1 Create the canvas
 
-1. Start a **new Interactive session** for `product-launch-readiness`.
-2. Choose **Local repository** (or **Local**) as the run location.
-3. Select **Claude Opus** (latest available) or **GPT-5.6 Sol**, with **High** reasoning effort if available. Building a canvas is a larger task because the agent creates an interface and its actions.
+1. Start a **new Interactive session** in `product-launch-readiness`.
+2. Use the local setup (**This computer**, **Current checkout**).
+3. Select **Copilot Fusion** with **High** effort. Building a canvas is a larger task because the agent creates an interface and its actions.
 4. Use the `/create-canvas` skill:
 
 ```text
@@ -325,7 +330,7 @@ data when I ask you to.
 ```
 
 5. When prompted, choose a scope for the canvas:
-   - **Project scope** (`.github/extensions`) — shared with your team, saved in the project.
+   - **Repository scope** (`.github/extensions`) — shared with your team, saved in the folder or repository.
    - **User scope** (`~/.copilot/extensions`) — personal, stored only on your machine.
 
    For a solo run of this lab, user scope is simplest.
@@ -362,15 +367,15 @@ You have either a working launch-readiness dashboard canvas with human and agent
 
 ## Exercise 7 — Produce the Remaining Artifacts (and Try Fleet)
 
-Real launches need several documents moving at once. Complete the reliable local path first, then try Fleet if your app and project support it.
+Real launches need several documents moving at once. Complete the reliable local path first, then try Fleet if your app and repository support it.
 
 ### 7.1 Complete the local-first path
 
-Start a **new session** for `product-launch-readiness`, choose **Local repository** (or **Local**) as the run location, and set the mode to **Autopilot**. Select **Claude Opus** (latest available) or **GPT-5.6 Sol**, with **High** reasoning effort if available, because this task coordinates several connected artifacts. Then use:
+Start a **new session** in `product-launch-readiness`, use the local setup (**This computer**, **Current checkout**), and set the mode to **Autopilot**. Select **Copilot Fusion** with **High** effort, because this task coordinates several connected artifacts. Then use:
 
 ```text
 Using launch-readiness-brief.md, launch-readiness-plan.md, and the files already
-in this project:
+in this folder:
 1. Create risk-register.csv with Risk, Likelihood, Impact, Owner, Mitigation,
    Trigger, and Go/No-Go Impact.
 2. Create stakeholder-update.md addressed to Elena Rodriguez, covering the
@@ -381,32 +386,32 @@ in this project:
 4. Update the dashboard canvas, or launch-readiness-dashboard.md if the canvas
    was unavailable.
 
-Keep every reusable source file in the root of the product-launch-readiness project.
+Keep every reusable source file in the root of the product-launch-readiness folder.
 ```
 
 Open the new files from the side panel's file tree and review them.
 
 ### 7.2 Optional: see parallel execution with Fleet
 
-Fleet creates multiple agent sessions for separate workstreams. It is easiest to demonstrate with a Git-backed copy of the same launch-readiness project because each session can use its own working tree and branch while still seeing the source artifacts.
+Fleet creates multiple agent sessions for separate workstreams. It is easiest to demonstrate with a Git repository containing copies of the launch-readiness files because each session can use its own working tree and branch while still seeing the source artifacts.
 
 1. Check **Settings > Experimental Flags** for **Agent tools / Fleet mode**, if your app still places Fleet behind a flag.
-2. Select a Git-backed project that contains copies of `launch-readiness-brief.md`, `launch-readiness-plan.md`, `action-tracker.csv`, and `executive-summary.md`. Do not use an unrelated empty practice project. If you do not have a Git-backed copy with these files, skip this optional exercise.
-3. Open an active session for that project and confirm the files appear in the side panel's file tree.
-4. Select **Claude Opus** (latest available) or **GPT-5.6 Sol** for the orchestrating session.
+2. Start a session in a Git repository that contains copies of `launch-readiness-brief.md`, `launch-readiness-plan.md`, `action-tracker.csv`, and `executive-summary.md`. Do not use an unrelated empty practice repository. If you do not have a Git repository with these files, skip this optional exercise.
+3. In that session, confirm the files appear in the side panel's file tree.
+4. Select **Copilot Fusion** with **High** effort for the orchestrating session.
 5. In Plan mode, approve the plan with **Approve and implement with Fleet** if that option appears. You can also type `/fleet` inside the active session:
 
 ```text
-/fleet Review the project launch materials and produce independent drafts for:
+/fleet Review the launch materials and produce independent drafts for:
 an action-tracker quality review, a risk challenge, a stakeholder-message
 critique, and an executive-summary critique.
 ```
 
-Watch the sessions appear in the sidebar and switch between them to inspect progress. These drafts are an optional demonstration; the canonical files used by the rest of the lab remain in your local project from Exercise 7.1.
+Watch the sessions appear in the sidebar and switch between them to inspect progress. These drafts are an optional demonstration; the canonical files used by the rest of the lab remain in your local folder from Exercise 7.1.
 
 ### ✅ Checkpoint
 
-You have a risk register, a stakeholder update, and a refreshed executive summary in the local project. If Fleet was available, you also observed several isolated agents working in parallel.
+You have a risk register, a stakeholder update, and a refreshed executive summary in the local folder. If Fleet was available, you also observed several isolated agents working in parallel.
 
 ## Exercise 8 — Review Outputs and Connect to GitHub (Optional)
 
@@ -414,7 +419,7 @@ You have a risk register, a stakeholder update, and a refreshed executive summar
 
 Open **My work** (or **Needs Your Attention**) in the sidebar. This is an account-wide view of issues, pull requests, and review requests from repositories you can access.
 
-You may see unrelated items from other repositories. If this lab uses only a plain local folder, it will not add anything new here, and that's fine — your outputs already live as files and canvases in the project.
+You may see unrelated items from other repositories. If this lab uses only a plain local folder, it will not add anything new here, and that's fine — your outputs already live as files and canvases in the folder.
 
 ### 8.2 Optional: connect a GitHub repository for issues and pull requests
 
@@ -424,7 +429,7 @@ This part requires a GitHub repository that you have write access to and that co
 
 If you do have a repository connected:
 
-Start a new **Interactive session** for that repository, leave the model on **Auto**, then use:
+Start a new **Interactive session** in that repository, select **Copilot Fusion** with **Standard** effort, then use:
 
 ```text
 Create one GitHub issue per launch-readiness action that is blocked or does
@@ -436,7 +441,7 @@ Open **My work** again to see the new issues, and click one to start a session d
 
 **Local fallback (no GitHub repository required):**
 
-Start a new **Interactive session** for `product-launch-readiness`, choose **Local repository** (or **Local**), leave the model on **Auto**, then use:
+Start a new **Interactive session** in `product-launch-readiness`, use the local setup (**This computer**, **Current checkout**), select **Copilot Fusion** with **Standard** effort, then use:
 
 ```text
 Create an issue-backlog.md file listing every blocked or unowned
@@ -464,29 +469,29 @@ Click through each tab briefly. You don't need to install anything new to finish
 
 You've located Skills, MCP servers, Plugins, Custom agents, and your installed canvas under Customize.
 
-## Exercise 10 — Automate a Weekly Project Status
+## Exercise 10 — Automate a Weekly Launch Status
 
-**Automations** let you save a recurring agent task and have it run on a schedule or on demand, without you starting it by hand each time. They're separate from your project's actual files and separate from GitHub Actions or other CI-style workflows — an automation is simply a saved prompt with a trigger attached.
+**Automations** let you save a recurring agent task and have it run on a schedule or on demand, without you starting it by hand each time. They're separate from your folder's actual files and separate from GitHub Actions or other CI-style workflows — an automation is simply a saved prompt with a trigger attached.
 
 ### 10.1 Create the automation
 
 1. Open **Automations** in the sidebar and click **New automation**.
 2. Name it `Weekly Pulse Analytics Launch Readiness`.
 3. Set the trigger to **Weekly** and choose a day and time.
-4. Leave the model on **Auto**. The recurring report is focused and should not require the most expensive model.
+4. Select **Copilot Fusion** with **Standard** effort. The recurring report is focused and doesn't need extra review steps.
 5. In the prompt box, enter:
 
 ```text
 Review the launch-readiness brief, action tracker, risk register, executive
-summary, stakeholder update, and readiness dashboard in this project, whatever
+summary, stakeholder update, and readiness dashboard in this folder, whatever
 formats they use. Write a project-manager weekly update with: overall Red,
 Yellow, or Green status; changes since the last update; readiness by team;
 critical risks; decisions needed; and actions due before the go/no-go review.
-Save it as weekly-status.md in the root of the product-launch-readiness project,
+Save it as weekly-status.md in the root of the product-launch-readiness folder,
 overwriting the previous version.
 ```
 
-6. Leave **Run in the cloud** off for the core path and select the same local `product-launch-readiness` project used in the earlier exercises.
+6. Leave **Run in the cloud** off for the core path and select the same local `product-launch-readiness` folder used in the earlier exercises.
 7. Open the dropdown next to **Create** and choose **Create and run** so you see a result immediately instead of waiting for next week.
 
 ### 10.2 Inspect and refine the output
@@ -511,7 +516,7 @@ You have a saved weekly automation that has already produced one `weekly-status.
 Cloud automations require: a private or internal GitHub repository (not a plain local folder), write access to that repository, the Copilot cloud agent enabled for it, and your organization allowing cloud agent automations. If any of these aren't in place, stay with the local automation from Exercise 10 — it covers the same core skill.
 :::
 
-If your project is a connected repository that meets the prerequisites above, you can let the same kind of automation run in the cloud instead of on your machine:
+If you have a connected repository that meets the prerequisites above, you can let the same kind of automation run in the cloud instead of on your machine:
 
 1. Open your automation (or create a new one) and enable **Run in the cloud**.
 2. Choose only the tools the task actually needs, following least privilege — for a status report, read access is usually enough; avoid granting write or pull-request tools unless the automation needs to create something.
@@ -531,9 +536,9 @@ A few habits keep multi-session, multi-artifact work under control:
 
 - **Review before you approve.** In Plan mode, read the proposed plan before approving it — this is your main safety checkpoint before an agent starts making changes.
 - **Scope automations narrowly.** Grant only the tools an automation needs, especially for cloud automations that can run unattended.
-- **Use Manage sessions.** Search, filter, and archive sessions and chats you're done with, so your sidebar stays readable as a project grows.
+- **Use Manage sessions.** Search, filter, and archive sessions and chats you're done with, so your sidebar stays readable as your work grows.
 - **Archive, don't delete, when in doubt.** Archiving a chat or session keeps its history available if you need to reference it later.
-- **Understand what is shared.** A project-scoped canvas can be committed with the repository. An automation is private to its creator, but cloud automation sessions and logs are visible to collaborators who can access the repository.
+- **Understand what is shared.** A repository-scoped canvas can be committed with the repository. An automation is private to its creator, but cloud automation sessions and logs are visible to collaborators who can access the repository.
 
 ### ✅ Final Checkpoint
 
@@ -561,18 +566,18 @@ You've run an entire product launch-readiness workflow as a project manager — 
 | Plan | Agent proposes a full plan first; you approve before it runs |
 | Autopilot | Agent works fully on its own until done |
 
-### Model Selection
+### Copilot Fusion Effort Levels
 
-| Task size | Model |
-|-----------|-------|
-| Routine, focused task | Auto |
-| Complex plan, canvas, or multi-artifact task | Claude Opus (latest available) or GPT-5.6 Sol |
+| Task size | Effort level |
+|-----------|--------------|
+| Routine, focused task | Fusion Standard |
+| Complex plan, canvas, or multi-artifact task | Fusion High |
 
 ### Canvas Scopes
 
 | Scope | Location | Visibility |
 |-------|----------|------------|
-| Project | `.github/extensions` | Shared with your team, saved in the project |
+| Repository | `.github/extensions` | Shared with your team, saved in the repository |
 | User | `~/.copilot/extensions` | Personal, this machine only |
 
 ### Automation Triggers
