@@ -141,7 +141,8 @@ Act as a project manager preparing for a go/no-go review. Turn these rough
 launch notes into a concise, one-page readiness brief with sections for Launch
 Goal, Success Measures, Readiness by Team, Milestones, Open Decisions, and Top
 Risks. Include an overall Red, Yellow, or Green status with a short rationale.
-Save it as launch-readiness-brief.md in this folder.
+Save it as launch-readiness-brief.md in this folder, then open the brief in the
+session side panel so I can review it.
 
 <paste your launch-readiness notes here>
 ```
@@ -154,11 +155,11 @@ While the session runs in the background, explore the sidebar:
 
 - **Sessions** — every active or past agent session, grouped by repository or folder. A session can work in your local folder, in a separate worktree, or in a cloud sandbox, depending on the **Environment** and **Workspace** you choose.
 - **Chats** — a conversation-only mode with no dedicated workspace behind it. Good for brainstorming or asking quick questions before you commit to a task.
-- **My work** (sometimes labeled **Needs Your Attention**) — an account-wide view of **issues** (tracked tasks or problems) and **pull requests** (proposed changes waiting for review) from your GitHub repositories. You may see unrelated work here even if this lab uses only a local folder.
+- **Issues** and **Pull requests** — browse tracked tasks and proposed changes in your GitHub repositories. You can also ask the agent to open a relevant list beside your session.
 - **Automations** — recurring or scheduled tasks you set up once and run again and again (you'll build one in Exercise 10).
 - **Customize** — where you manage skills, MCP servers, plugins, custom agents, and canvases (you'll tour this in Exercise 9).
 
-Click back into your running session and open the side panel. Depending on the task, you may see the **plan**, a running **to-do list**, a **file tree**, and a summary of **changes** the agent is making — all live, updating as the agent works.
+Click back into your running session and open the side panel. Ask the agent to open `launch-readiness-brief.md` there; if it doesn't open the file automatically, use the side panel's **file tree** to open it. Depending on the task, you may also see the **plan**, a running **to-do list**, and a summary of **changes** the agent is making — all live, updating as the agent works.
 
 :::note What's a worktree?
 When an agent works inside a connected GitHub repository, it can use an isolated copy called a **worktree**, tied to its own **branch** (a parallel line of changes). That is useful for independent work you want to review before combining. For the core path in this lab, you selected **This computer** and **Current checkout** so each session keeps using the same files in `product-launch-readiness`.
@@ -170,7 +171,7 @@ Check the session's **Environment** and **Workspace**. If the agent says it cann
 
 ### ✅ Checkpoint
 
-Your first session produced a `launch-readiness-brief.md` file, and you've located Sessions, Chats, My work / Needs Your Attention, Automations, and Customize in the sidebar.
+Your first session produced a `launch-readiness-brief.md` file, and you've located Sessions, Chats, Issues, Pull requests, Automations, and Customize in the sidebar.
 
 ## Exercise 3 — Chat vs. Session, and Session Modes
 
@@ -415,11 +416,11 @@ You have a risk register, a stakeholder update, and a refreshed executive summar
 
 ## Exercise 8 — Review Outputs and Connect to GitHub (Optional)
 
-### 8.1 Review from My work / Needs Your Attention
+### 8.1 Review the launch materials in the side panel
 
-Open **My work** (or **Needs Your Attention**) in the sidebar. This is an account-wide view of issues, pull requests, and review requests from repositories you can access.
+Return to your `product-launch-readiness` session and open the side panel's **file tree**. Open `action-tracker.csv`, `risk-register.csv`, and `executive-summary.md` to review the launch actions, risks, and go/no-go recommendation. If you created a dashboard canvas, open it too.
 
-You may see unrelated items from other repositories. If this lab uses only a plain local folder, it will not add anything new here, and that's fine — your outputs already live as files and canvases in the folder.
+These materials are available in your local folder; you don't need a GitHub repository for this review.
 
 ### 8.2 Optional: connect a GitHub repository for issues and pull requests
 
@@ -437,7 +438,14 @@ not have an owner assigned, using the repository's default issue template if
 one exists. Include the readiness area and go/no-go impact in each issue.
 ```
 
-Open **My work** again to see the new issues, and click one to start a session directly from it.
+After the agent creates the issues, ask it to open the relevant list beside your session. Replace the placeholder with your repository's owner and name:
+
+```text
+Open the issues for <owner>/<repository> in the side panel so I can review
+the launch-readiness issues we just created.
+```
+
+Find an issue in the list and open it to review its details. To work on it in a separate session, choose **New session** from the issue detail view.
 
 **Local fallback (no GitHub repository required):**
 
@@ -451,7 +459,7 @@ short description, go/no-go impact, and suggested owner.
 
 ### ✅ Checkpoint
 
-You've reviewed pending work through My work / Needs Your Attention, and you have either a set of GitHub issues or a local issue-backlog.md — both represent the same underlying idea.
+You've reviewed the launch materials in the side panel and have either a set of GitHub issues or a local `issue-backlog.md` — both represent the same underlying idea.
 
 ## Exercise 9 — Tour Customize
 
@@ -554,7 +562,7 @@ You've run an entire product launch-readiness workflow as a project manager — 
 |------|----------------|
 | Sessions | Persistent agent workspaces; choose local, working-tree, or cloud execution |
 | Chats | Conversation-only, no dedicated workspace |
-| My work / Needs Your Attention | Account-wide issues and pull requests that may need your attention |
+| Issues / Pull requests | Browse GitHub issues and proposed changes; ask the agent to open a relevant list beside your session |
 | Automations | Saved recurring or on-demand agent tasks |
 | Customize | Skills, MCP servers, plugins, custom agents, canvases |
 
